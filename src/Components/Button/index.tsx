@@ -11,8 +11,6 @@ import {
 import Colors from '../../ultils/color';
 
 interface Props {
-  width?: number;
-  height?: number;
   tittle?: string;
   isReserve?: boolean;
   style?: TextStyle;
@@ -52,7 +50,7 @@ const style = StyleSheet.create({
     borderColor: Colors.Background,
   },
   titleStyle: {
-    fontSize: 20,
+    fontSize: 18,
     color: Colors.Text,
   },
 });

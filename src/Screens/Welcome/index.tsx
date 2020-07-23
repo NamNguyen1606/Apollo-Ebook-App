@@ -24,7 +24,13 @@ const WelcomeScreen: React.FC<Props> = ({navigation}) => {
             navigation.navigate(Route.Register);
           }}
         />
-        <Button tittle="LOG IN" isReserve={true} onPress={() => {}} />
+        <Button
+          tittle="LOG IN"
+          isReserve={true}
+          onPress={() => {
+            navigation.navigate('login_screen');
+          }}
+        />
         <Text style={style.subFooterStyle}>
           by signing up to you agree to our{' '}
           <Text style={style.hightLightStyle}>

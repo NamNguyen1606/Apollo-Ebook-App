@@ -1,8 +1,9 @@
+/* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import Colors from '../../ultils/color';
-import {Icon, Divider} from 'react-native-elements';
+import {Icon} from 'react-native-elements';
 import Route from '../../ultils/router';
 import {TextField, Button, IconBox} from '../../Components';
 
@@ -10,22 +11,18 @@ interface Props {
   navigation: any;
 }
 
-const RegisterScreen: React.FC<Props> = ({navigation}) => {
-  const [fullName, setFullName] = useState();
+const LoginScreen: React.FC<Props> = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
-  function handleFullName(val: any) {
-    setFullName(val);
-  }
   function handleEmail(val: any) {
     setEmail(val);
   }
   function handlePassword(val: any) {
     setPassword(val);
   }
-  function register() {
-    alert(`${fullName} + ${email} + ${password}`);
+  function logIn() {
+    alert(`${email} + ${password}`);
   }
 
   return (
@@ -49,60 +46,37 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
           />
         </View>
         <View style={{flex: 8, justifyContent: 'center'}}>
-          <Text style={style.titleStyle}>Join Apollo Today!</Text>
+          <Text style={style.titleStyle}>Welcome Back!</Text>
           <Text style={style.subTitleStyle}>
-            Create an account to start reading
+            Log in with your email & password
           </Text>
         </View>
       </View>
       <View style={style.middle}>
         <TextField
-          style={{marginBottom: 10}}
-          title="Full Name"
-          icon="user"
-          onChangeText={(val) => handleFullName(val)}
-        />
-        <TextField
-          style={{marginBottom: 10}}
           title="Email"
           icon="envelope"
           onChangeText={(val) => handleEmail(val)}
         />
         <TextField
+          style={{marginTop: 10}}
           title="Password"
           isPassword={true}
           onChangeText={(val) => handlePassword(val)}
         />
         <Button
           style={{height: 55, marginTop: 14}}
-          tittle="REGISTER NOW"
-          onPress={register}
+          tittle="LOG IN"
+          onPress={logIn}
         />
       </View>
       <View style={style.footer}>
-        <Text style={{fontSize: 15, color: Colors.SubText}}>
-          Already have an account?{' '}
-          <Text
-            style={{
-              fontSize: 15,
-              color: Colors.Background,
-              textDecorationLine: 'underline',
-            }}>
-            Log In
-          </Text>
+        <Text style={{fontSize: 15, color: Colors.SubText, marginTop: 15}}>
+          Forgot Password?
         </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: 70,
-            width: '100%',
-          }}>
-          <Divider style={{backgroundColor: 'black'}} />
-          <Text style={{fontSize: 15, color: '#A4A7A9'}}>Register With</Text>
-          <Divider style={{backgroundColor: 'black'}} />
-        </View>
+        <Text style={{fontSize: 15, color: '#A4A7A9', marginVertical: 25}}>
+          Log in With
+        </Text>
         <View
           style={{
             width: '60%',
@@ -124,17 +98,17 @@ const style = StyleSheet.create({
     backgroundColor: 'white',
   },
   header: {
-    flex: 3.8,
+    flex: 5,
     backgroundColor: Colors.Background,
   },
   middle: {
-    flex: 3.2,
+    flex: 2.5,
     backgroundColor: 'white',
     marginHorizontal: 20,
     marginTop: 15,
   },
   footer: {
-    flex: 2,
+    flex: 2.5,
     backgroundColor: 'white',
     alignItems: 'center',
   },
@@ -150,4 +124,4 @@ const style = StyleSheet.create({
     textAlign: 'center',
   },
 });
-export default RegisterScreen;
+export default LoginScreen;
