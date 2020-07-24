@@ -1,6 +1,18 @@
 import Button from './Button';
 import TextField from './TextInput';
 import IconBox from './IconBox';
-export {Button};
-export {TextField};
-export {IconBox};
+import BookScrollView from './BookScrollView';
+import BookProduct from './BookProduct';
+import BookCard from './BookCard';
+import CategoryTag from './CategoryTag';
+import CategoryCard from './CategoryCard';
+export {
+  Button,
+  TextField,
+  IconBox,
+  BookScrollView,
+  BookProduct,
+  BookCard,
+  CategoryTag,
+  CategoryCard,
+};

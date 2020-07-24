@@ -22,7 +22,8 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
     setPassword(val);
   }
   function logIn() {
-    alert(`${email} + ${password}`);
+    // alert(`${email} + ${password}`);
+    navigation.navigate('HomePage');
   }
 
   return (

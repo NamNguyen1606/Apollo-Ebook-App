@@ -1,11 +1,12 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {View, StyleSheet, TextInput, TextStyle} from 'react-native';
+import {View, StyleSheet, TextInput, TextStyle,} from 'react-native';
 import {Icon} from 'react-native-elements';
 
 interface Props {
   title: string;
-  icon?: 'user' | 'envelope';
+  icon?: 'user' | 'envelope' | 'search';
   isPassword?: boolean;
   onChangeText: (val: any) => void;
   style?: TextStyle;
@@ -14,29 +15,33 @@ interface Props {
 const TextField: React.FC<Props> = (props) => {
   const [isShowPwd, setIsShowPwd] = useState(true);
   return (
-    <View style={[style.container, props.style]}>
+      <View style={[style.container, props.style]}>
+      <View style={{flex: 14}}>
       <TextInput
         style={{marginLeft: 15}}
         placeholder={props.title}
         onChangeText={props.onChangeText}
-        secureTextEntry={isShowPwd}
+        secureTextEntry={ props.isPassword ? isShowPwd : false}
       />
-      {props.isPassword ? (
-        <Icon
-          name={isShowPwd ? 'eye-slash' : 'eye'}
-          type="font-awesome"
-          size={20}
-          color="#8C9BA5"
-          onPress={() => setIsShowPwd(!isShowPwd)}
-        />
-      ) : (
-        <Icon
-          name={props.icon || ''}
-          type="font-awesome"
-          size={20}
-          color="#8C9BA5"
-        />
-      )}
+      </View>
+      <View style={{flex: 1}}>
+        {props.isPassword ? (
+          <Icon
+            name={isShowPwd ? 'eye-slash' : 'eye'}
+            type="font-awesome"
+            size={20}
+            color="#8C9BA5"
+            onPress={() => setIsShowPwd(!isShowPwd)}
+          />
+        ) : (
+          <Icon
+            name={props.icon || ''}
+            type="font-awesome"
+            size={20}
+            color="#8C9BA5"
+          />
+        )}
+      </View>
     </View>
   );
 };
