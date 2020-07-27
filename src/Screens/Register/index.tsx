@@ -1,6 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import Colors from '../../Utils/color';
 import {Icon, Divider} from 'react-native-elements';
 import Route from '../../Utils/router';
@@ -20,93 +26,95 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
   }
 
   return (
-    <View style={style.container}>
-      <View style={style.header}>
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'flex-start',
-            marginTop: 20,
-            marginLeft: 15,
-          }}>
-          <Icon
-            name="chevron-back"
-            type="ionicon"
-            color="white"
-            size={33}
-            onPress={() => {
-              navigation.navigate(Route.Welcome);
-            }}
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={style.container}>
+        <View style={style.header}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'flex-start',
+              marginTop: 20,
+              marginLeft: 15,
+            }}>
+            <Icon
+              name="chevron-back"
+              type="ionicon"
+              color="white"
+              size={33}
+              onPress={() => {
+                navigation.navigate(Route.Welcome);
+              }}
+            />
+          </View>
+          <View style={{flex: 8, justifyContent: 'center'}}>
+            <Text style={style.titleStyle}>Join Apollo Today!</Text>
+            <Text style={style.subTitleStyle}>
+              Create an account to start reading
+            </Text>
+          </View>
+        </View>
+        <View style={style.middle}>
+          <TextField
+            style={{marginBottom: 10}}
+            title="Full Name"
+            icon="user"
+            onChangeText={(val) => setFullName(val)}
+          />
+          <TextField
+            style={{marginBottom: 10}}
+            title="Email"
+            icon="envelope"
+            onChangeText={(val) => setEmail(val)}
+          />
+          <TextField
+            title="Password"
+            isPassword={true}
+            onChangeText={(val) => setPassword(val)}
+          />
+          <Button
+            style={{height: 55, marginTop: 14}}
+            tittle="REGISTER NOW"
+            onPress={register}
           />
         </View>
-        <View style={{flex: 8, justifyContent: 'center'}}>
-          <Text style={style.titleStyle}>Join Apollo Today!</Text>
-          <Text style={style.subTitleStyle}>
-            Create an account to start reading
+        <View style={style.footer}>
+          <Text style={{fontSize: 15, color: Colors.SubText}}>
+            Already have an account?{' '}
+            <Text
+              style={{
+                fontSize: 15,
+                color: Colors.Background,
+                textDecorationLine: 'underline',
+              }}>
+              Log In
+            </Text>
           </Text>
-        </View>
-      </View>
-      <View style={style.middle}>
-        <TextField
-          style={{marginBottom: 10}}
-          title="Full Name"
-          icon="user"
-          onChangeText={(val) => setFullName(val)}
-        />
-        <TextField
-          style={{marginBottom: 10}}
-          title="Email"
-          icon="envelope"
-          onChangeText={(val) => setEmail(val)}
-        />
-        <TextField
-          title="Password"
-          isPassword={true}
-          onChangeText={(val) => setPassword(val)}
-        />
-        <Button
-          style={{height: 55, marginTop: 14}}
-          tittle="REGISTER NOW"
-          onPress={register}
-        />
-      </View>
-      <View style={style.footer}>
-        <Text style={{fontSize: 15, color: Colors.SubText}}>
-          Already have an account?{' '}
-          <Text
+          <View
             style={{
-              fontSize: 15,
-              color: Colors.Background,
-              textDecorationLine: 'underline',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: 70,
+              width: '100%',
             }}>
-            Log In
-          </Text>
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: 70,
-            width: '100%',
-          }}>
-          <Divider style={{backgroundColor: 'black'}} />
-          <Text style={{fontSize: 15, color: '#A4A7A9'}}>Register With</Text>
-          <Divider style={{backgroundColor: 'black'}} />
-        </View>
-        <View
-          style={{
-            width: '60%',
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            // marginTop: 20,
-          }}>
-          <IconBox icon="facebook" />
-          <IconBox icon="twitter" />
-          <IconBox icon="google" />
+            <Divider style={{backgroundColor: 'black'}} />
+            <Text style={{fontSize: 15, color: '#A4A7A9'}}>Register With</Text>
+            <Divider style={{backgroundColor: 'black'}} />
+          </View>
+          <View
+            style={{
+              width: '60%',
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              // marginTop: 20,
+            }}>
+            <IconBox icon="facebook" />
+            <IconBox icon="twitter" />
+            <IconBox icon="google" />
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 const style = StyleSheet.create({

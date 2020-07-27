@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Text,
   TextStyle,
+  ActivityIndicator,
 } from 'react-native';
 import Colors from '../../Utils/color';
 
@@ -14,26 +15,34 @@ interface Props {
   tittle?: string;
   isReserve?: boolean;
   style?: TextStyle;
+  isDisable?: boolean;
   onPress: () => void;
 }
 
 const Button: React.FC<Props> = (props) => {
   return (
-    <TouchableOpacity activeOpacity={0.7} onPress={props.onPress}>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      onPress={props.onPress}
+      disabled={props.isDisable}>
       <View
         style={[
           style.container,
           props.style,
           props.isReserve ? {backgroundColor: 'white'} : null,
         ]}>
-        <Text
-          style={[
-            style.titleStyle,
-            ,
-            props.isReserve ? {color: Colors.SubText} : null,
-          ]}>
-          {props.tittle}
-        </Text>
+        {props.isDisable ? (
+          <ActivityIndicator size="large" color="white" />
+        ) : (
+          <Text
+            style={[
+              style.titleStyle,
+              ,
+              props.isReserve ? {color: Colors.SubText} : null,
+            ]}>
+            {props.tittle}
+          </Text>
+        )}
       </View>
     </TouchableOpacity>
   );
