@@ -8,7 +8,7 @@ import {
   Text,
   TextStyle,
 } from 'react-native';
-import Colors from '../../ultils/color';
+import Colors from '../../Utils/color';
 
 interface Props {
   tittle?: string;

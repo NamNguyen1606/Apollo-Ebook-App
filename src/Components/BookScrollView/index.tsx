@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import BookProduct from '../BookProduct';
-import Colors from '../../ultils/color';
+import Colors from '../../Utils/color';
 import Book from '../../Models/book';
 
 interface Props {

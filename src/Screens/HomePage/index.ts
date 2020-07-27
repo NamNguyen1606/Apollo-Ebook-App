@@ -1,13 +1,13 @@
-import BookShelfScreen from './BookSelf';
-import DiscoverScreen from './Discover/index';
+import DiscoverScreen from './Discover';
+import BookshelfScreen from './BookShelf/index';
 import SearchScreen from './Search/index';
 import ProfileScreen from './Profile/index';
-import BookShelfMoreScreen from './BookShelfMore/index';
+import ListBookScreen from './ListBook/index';
 
 export {
-  BookShelfScreen,
   DiscoverScreen,
+  BookshelfScreen,
   SearchScreen,
   ProfileScreen,
-  BookShelfMoreScreen,
+  ListBookScreen,
 };

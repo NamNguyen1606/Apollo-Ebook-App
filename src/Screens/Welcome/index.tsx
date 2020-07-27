@@ -2,9 +2,9 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {Icon} from 'react-native-elements';
-import Colors from '../../ultils/color';
+import Colors from '../../Utils/color';
 import {Button} from '../../Components';
-import Route from '../../ultils/router';
+import Route from '../../Utils/router';
 interface Props {
   navigation: any;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Icon} from 'react-native-elements';
-import Colors from '../../ultils/color';
+import Colors from '../../Utils/color';
 
 interface Props {
   icon?: 'facebook' | 'twitter' | 'google';

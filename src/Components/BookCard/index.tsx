@@ -2,7 +2,7 @@
 import React from 'react';
 import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
 import {Rating} from 'react-native-elements';
-import Colors from '../../ultils/color';
+import Colors from '../../Utils/color';
 
 interface Props {}
 

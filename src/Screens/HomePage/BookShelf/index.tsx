@@ -1,78 +1,88 @@
 /* eslint-disable react-native/no-inline-styles */
-/* eslint-disable prettier/prettier */
 import React from 'react';
-import {View, StyleSheet, Text, ImageBackground, Dimensions} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Dimensions,
+  ScrollView,
+  ImageBackground,
+} from 'react-native';
 import Colors from '../../../Utils/color';
 import {BookScrollView} from '../../../Components';
-import Book from '../../../Models/book';
 import Data from '../../../Utils/data';
-import Route from '../../../Utils/router';
+import Book from '../../../Models/book';
 
 interface Props {
   navigation: any;
 }
 
-const DiscoverScreen: React.FC<Props> = (props) => {
+const BookshelfScreen: React.FC<Props> = (props) => {
   function onItemPress(book: Book) {
-    console.log(`${book.name} \n ${book.author}`);
+    alert(`${book.name} \n ${book.author}`);
   }
   return (
-    <View style={style.container}>
-          <ScrollView style={style.middle}>
-        <View style={style.header}>
+    <ScrollView style={style.container}>
+      <View style={style.header}>
         <ImageBackground
-          style={style.backgroundStyle}
+          style={{flex: 1}}
           source={{
             uri:
               'https://images.creativemarket.com/0.1.0/ps/6374392/300/200/m2/fpc/wm0/rz7tt7epyeamedl02kmk27udgkcpjcltux0kweivmuodculwfbq3roybhxfw7kfq-.jpg?1557575922&s=f9500d0ae1b0e8a3679358049c4ea48f',
           }}>
           <View style={{flex: 1, justifyContent: 'center'}}>
-            <Text style={style.titleHeader}>Discover</Text>
+            <Text style={style.titleHeader}>BookShelf</Text>
           </View>
         </ImageBackground>
       </View>
-
+      <View style={style.middle}>
         <BookScrollView
-          title="Bookmark"
+          title="Trending Now"
           books={Data.bookList}
           onItemPress={(book) => onItemPress(book)}
-          onMorePress={()=>{props.navigation.navigate(Route.ListBook, {title: 'Bookmark'});}}
+          onMorePress={() => {
+            () => {
+              props.navigation.navigate('BookShelf_More');
+            };
+          }}
         />
-       <BookScrollView
-          title="Downloads"
+        <BookScrollView
+          title="Sale"
           books={Data.bookList}
           onItemPress={(book) => onItemPress(book)}
-          onMorePress={()=>{props.navigation.navigate(Route.ListBook, {title: 'Downloads'});}}
+          onMorePress={() => {
+            () => {
+              props.navigation.navigate('BookShelf_More');
+            };
+          }}
         />
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 };
 const style = StyleSheet.create({
   container: {
-    width: '100%',
     flex: 1,
-    marginBottom: 20,
   },
   header: {
     height: Dimensions.get('window').height / 5,
     backgroundColor: Colors.Background,
   },
   middle: {
-    height: '100%',
-    backgroundColor: 'white',
-    width: '100%',
-  },
-  backgroundStyle: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  category: {
+    flex: 1.5,
+    marginHorizontal: 10,
+    paddingBottom: 30,
   },
   titleHeader: {
     fontSize: 30,
-    fontWeight: 'bold',
     color: Colors.Text,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
-export default DiscoverScreen;
+
+export default BookshelfScreen;

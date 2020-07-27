@@ -1,16 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, StyleSheet, Text, ScrollView, Dimensions} from 'react-native';
-import Colors from '../../../ultils/color';
+import Colors from '../../../Utils/color';
 import {BookCard} from '../../../Components';
 import {Icon} from 'react-native-elements';
-import Route from '../../../ultils/router';
+import Route from '../../../Utils/router';
 
 interface Props {
   navigation: any;
+  route: any;
 }
 
-const BookShelfMoreScreen: React.FC<Props> = ({navigation}) => {
+const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
+  const {title} = route.params;
   return (
     <View style={style.container}>
       <View style={style.header}>
@@ -20,10 +22,10 @@ const BookShelfMoreScreen: React.FC<Props> = ({navigation}) => {
           color="white"
           size={33}
           onPress={() => {
-            navigation.navigate(Route.BookShelf);
+            navigation.navigate(Route.Discover);
           }}
         />
-        <Text style={style.titleHeader}>Bookshelf</Text>
+        <Text style={style.titleHeader}>{title}</Text>
       </View>
       <View style={style.middle}>
         <View
@@ -78,4 +80,4 @@ const style = StyleSheet.create({
     color: '#5E6162',
   },
 });
-export default BookShelfMoreScreen;
+export default ListBookScreen;

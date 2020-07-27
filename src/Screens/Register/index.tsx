@@ -1,9 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import Colors from '../../ultils/color';
+import Colors from '../../Utils/color';
 import {Icon, Divider} from 'react-native-elements';
-import Route from '../../ultils/router';
+import Route from '../../Utils/router';
 import {TextField, Button, IconBox} from '../../Components';
 
 interface Props {
@@ -15,17 +15,8 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
-  function handleFullName(val: any) {
-    setFullName(val);
-  }
-  function handleEmail(val: any) {
-    setEmail(val);
-  }
-  function handlePassword(val: any) {
-    setPassword(val);
-  }
-  function register() {
-    alert(`${fullName} + ${email} + ${password}`);
+  async function register() {
+    console.log(`${fullName} + ${email} + ${password}`);
   }
 
   return (
@@ -60,18 +51,18 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
           style={{marginBottom: 10}}
           title="Full Name"
           icon="user"
-          onChangeText={(val) => handleFullName(val)}
+          onChangeText={(val) => setFullName(val)}
         />
         <TextField
           style={{marginBottom: 10}}
           title="Email"
           icon="envelope"
-          onChangeText={(val) => handleEmail(val)}
+          onChangeText={(val) => setEmail(val)}
         />
         <TextField
           title="Password"
           isPassword={true}
-          onChangeText={(val) => handlePassword(val)}
+          onChangeText={(val) => setPassword(val)}
         />
         <Button
           style={{height: 55, marginTop: 14}}

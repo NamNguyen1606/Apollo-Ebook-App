@@ -2,28 +2,25 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import Colors from '../../ultils/color';
+import Colors from '../../Utils/color';
 import {Icon} from 'react-native-elements';
-import Route from '../../ultils/router';
+import Route from '../../Utils/router';
 import {TextField, Button, IconBox} from '../../Components';
-
+import AuthApi from '../../Api/authApi';
+import AsyncStorage from '@react-native-community/async-storage';
 interface Props {
   navigation: any;
 }
 
 const LoginScreen: React.FC<Props> = ({navigation}) => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
-  function handleEmail(val: any) {
-    setEmail(val);
-  }
-  function handlePassword(val: any) {
-    setPassword(val);
-  }
-  function logIn() {
-    // alert(`${email} + ${password}`);
-    navigation.navigate('HomePage');
+  async function logIn() {
+    console.log(`${email} + ${password}`);
+    const response = await AuthApi.loginByPassword(email, password);
+    console.log(response);
+    // navigation.navigate('HomePage');
   }
 
   return (
@@ -57,13 +54,13 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
         <TextField
           title="Email"
           icon="envelope"
-          onChangeText={(val) => handleEmail(val)}
+          onChangeText={(val) => setEmail(val)}
         />
         <TextField
           style={{marginTop: 10}}
           title="Password"
           isPassword={true}
-          onChangeText={(val) => handlePassword(val)}
+          onChangeText={(val) => setPassword(val)}
         />
         <Button
           style={{height: 55, marginTop: 14}}

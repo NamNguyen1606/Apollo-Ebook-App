@@ -9,6 +9,7 @@ interface Props {
   icon?: 'user' | 'envelope' | 'search';
   isPassword?: boolean;
   onChangeText: (val: any) => void;
+  onIconPress?: () => void;
   style?: TextStyle;
 }
 
@@ -39,6 +40,7 @@ const TextField: React.FC<Props> = (props) => {
             type="font-awesome"
             size={20}
             color="#8C9BA5"
+            onPress={props.onIconPress}
           />
         )}
       </View>
