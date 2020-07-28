@@ -24,20 +24,20 @@ const HomeTabNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="Book Self"
-        component={BookshelfScreen}
-        options={{
-          tabBarIcon: ({color, size}) => (
-            <Icon name="book" type="material" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
         name="Search"
         component={SearchScreen}
         options={{
           tabBarIcon: ({color, size}) => (
             <Icon name="search" type="font-awesome" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Book Self"
+        component={BookshelfScreen}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <Icon name="book" type="material" size={size} color={color} />
           ),
         }}
       />

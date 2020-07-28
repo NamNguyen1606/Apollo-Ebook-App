@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {WelcomeScreen, RegisterScreen, LoginScreen} from '../Screens';
 import HomeTabNavigation from './homeTab';
 import Route from '../Utils/router';
+import { DetailBookScreen } from '../Screens/HomePage';
 const Stack = createStackNavigator();
 const AuthNavigation = () => {
   return (
@@ -25,6 +26,11 @@ const AuthNavigation = () => {
       <Stack.Screen
         name={Route.HomePage}
         component={HomeTabNavigation}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name={Route.DetailBook}
+        component={DetailBookScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

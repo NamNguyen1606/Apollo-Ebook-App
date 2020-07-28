@@ -27,16 +27,22 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   async function logIn() {
-    setIsLogin(true);
-    console.log(`${email} + ${password}`);
-    const response: any = await AuthApi.loginByPassword(email, password);
-    StoreData.setUserInfo(response);
-    if (response.Success) {
-      navigation.navigate('HomePage');
-    } else {
-      Alert.alert('Error', response.Message);
-    }
-    setIsLogin(false);
+    // setIsLogin(true);
+    // console.log(`${email} + ${password}`);
+    // const response: any = await AuthApi.loginByPassword(
+    //   'rv7yjdz10sh0q06362ugd1n4gjpy4b',
+    //   email,
+    //   password,
+    // );
+    // StoreData.setUserInfo(response);
+    // if (response.Success) {
+    //   navigation.navigate('HomePage');
+    // } else {
+    //   Alert.alert('Error', response.Message);
+    // }
+    // setIsLogin(false);
+
+    navigation.navigate(Route.HomePage);
   }
 
   return (

@@ -6,6 +6,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  TextStyle,
 } from 'react-native';
 import BookProduct from '../BookProduct';
 import Colors from '../../Utils/color';
@@ -14,20 +15,22 @@ import Book from '../../Models/book';
 interface Props {
   title: string;
   books: Book[];
+  style?: TextStyle;
   onItemPress: (book: Book) => void;
   onMorePress: () => void;
 }
 
 const BookScrollView: React.FC<Props> = (props) => {
   function renderBookList(bookArr: Book[]) {
-    let result: [] = [];
-    for (let index in bookArr) {
+    let result: any[] = [];
+    if (bookArr.length === 0) {
+      return [];
+    }
+    for (let book of bookArr) {
       let widget: any = (
         <BookProduct
-          key={index}
-          name={bookArr[index].name}
-          author={bookArr[index].author}
-          img={bookArr[index].img}
+          key={book.id}
+          img={book.imgUrl}
           onPress={(book) => {
             props.onItemPress(book);
           }}
@@ -39,7 +42,7 @@ const BookScrollView: React.FC<Props> = (props) => {
   }
 
   return (
-    <View style={style.container}>
+    <View style={[style.container, props.style]}>
       <View style={style.header}>
         <Text style={style.titleStyle}>{props.title}</Text>
         <TouchableOpacity activeOpacity={0.6} onPress={props.onMorePress}>
@@ -56,7 +59,7 @@ const BookScrollView: React.FC<Props> = (props) => {
 };
 const style = StyleSheet.create({
   container: {
-    height: 320,
+    height: 300,
     backgroundColor: 'white',
     marginHorizontal: 20,
   },

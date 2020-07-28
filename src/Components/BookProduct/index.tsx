@@ -3,36 +3,28 @@
 import React from 'react';
 import {View, StyleSheet, Text, Image, TouchableOpacity} from 'react-native';
 import Book from '../../Models/book';
+import Colors from '../../Utils/color';
 
 interface Props {
-  name: string;
-  author: string;
   img: string;
   onPress: (book: Book) => void;
 }
 const BookProduct: React.FC<Props> = (props) => {
   return (
     <TouchableOpacity activeOpacity={0.65} onPress={() => {
-        let book = new Book(props.name, props.author, props.img);
+        let book = new Book();
+        book.imgUrl = props.img;
         props.onPress(book);
         }}>
       <View style={style.container}>
         <View style={style.imgHolder}>
           <Image
             style={{flex: 1}}
-            resizeMode="contain"
+            resizeMode="cover"
             source={{
               uri: props.img,
             }}
           />
-        </View>
-        <View style={{height:50, width: 120, justifyContent: 'space-between'}}>
-          <Text numberOfLines={2} style={style.nameStyle}>
-            {props.name}
-          </Text>
-          <Text numberOfLines={1} style={style.authorStyle}>
-            {props.author}
-          </Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -41,27 +33,18 @@ const BookProduct: React.FC<Props> = (props) => {
 
 const style = StyleSheet.create({
   container: {
-    height: '100%',
-    width: 135,
+    height: 210,
+    width: 140,
     backgroundColor: 'white',
     alignItems: 'center',
+    borderWidth: 0.5,
+    borderColor: Colors.Background,
+    marginLeft: 10,
   },
   imgHolder: {
-    height: 180,
-    width: 120,
+    height: 207,
+    width: 135,
     backgroundColor: 'white',
-  },
-  nameStyle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: 'black',
-    textAlign: 'center',
-    marginTop: 5,
-  },
-  authorStyle: {
-    fontSize: 13,
-    color: '#5E6162',
-    textAlign: 'center',
   },
 });
 export default BookProduct;

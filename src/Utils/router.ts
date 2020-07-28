@@ -5,8 +5,9 @@ export default class Route {
   static Login: string = 'login_screen';
 
   //Home
-  static HomePage: string = 'HomePage';
-  static BookShelf: string = 'BookShelf';
-  static ListBook: string = 'List_Book';
-  static Discover: string = 'Discover';
+  static HomePage: string = 'home_page';
+  static BookShelf: string = 'book_shelf';
+  static ListBook: string = 'list_book';
+  static Discover: string = 'discover';
+  static DetailBook: string = 'detail_book';
 }

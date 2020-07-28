@@ -1,25 +1,84 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text, ImageBackground, Dimensions} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Colors from '../../../Utils/color';
 import {BookScrollView} from '../../../Components';
 import Book from '../../../Models/book';
-import Data from '../../../Utils/data';
 import Route from '../../../Utils/router';
+import BookApi from '../../../Api/bookApi';
 
 interface Props {
   navigation: any;
 }
 
 const DiscoverScreen: React.FC<Props> = (props) => {
+  const [newBookList, setNewBookList] = useState<Book[]>([]);
+  const [bestSellerBookList, setBestSellerBookList] = useState<Book[]>([]);
+
   function onItemPress(book: Book) {
-    console.log(`${book.name} \n ${book.author}`);
+    console.log(book);
   }
+  function renderBookScrollView() {
+    return [<BookScrollView
+    key={1}
+    title="New Books"
+    books={newBookList}
+    onItemPress={(book) => onItemPress(book)}
+    onMorePress={()=>{props.navigation.navigate(Route.ListBook, {title: 'New Books'});}}
+  />,
+  <BookScrollView
+    key={2}
+    title="Best Seller"
+    books={bestSellerBookList}
+    style={{marginBottom: 20}}
+    onItemPress={(book) => onItemPress(book)}
+    onMorePress={()=>{props.navigation.navigate(Route.ListBook, {title: 'Best Seller'});}}
+  />];
+  }
+  async function getBookData(){
+    const newBookResponse:any = await BookApi.getAllNewBook(0, 10, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE');
+    const bestSellerResponse: any = await BookApi.getAllBestSellerBook(0, 10, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE');
+    const newBookListData: Book[] = newBookResponse.map((item: any)=>{
+      return new Book(
+        item.Success,
+        item.Author,
+        item.BookID,
+        item.CoverUrl,
+        item.FileSize,
+        item.Price,
+        item.PublishYear,
+        item.Title,
+        item.TotalBooks,
+        item.Sumarize,
+      );
+    });
+
+    const bestSellerListData: Book[] = bestSellerResponse.map((item: any)=>{
+      return new Book(
+        item.Success,
+        item.Author,
+        item.BookID,
+        item.CoverUrl,
+        item.FileSize,
+        item.Price,
+        item.PublishYear,
+        item.Title,
+        item.TotalBooks,
+        item.Sumarize,
+      );
+    });
+    setNewBookList(newBookListData);
+    setBestSellerBookList(bestSellerListData);
+  }
+  useEffect(()=>{
+    getBookData();
+  },[]);
+
   return (
     <View style={style.container}>
-          <ScrollView style={style.middle}>
+     <ScrollView style={style.middle}>
         <View style={style.header}>
         <ImageBackground
           style={style.backgroundStyle}
@@ -32,37 +91,25 @@ const DiscoverScreen: React.FC<Props> = (props) => {
           </View>
         </ImageBackground>
       </View>
-
-        <BookScrollView
-          title="Bookmark"
-          books={Data.bookList}
-          onItemPress={(book) => onItemPress(book)}
-          onMorePress={()=>{props.navigation.navigate(Route.ListBook, {title: 'Bookmark'});}}
-        />
-       <BookScrollView
-          title="Downloads"
-          books={Data.bookList}
-          onItemPress={(book) => onItemPress(book)}
-          onMorePress={()=>{props.navigation.navigate(Route.ListBook, {title: 'Downloads'});}}
-        />
+          {renderBookScrollView()}
       </ScrollView>
     </View>
   );
 };
+
 const style = StyleSheet.create({
   container: {
-    width: '100%',
     flex: 1,
-    marginBottom: 20,
+    backgroundColor: 'white',
   },
   header: {
-    height: Dimensions.get('window').height / 5,
+    height: Dimensions.get('window').height / 8,
     backgroundColor: Colors.Background,
   },
   middle: {
-    height: '100%',
     backgroundColor: 'white',
     width: '100%',
+    paddingBottom: 20,
   },
   backgroundStyle: {
     flex: 1,

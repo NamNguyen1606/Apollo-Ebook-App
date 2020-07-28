@@ -1,32 +1,36 @@
 export default class Book {
-  private _name: string;
-  private _author: string;
-  private _img: string;
+  status: boolean;
+  author: string;
+  id: number;
+  imgUrl: string;
+  fileSize: string;
+  price: number;
+  publicYear: number;
+  title: string;
+  total: number;
+  summary: string;
 
-  constructor(name: string, author: string, img: string) {
-    this._name = name;
-    this._author = author;
-    this._img = img;
-  }
-
-  get name(): string {
-    return this._name;
-  }
-  set name(val: string) {
-    this._name = val;
-  }
-
-  get author(): string {
-    return this._author;
-  }
-  set author(val: string) {
-    this._author = val;
-  }
-
-  get img(): string {
-    return this._img;
-  }
-  set img(val: string) {
-    this._img = val;
+  constructor(
+    status?: boolean,
+    author?: string,
+    id?: number,
+    imgUrl?: string,
+    fileSize?: string,
+    price?: number,
+    publicYear?: number,
+    title?: string,
+    total?: number,
+    summary?: string,
+  ) {
+    this.id = id || 0;
+    this.status = status || true;
+    this.author = author || '';
+    this.imgUrl = imgUrl || '';
+    this.fileSize = fileSize || '';
+    this.price = price || 0;
+    this.publicYear = publicYear || 0;
+    this.title = title || '';
+    this.total = total || 0;
+    this.summary = summary || '';
   }
 }
