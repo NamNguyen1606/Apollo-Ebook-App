@@ -3,8 +3,10 @@ import React from 'react';
 import {View, StyleSheet, Text, ScrollView, Dimensions} from 'react-native';
 import Colors from '../../../Utils/color';
 import {BookCard} from '../../../Components';
-import {Icon} from 'react-native-elements';
+import {Icon, ListItem} from 'react-native-elements';
 import Route from '../../../Utils/router';
+import {FlatList} from 'react-native-gesture-handler';
+import Book from '../../../Models/book';
 
 interface Props {
   navigation: any;
@@ -12,7 +14,7 @@ interface Props {
 }
 
 const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
-  const {title} = route.params;
+  const {title, data} = route.params;
   return (
     <View style={style.container}>
       <View style={style.header}>
@@ -38,12 +40,19 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
           <Text style={style.counterStyle}>Bookmarks</Text>
           <Text style={style.quantityStyle}>27 Books</Text>
         </View>
-        <ScrollView style={{marginTop: 20}}>
-          <BookCard />
-          <BookCard />
-          <BookCard />
-          <BookCard />
-        </ScrollView>
+        <FlatList
+          data={data}
+          renderItem={({item}: any) => (
+            <BookCard
+              author={item.author}
+              tittle={item.title}
+              img={item.imgUrl}
+              price={item.price}
+              publishYear={item.publicYear}
+            />
+          )}
+          keyExtractor={item => `${item.id}`}
+        />
       </View>
     </View>
   );
@@ -51,7 +60,6 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: 20,
     backgroundColor: 'white',
   },
   header: {

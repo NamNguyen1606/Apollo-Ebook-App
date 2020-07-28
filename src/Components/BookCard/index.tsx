@@ -3,38 +3,38 @@ import React from 'react';
 import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
 import {Rating} from 'react-native-elements';
 import Colors from '../../Utils/color';
+import FastImage from 'react-native-fast-image';
 
-interface Props {}
+interface Props {
+  tittle: string;
+  author: string;
+  price: number;
+  publishYear: number;
+  img: string;
+}
 
-const BookCard = () => {
+const BookCard: React.FC<Props> = (props) => {
   return (
     <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
       <View style={style.container}>
         <View style={style.imgHolder}>
-          <Image
+          <FastImage
             style={{
               height: 190,
               width: 107,
             }}
             resizeMode="contain"
             source={{
-              uri:
-                'https://images-na.ssl-images-amazon.com/images/I/81zvl3KfEIL.jpg',
+              uri: props.img,
             }}
           />
         </View>
         <View style={style.detailHolder}>
-          <Text style={style.nameStyle}>Red Dragon</Text>
-          <Text style={style.authorStyle}>
-            Author of ther silence of the lambs
+          <Text numberOfLines={3} style={style.nameStyle}>
+            {props.tittle}
           </Text>
-          <View style={{flexDirection: 'row'}}>
-            <Tag title="HORROR" />
-            <Tag title="FICTION" />
-            <Tag title="FANTASY" />
-          </View>
-          <Text style={style.authorStyle}>by Thomas Harris</Text>
-          <Rating imageSize={20} readonly={true} />
+          <Text style={style.authorStyle}>{props.author}</Text>
+          <Text style={style.priceStyle}>{props.price} VND</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -46,6 +46,8 @@ const style = StyleSheet.create({
     height: 200,
     width: '100%',
     backgroundColor: 'white',
+    borderColor: Colors.SubText,
+    borderBottomWidth: 0.3,
   },
   imgHolder: {
     flex: 1.2,
@@ -62,11 +64,16 @@ const style = StyleSheet.create({
   nameStyle: {
     fontSize: 19,
     color: 'black',
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
   authorStyle: {
     fontSize: 16,
-    color: Colors.SubText,
+    color: 'grey',
+  },
+  priceStyle: {
+    fontSize: 16,
+    color: 'black',
+    fontWeight: 'bold',
   },
 });
 export default BookCard;

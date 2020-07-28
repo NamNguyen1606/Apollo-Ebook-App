@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import Colors from '../../../Utils/color';
 import {BookScrollView} from '../../../Components';
-import Data from '../../../Utils/data';
 import Book from '../../../Models/book';
 
 interface Props {
@@ -36,7 +35,7 @@ const BookshelfScreen: React.FC<Props> = (props) => {
         </ImageBackground>
       </View>
       <View style={style.middle}>
-        <BookScrollView
+        {/* <BookScrollView
           title="Trending Now"
           books={Data.bookList}
           onItemPress={(book) => onItemPress(book)}
@@ -55,7 +54,7 @@ const BookshelfScreen: React.FC<Props> = (props) => {
               props.navigation.navigate('BookShelf_More');
             };
           }}
-        />
+        /> */}
       </View>
     </ScrollView>
   );

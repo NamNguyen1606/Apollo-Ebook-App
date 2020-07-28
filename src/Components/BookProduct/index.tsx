@@ -1,9 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {View, StyleSheet, Text, Image, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import Book from '../../Models/book';
 import Colors from '../../Utils/color';
+import FastImage from 'react-native-fast-image';
 
 interface Props {
   img: string;
@@ -18,12 +19,13 @@ const BookProduct: React.FC<Props> = (props) => {
         }}>
       <View style={style.container}>
         <View style={style.imgHolder}>
-          <Image
-            style={{flex: 1}}
-            resizeMode="cover"
-            source={{
+          <FastImage
+             style={{flex: 1}}
+             source={{
               uri: props.img,
+              priority: "high",
             }}
+            resizeMode={FastImage.resizeMode.contain}
           />
         </View>
       </View>
