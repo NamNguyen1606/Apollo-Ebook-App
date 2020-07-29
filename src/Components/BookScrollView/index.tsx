@@ -51,7 +51,7 @@ const BookScrollView: React.FC<Props> = (props) => {
           </View>
         </TouchableOpacity>
       </View>
-      <ScrollView style={style.footer} horizontal={true}>
+      <ScrollView style={style.footer} horizontal={true} showsHorizontalScrollIndicator={false}>
         {renderBookList(props.books)}
       </ScrollView>
     </View>

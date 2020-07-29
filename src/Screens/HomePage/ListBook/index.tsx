@@ -84,7 +84,7 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
               publishYear={item.publicYear}
             />
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => `${item.id}`}
           onEndReached={loadMore}
           onEndReachedThreshold={0.6}
           showsVerticalScrollIndicator={false}
