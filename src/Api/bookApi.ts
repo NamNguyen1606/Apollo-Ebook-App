@@ -1,6 +1,22 @@
 import axiosClient from './axiosClient';
 
 class BookApi {
+  static bookType: 'AllBooks' | 'TopSell';
+
+  static getAll = (
+    collection: 'AllBooks' | 'TopSell' | string,
+    index: number,
+    count: number,
+    token: string,
+  ) => {
+    const url = `Book/Search?collection=${collection}&index=${index}&count=${count}&status=0`;
+    return axiosClient.post(
+      url,
+      {search: '', author: ''},
+      {headers: {Token: token}},
+    );
+  };
+
   static getAllNewBook = (index: number, count: number, token: string) => {
     const url = `Book/Search?collection=AllBooks&index=${index}&count=${count}&status=0`;
     return axiosClient.post(

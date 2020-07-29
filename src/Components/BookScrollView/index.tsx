@@ -30,6 +30,7 @@ const BookScrollView: React.FC<Props> = (props) => {
         <BookProduct
           key={book.id}
           img={book.imgUrl}
+          title={book.title}
           onPress={(book) => {
             props.onItemPress(book);
           }}

@@ -1,9 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  TouchableOpacity,
+  ImageBackground,
+} from 'react-native';
 import {Rating} from 'react-native-elements';
 import Colors from '../../Utils/color';
 import FastImage from 'react-native-fast-image';
+import {TextStyle} from 'react-native';
 
 interface Props {
   tittle: string;
@@ -11,21 +19,29 @@ interface Props {
   price: number;
   publishYear: number;
   img: string;
+  style?: TextStyle;
 }
 
 const BookCard: React.FC<Props> = (props) => {
+  const [isUrlError, setIsUrlError] = useState(false);
+  const [img, setImg] = useState(props.img);
+  const defaultImg =
+    'https://cdn0.iconfinder.com/data/icons/book-and-library/64/Sad-Emotion-Book-512.png';
   return (
     <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
-      <View style={style.container}>
+      <View style={[style.container, style]}>
         <View style={style.imgHolder}>
           <FastImage
             style={{
-              height: 190,
-              width: 107,
+              height: 175,
+              width: 115,
             }}
             resizeMode="contain"
             source={{
-              uri: props.img,
+              uri: img,
+            }}
+            onError={() => {
+              setImg(defaultImg);
             }}
           />
         </View>
@@ -50,7 +66,10 @@ const style = StyleSheet.create({
     borderBottomWidth: 0.3,
   },
   imgHolder: {
-    flex: 1.2,
+    height: 170,
+    width: 115,
+    marginRight: 10,
+    marginVertical: 10,
     justifyContent: 'center',
     alignItems: 'flex-start',
     backgroundColor: 'white',

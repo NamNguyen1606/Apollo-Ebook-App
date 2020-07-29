@@ -1,12 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet, Text, ScrollView, Dimensions} from 'react-native';
 import Colors from '../../../Utils/color';
 import {BookCard} from '../../../Components';
-import {Icon, ListItem} from 'react-native-elements';
+import {Icon} from 'react-native-elements';
 import Route from '../../../Utils/router';
 import {FlatList} from 'react-native-gesture-handler';
 import Book from '../../../Models/book';
+import BookApi from '../../../Api/bookApi';
 
 interface Props {
   navigation: any;
@@ -14,7 +15,37 @@ interface Props {
 }
 
 const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
-  const {title, data} = route.params;
+  const {title, collection, data} = route.params;
+  const [bookData, setBookData] = useState(() => data);
+  const [index, setIndex] = useState(10);
+  console.log(route.params);
+  async function loadMore() {
+    setIndex(index + 10);
+    const response: any = await BookApi.getAll(
+      collection,
+      index,
+      10,
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE',
+    );
+    const newBookData: Book[] = response.map((item: any) => {
+      return new Book(
+        item.Success,
+        item.Author,
+        item.BookID,
+        item.CoverUrl,
+        item.FileSize,
+        item.Price,
+        item.PublishYear,
+        item.Title,
+        item.TotalBooks,
+        item.Sumarize,
+      );
+    });
+    console.log('     ');
+    console.log(newBookData);
+    setBookData([...bookData, ...newBookData]);
+  }
+
   return (
     <View style={style.container}>
       <View style={style.header}>
@@ -34,16 +65,18 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            height: 40,
+            height: 10,
             alignItems: 'flex-end',
           }}>
-          <Text style={style.counterStyle}>Bookmarks</Text>
-          <Text style={style.quantityStyle}>27 Books</Text>
+          {/* <Text style={style.counterStyle}>Bookmarks</Text>
+          <Text style={style.quantityStyle}>27 Books</Text> */}
         </View>
         <FlatList
-          data={data}
-          renderItem={({item}: any) => (
+          data={bookData}
+          renderItem={({item}: Book) => (
             <BookCard
+              style={{marginRight: 10}}
+              key={item.id}
               author={item.author}
               tittle={item.title}
               img={item.imgUrl}
@@ -51,7 +84,10 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
               publishYear={item.publicYear}
             />
           )}
-          keyExtractor={item => `${item.id}`}
+          keyExtractor={(item) => item.id}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.6}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     </View>
