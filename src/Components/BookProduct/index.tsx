@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
-import {View, StyleSheet, TouchableOpacity, ImageBackground, Text} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import Book from '../../Models/book';
 import Colors from '../../Utils/color';
 import FastImage from 'react-native-fast-image';
@@ -9,6 +9,7 @@ import FastImage from 'react-native-fast-image';
 interface Props {
   img: string;
   title: string;
+  data: Book;
   onPress: (book: Book) => void;
 }
 const BookProduct: React.FC<Props> = (props) => {
@@ -17,9 +18,7 @@ const BookProduct: React.FC<Props> = (props) => {
   const defaultImg = 'https://cdn0.iconfinder.com/data/icons/book-and-library/64/Sad-Emotion-Book-512.png';
   return (
     <TouchableOpacity activeOpacity={0.65} onPress={() => {
-        let book = new Book();
-        book.imgUrl = props.img;
-        props.onPress(book);
+        props.onPress(props.data);
         }}>
       <View style={style.container}>
         <View style={style.imgHolder}>
@@ -59,6 +58,7 @@ const style = StyleSheet.create({
     fontSize: 14,
     marginHorizontal: 3,
     marginBottom: 5,
+    color: Colors.DarkGrey,
   },
 });
 export default BookProduct;

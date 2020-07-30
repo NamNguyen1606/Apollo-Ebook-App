@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-import {View, StyleSheet, Text, ScrollView, Dimensions} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, StyleSheet, Text, Dimensions} from 'react-native';
 import Colors from '../../../Utils/color';
 import {BookCard} from '../../../Components';
 import {Icon} from 'react-native-elements';
@@ -18,7 +18,7 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
   const {title, collection, data} = route.params;
   const [bookData, setBookData] = useState(() => data);
   const [index, setIndex] = useState(10);
-  console.log(route.params);
+
   async function loadMore() {
     setIndex(index + 10);
     const response: any = await BookApi.getAll(
@@ -46,6 +46,10 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
     setBookData([...bookData, ...newBookData]);
   }
 
+  const onItemPress = (data: Book) =>
+    navigation.navigate(Route.DetailBook, {book: data});
+
+  useEffect(() => {}, [bookData]);
   return (
     <View style={style.container}>
       <View style={style.header}>
@@ -61,30 +65,23 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
         <Text style={style.titleHeader}>{title}</Text>
       </View>
       <View style={style.middle}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            height: 10,
-            alignItems: 'flex-end',
-          }}>
-          {/* <Text style={style.counterStyle}>Bookmarks</Text>
-          <Text style={style.quantityStyle}>27 Books</Text> */}
-        </View>
         <FlatList
           data={bookData}
-          renderItem={({item}: Book) => (
+          renderItem={({item}) => (
             <BookCard
-              style={{marginRight: 10}}
+              style={{marginTop: 10}}
               key={item.id}
               author={item.author}
               tittle={item.title}
               img={item.imgUrl}
               price={item.price}
+              quantity={item.total}
               publishYear={item.publicYear}
+              data={item}
+              onPress={(data: Book) => onItemPress(data)}
             />
           )}
-          keyExtractor={(item) => `${item.id}`}
+          keyExtractor={(item: any) => `${item.id}`}
           onEndReached={loadMore}
           onEndReachedThreshold={0.6}
           showsVerticalScrollIndicator={false}
@@ -96,7 +93,7 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#F9F9F9',
   },
   header: {
     height: 80,
@@ -107,8 +104,8 @@ const style = StyleSheet.create({
   },
   middle: {
     flex: 1,
-    backgroundColor: 'white',
-    marginHorizontal: 20,
+    marginHorizontal: 10,
+    backgroundColor: '#F9F9F9',
   },
   titleHeader: {
     fontSize: 25,

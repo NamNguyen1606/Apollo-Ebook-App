@@ -31,6 +31,7 @@ const BookScrollView: React.FC<Props> = (props) => {
           key={book.id}
           img={book.imgUrl}
           title={book.title}
+          data={book}
           onPress={(book) => {
             props.onItemPress(book);
           }}
@@ -47,11 +48,14 @@ const BookScrollView: React.FC<Props> = (props) => {
         <Text style={style.titleStyle}>{props.title}</Text>
         <TouchableOpacity activeOpacity={0.6} onPress={props.onMorePress}>
           <View style={style.borderSubTitle}>
-            <Text>MORE</Text>
+            <Text style={{color: Colors.DarkGrey}}>MORE</Text>
           </View>
         </TouchableOpacity>
       </View>
-      <ScrollView style={style.footer} horizontal={true} showsHorizontalScrollIndicator={false}>
+      <ScrollView
+        style={style.footer}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}>
         {renderBookList(props.books)}
       </ScrollView>
     </View>

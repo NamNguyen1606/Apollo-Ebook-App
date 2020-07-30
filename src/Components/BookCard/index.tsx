@@ -1,17 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  Text,
-  TouchableOpacity,
-  ImageBackground,
-} from 'react-native';
-import {Rating} from 'react-native-elements';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Colors from '../../Utils/color';
 import FastImage from 'react-native-fast-image';
 import {TextStyle} from 'react-native';
+import MoneyFormat from '../../Utils/moneyFormat';
+import Book from '../../Models/book';
 
 interface Props {
   tittle: string;
@@ -19,17 +13,21 @@ interface Props {
   price: number;
   publishYear: number;
   img: string;
+  quantity: number;
   style?: TextStyle;
+  data: Book;
+  onPress: (book: Book) => void;
 }
 
 const BookCard: React.FC<Props> = (props) => {
-  const [isUrlError, setIsUrlError] = useState(false);
   const [img, setImg] = useState(props.img);
   const defaultImg =
     'https://cdn0.iconfinder.com/data/icons/book-and-library/64/Sad-Emotion-Book-512.png';
   return (
-    <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
-      <View style={[style.container, style]}>
+    <TouchableOpacity
+      activeOpacity={0.5}
+      onPress={() => props.onPress(props.data)}>
+      <View style={[style.container, props.style]}>
         <View style={style.imgHolder}>
           <FastImage
             style={{
@@ -50,7 +48,10 @@ const BookCard: React.FC<Props> = (props) => {
             {props.tittle}
           </Text>
           <Text style={style.authorStyle}>{props.author}</Text>
-          <Text style={style.priceStyle}>{props.price} VND</Text>
+          <Tag
+            title={MoneyFormat.VND(props.price)}
+            isSoldOut={props.quantity === 0}
+          />
         </View>
       </View>
     </TouchableOpacity>
@@ -59,14 +60,15 @@ const BookCard: React.FC<Props> = (props) => {
 const style = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: 200,
+    height: 180,
     width: '100%',
     backgroundColor: 'white',
     borderColor: Colors.SubText,
     borderBottomWidth: 0.3,
+    paddingRight: 10,
   },
   imgHolder: {
-    height: 170,
+    height: 165,
     width: 115,
     marginRight: 10,
     marginVertical: 10,
@@ -77,13 +79,15 @@ const style = StyleSheet.create({
   detailHolder: {
     flex: 2.4,
     backgroundColor: 'white',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     alignItems: 'flex-start',
+    paddingTop: 10,
+    paddingBottom: 30,
   },
   nameStyle: {
     fontSize: 19,
-    color: 'black',
-    fontWeight: 'bold',
+    color: Colors.DarkGrey,
+    fontWeight: 'normal',
   },
   authorStyle: {
     fontSize: 16,
@@ -97,16 +101,23 @@ const style = StyleSheet.create({
 });
 export default BookCard;
 
-const Tag = ({title}) => {
+interface TagProps {
+  title: string;
+  isSoldOut: boolean;
+}
+const Tag: React.FC<TagProps> = (props) => {
   return (
     <View
       style={{
-        backgroundColor: '#61C4C1',
+        backgroundColor: props.isSoldOut ? '#E85147' : Colors.Background,
         borderRadius: 3,
-        paddingHorizontal: 3,
-        marginRight: 5,
+        paddingHorizontal: 5,
+        paddingVertical: 3,
+        marginRight: 10,
       }}>
-      <Text style={{fontSize: 14, color: 'white'}}>{title}</Text>
+      <Text style={{fontSize: 15, color: 'white', fontWeight: 'bold'}}>
+        {props.isSoldOut ? 'Sold Out' : props.title}
+      </Text>
     </View>
   );
 };

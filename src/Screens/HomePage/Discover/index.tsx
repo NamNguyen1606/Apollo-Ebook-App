@@ -19,6 +19,7 @@ const DiscoverScreen: React.FC<Props> = (props) => {
   const {newBook, bestSellerBook} : any = bookData;
   function onItemPress(book: Book) {
     console.log(book);
+    props.navigation.navigate(Route.DetailBook, {book: book});
   }
 
   function renderBookScrollView() {
