@@ -1,6 +1,7 @@
 export default class Book {
   status: boolean;
   author: string;
+  authorMore: string;
   id: number;
   imgUrl: string;
   fileSize: string;
@@ -9,6 +10,9 @@ export default class Book {
   title: string;
   total: number;
   summary: string;
+  publisher: string;
+  subject: string;
+  page: number;
 
   constructor(
     status?: boolean,
@@ -21,6 +25,10 @@ export default class Book {
     title?: string,
     total?: number,
     summary?: string,
+    authorMore?: string,
+    publisher?: string,
+    subject?: string,
+    page?: number,
   ) {
     this.id = id || 0;
     this.status = status || true;
@@ -32,5 +40,9 @@ export default class Book {
     this.title = title || '';
     this.total = total || 0;
     this.summary = summary || '';
+    this.authorMore = authorMore || '';
+    this.publisher = publisher || '';
+    this.subject = subject || '';
+    this.page = page || 0;
   }
 }

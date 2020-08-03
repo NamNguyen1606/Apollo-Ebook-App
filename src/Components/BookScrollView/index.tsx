@@ -17,6 +17,7 @@ interface Props {
   style?: TextStyle;
   onItemPress: (book: Book) => void;
   onMorePress: () => void;
+  isShowHeader?: boolean;
 }
 
 const BookScrollView: React.FC<Props> = (props) => {
@@ -44,14 +45,16 @@ const BookScrollView: React.FC<Props> = (props) => {
 
   return (
     <View style={[style.container, props.style]}>
-      <View style={style.header}>
-        <Text style={style.titleStyle}>{props.title}</Text>
-        <TouchableOpacity activeOpacity={0.6} onPress={props.onMorePress}>
-          <View style={style.borderSubTitle}>
-            <Text style={{color: Colors.DarkGrey}}>MORE</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
+      {props.isShowHeader ? (
+        <View style={style.header}>
+          <Text style={style.titleStyle}>{props.title}</Text>
+          <TouchableOpacity activeOpacity={0.6} onPress={props.onMorePress}>
+            <View style={style.borderSubTitle}>
+              <Text style={{color: Colors.DarkGrey}}>MORE</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      ) : null}
       <ScrollView
         style={style.footer}
         horizontal={true}
@@ -65,7 +68,6 @@ const style = StyleSheet.create({
   container: {
     height: 300,
     backgroundColor: 'white',
-    marginHorizontal: 20,
   },
   header: {
     height: 70,

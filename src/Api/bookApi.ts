@@ -37,6 +37,16 @@ class BookApi {
       {headers: {Token: token}},
     );
   };
+
+  static getDetailBook(id: number, token: string) {
+    const url = `Book/Detail?id=${id}`;
+    return axiosClient.get(url, {headers: {Token: token}});
+  }
+
+  static getSuggestionBooks(id: number, token: string) {
+    const url = `Book/RefBooks?id=${id}`;
+    return axiosClient.get(url, {headers: {token: token}});
+  }
 }
 
 export default BookApi;

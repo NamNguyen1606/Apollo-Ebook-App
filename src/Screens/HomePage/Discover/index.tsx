@@ -18,7 +18,6 @@ const DiscoverScreen: React.FC<Props> = (props) => {
   const bookData = useContext(BookDataContext);
   const {newBook, bestSellerBook} : any = bookData;
   function onItemPress(book: Book) {
-    console.log(book);
     props.navigation.navigate(Route.DetailBook, {book: book});
   }
 
@@ -27,6 +26,8 @@ const DiscoverScreen: React.FC<Props> = (props) => {
     key={1}
     title="New Books"
     books={newBook}
+    style={{marginHorizontal: 20}}
+    isShowHeader={true}
     onItemPress={(book) => onItemPress(book)}
     onMorePress={()=>{props.navigation.navigate(Route.ListBook, {title: 'New Books',collection: 'AllBooks' , data: newBook});}}
   />,
@@ -34,7 +35,8 @@ const DiscoverScreen: React.FC<Props> = (props) => {
     key={2}
     title="Best Seller"
     books={bestSellerBook}
-    style={{marginBottom: 20}}
+    style={{marginBottom: 20, marginHorizontal: 20}}
+    isShowHeader={true}
     onItemPress={(book) => onItemPress(book)}
     onMorePress={()=>{props.navigation.navigate(Route.ListBook, {title: 'Best Seller',collection: 'TopSell', data: bestSellerBook});}}
   />];

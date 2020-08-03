@@ -7,7 +7,6 @@ import {
   ProfileScreen,
 } from '../Screens/HomePage';
 import DiscoverStack from './discoverStack';
-import Route from '../Utils/router';
 interface props {
   route: any;
 }

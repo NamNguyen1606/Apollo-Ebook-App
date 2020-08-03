@@ -55,7 +55,6 @@ const SearchScreen = () => {
       }
     });
     setList(listCategory);
-    console.log('render');
   }
   useEffect(()=>{
     LoadingCategory();

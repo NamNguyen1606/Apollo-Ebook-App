@@ -10,4 +10,5 @@ export default class Route {
   static ListBook: string = 'list_book';
   static Discover: string = 'discover';
   static DetailBook: string = 'detail_book';
+  static SynopsisTab: string = 'synopsis';
 }
