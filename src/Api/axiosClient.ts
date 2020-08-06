@@ -1,10 +1,11 @@
 import axios from 'axios';
 import queryString from 'query-string';
 
-const REACT_APP_API_URL: string = 'http://bookstoreapi.libvn.net/yb/';
+const API_URL_GLOBAL: string = 'http://bookstoreapi.libvn.net/yb/';
+const API_URL_LOCAL: string = 'http://192.168.1.249:55/yb/';
 
 const axiosClient = axios.create({
-  baseURL: REACT_APP_API_URL,
+  baseURL: API_URL_LOCAL,
   headers: {
     'content-type': 'application/json',
   },

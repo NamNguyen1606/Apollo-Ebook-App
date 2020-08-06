@@ -6,6 +6,7 @@ import BookProduct from './BookProduct';
 import BookCard from './BookCard';
 import CategoryTag from './CategoryTag';
 import CategoryCard from './CategoryCard';
+import PacketCard from './PacketCard/index';
 export {
   Button,
   TextField,
@@ -15,4 +16,5 @@ export {
   BookCard,
   CategoryTag,
   CategoryCard,
+  PacketCard,
 };

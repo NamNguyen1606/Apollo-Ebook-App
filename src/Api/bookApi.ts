@@ -38,14 +38,20 @@ class BookApi {
     );
   };
 
-  static getDetailBook(id: number, token: string) {
+  static getDetailBook(id: number, token: string, cancelToken?: any) {
     const url = `Book/Detail?id=${id}`;
-    return axiosClient.get(url, {headers: {Token: token}});
+    return axiosClient.get(url, {
+      headers: {Token: token},
+      cancelToken: cancelToken || null,
+    });
   }
 
-  static getSuggestionBooks(id: number, token: string) {
+  static getSuggestionBooks(id: number, token: string, cancelToken?: any) {
     const url = `Book/RefBooks?id=${id}`;
-    return axiosClient.get(url, {headers: {token: token}});
+    return axiosClient.get(url, {
+      headers: {token: token},
+      cancelToken: cancelToken || null,
+    });
   }
 }
 

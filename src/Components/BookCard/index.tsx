@@ -1,11 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
 import Colors from '../../Utils/color';
-import FastImage from 'react-native-fast-image';
 import {TextStyle} from 'react-native';
 import MoneyFormat from '../../Utils/moneyFormat';
 import Book from '../../Models/book';
+import {SharedElement} from 'react-navigation-shared-element';
 
 interface Props {
   tittle: string;
@@ -29,19 +29,21 @@ const BookCard: React.FC<Props> = (props) => {
       onPress={() => props.onPress(props.data)}>
       <View style={[style.container, props.style]}>
         <View style={style.imgHolder}>
-          <FastImage
-            style={{
-              height: 175,
-              width: 115,
-            }}
-            resizeMode="contain"
-            source={{
-              uri: img,
-            }}
-            onError={() => {
-              setImg(defaultImg);
-            }}
-          />
+          <SharedElement id={`item.${props.data.id}.photo`}>
+            <Image
+              style={{
+                height: 175,
+                width: 115,
+              }}
+              resizeMode="contain"
+              source={{
+                uri: img,
+              }}
+              onError={() => {
+                setImg(defaultImg);
+              }}
+            />
+          </SharedElement>
         </View>
         <View style={style.detailHolder}>
           <Text numberOfLines={3} style={style.nameStyle}>

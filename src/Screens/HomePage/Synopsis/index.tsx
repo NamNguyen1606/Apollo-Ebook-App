@@ -13,6 +13,7 @@ interface Props {
 }
 
 const SynopsisTab: React.FC<Props> = (props) => {
+  console.log(props.suggestionData);
   return (
     <View style={style.container}>
       <Text style={[style.title, {marginTop: 0}]}>Information</Text>
@@ -28,7 +29,7 @@ const SynopsisTab: React.FC<Props> = (props) => {
       <Text style={style.title}>Summary</Text>
       <Text style={style.summaryStyle}>{props.data.summary}</Text>
       <Text style={style.title}>Suggestion</Text>
-      {props.suggestionData !== null && props.suggestionData !== [] ? (
+      {props.suggestionData !== null && props.suggestionData.length !== 0 ? (
         <BookScrollView
           key={1}
           title="Suggestion"

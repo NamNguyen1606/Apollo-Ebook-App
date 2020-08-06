@@ -1,13 +1,18 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
 import {WelcomeScreen, RegisterScreen, LoginScreen} from '../Screens';
 import HomeTabNavigation from './homeTab';
 import Route from '../Utils/router';
-import {DetailBookScreen, SynopsisTab} from '../Screens/HomePage';
-const Stack = createStackNavigator();
+import {
+  DetailBookScreen,
+  SynopsisTab,
+  DetailPacketScreen,
+} from '../Screens/HomePage';
+import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+
+const Stack = createSharedElementStackNavigator();
 const AuthNavigation = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{animationTypeForReplace: 'pop'}}>
       <Stack.Screen
         name={Route.Welcome}
         component={WelcomeScreen}
@@ -32,12 +37,21 @@ const AuthNavigation = () => {
         name={Route.DetailBook}
         component={DetailBookScreen}
         options={{headerShown: false}}
+        sharedElementsConfig={(route) => {
+          const {book} = route.params;
+          return [`item.${book.id}.photo`, `item.${book.id}.text`];
+        }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name={Route.SynopsisTab}
         component={SynopsisTab}
         options={{headerShown: false}}
-      /> */}
+      />
+      <Stack.Screen
+        name={Route.DetailPacket}
+        component={DetailPacketScreen}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };

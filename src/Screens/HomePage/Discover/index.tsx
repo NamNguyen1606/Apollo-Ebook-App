@@ -18,7 +18,7 @@ const DiscoverScreen: React.FC<Props> = (props) => {
   const bookData = useContext(BookDataContext);
   const {newBook, bestSellerBook} : any = bookData;
   function onItemPress(book: Book) {
-    props.navigation.navigate(Route.DetailBook, {book: book});
+    props.navigation.navigate(Route.DetailBook, {book});
   }
 
   function renderBookScrollView() {
@@ -45,7 +45,7 @@ const DiscoverScreen: React.FC<Props> = (props) => {
 
   return (
     <View style={style.container}>
-     <ScrollView style={style.middle}>
+     <ScrollView style={style.middle} showsVerticalScrollIndicator ={false}>
         <View style={style.header}>
         <ImageBackground
           style={style.backgroundStyle}
@@ -70,7 +70,7 @@ const style = StyleSheet.create({
     backgroundColor: 'white',
   },
   header: {
-    height: Dimensions.get('window').height / 8,
+    height: Dimensions.get('window').height / 10,
     backgroundColor: Colors.Background,
   },
   middle: {

@@ -7,7 +7,7 @@ import {
   ImageBackground,
   Dimensions,
   Image,
-  TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import {Button} from '../../../Components';
@@ -18,6 +18,9 @@ import SynopsisTab from '../Synopsis';
 import {ScrollView} from 'react-native-gesture-handler';
 import BookApi from '../../../Api/bookApi';
 import Book from '../../../Models/book';
+import {SharedElement} from 'react-navigation-shared-element';
+import Route from '../../../Utils/router';
+import axios from 'axios';
 
 const Token =
   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
@@ -28,6 +31,7 @@ interface Props {
 
 const DetailBookScreen: React.FC<Props> = (props) => {
   const {book} = props.route.params;
+  console.log(`detail: ${book.id}`);
   const [data, setData] = useState(book);
   const [suggestionData, setSuggestionData] = useState(null);
   const [isReview, setIsReview] = useState(false);
@@ -40,17 +44,26 @@ const DetailBookScreen: React.FC<Props> = (props) => {
   }
   function onRead() {}
 
-  async function getBookInfoData() {
-    const response: any = await BookApi.getDetailBook(data.id, Token);
+  async function getBookInfoData(cancelToken: any, token: any) {
+    const response: any = await BookApi.getDetailBook(
+      data.id,
+      token,
+      cancelToken,
+    );
     data.page = response.Pages;
     data.authorMore = response.AuthorMore;
     data.publisher = response.Publisher;
     data.subject = response.Subject;
+    data.summary = response.Sumarize;
     setData({...data, ...data});
   }
 
-  async function getSuggestionData() {
-    const response: any = await BookApi.getSuggestionBooks(data.id, Token);
+  async function getSuggestionData(cancelToken: any, token: any) {
+    const response: any = await BookApi.getSuggestionBooks(
+      data.id,
+      token,
+      cancelToken,
+    );
     const suggestData = response.map((item): any => {
       return new Book(
         item.Success,
@@ -68,9 +81,15 @@ const DetailBookScreen: React.FC<Props> = (props) => {
     setSuggestionData(suggestData);
   }
   useEffect(() => {
-    getBookInfoData();
-    getSuggestionData();
-    console.log('effect');
+    const source = axios.CancelToken.source();
+    const loading = async (cancelToken: any) => {
+      await getBookInfoData(cancelToken, Token);
+      await getSuggestionData(cancelToken, Token);
+    };
+    loading(source.token);
+    return () => {
+      source.cancel();
+    };
   }, []);
   return (
     <ScrollView style={style.container} showsVerticalScrollIndicator={false}>
@@ -103,14 +122,16 @@ const DetailBookScreen: React.FC<Props> = (props) => {
           />
         </View>
         <View style={style.middle}>
-          <Image
-            style={style.img}
-            resizeMode="cover"
-            source={{
-              uri: img,
-            }}
-            onError={() => setImg(defaultImg)}
-          />
+          <SharedElement id={`item.${book.id}.photo`}>
+            <Image
+              style={{height: 220, width: 140, borderRadius: 8}}
+              resizeMode="cover"
+              source={{
+                uri: img,
+              }}
+              onError={() => setImg(defaultImg)}
+            />
+          </SharedElement>
           <View style={style.detail}>
             <Text
               style={style.title}
@@ -138,7 +159,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
       </ImageBackground>
       <View style={style.bottom}>
         <View style={style.tabHolder}>
-          <TouchableHighlight
+          <TouchableOpacity
             style={[
               style.tab,
               isReview
@@ -155,8 +176,8 @@ const DetailBookScreen: React.FC<Props> = (props) => {
                 Synopsis
               </Text>
             </View>
-          </TouchableHighlight>
-          <TouchableHighlight
+          </TouchableOpacity>
+          <TouchableOpacity
             style={[
               style.tab,
               !isReview
@@ -173,7 +194,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
                 Reviews
               </Text>
             </View>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
         {isReview ? (
           <ReviewTab />
@@ -233,6 +254,7 @@ const style = StyleSheet.create({
     borderRadius: 5,
   },
   img: {
+    height: 200,
     width: 140,
     borderRadius: 8,
   },
@@ -259,4 +281,5 @@ const style = StyleSheet.create({
     color: '#F6F6F6',
   },
 });
+
 export default DetailBookScreen;

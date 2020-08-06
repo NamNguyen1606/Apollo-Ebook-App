@@ -6,6 +6,7 @@ import ListBookScreen from './ListBook/index';
 import DetailBookScreen from './DetailBook/index';
 import SynopsisTab from './Synopsis/index';
 import ReviewTab from './ReviewTab/index';
+import DetailPacketScreen from '../DetailPacket/index';
 export {
   DiscoverScreen,
   BookshelfScreen,
@@ -15,4 +16,5 @@ export {
   DetailBookScreen,
   SynopsisTab,
   ReviewTab,
+  DetailPacketScreen,
 };

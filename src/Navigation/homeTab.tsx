@@ -11,7 +11,7 @@ interface props {
   route: any;
 }
 const Tab = createBottomTabNavigator();
-export const BookDataContext = React.createContext();
+export const BookDataContext = React.createContext({});
 const HomeTabNavigation: React.FC<props> = (props) => {
   const {newBookData, bestSellerData} = props.route.params;
   return (

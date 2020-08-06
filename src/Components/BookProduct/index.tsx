@@ -1,10 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
-import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
 import Book from '../../Models/book';
 import Colors from '../../Utils/color';
 import FastImage from 'react-native-fast-image';
+import { SharedElement } from 'react-navigation-shared-element';
 
 interface Props {
   img: string;
@@ -22,16 +23,17 @@ const BookProduct: React.FC<Props> = (props) => {
         }}>
       <View style={style.container}>
         <View style={style.imgHolder}>
-          <FastImage
-             style={{flex: 1}}
-             source={{
-              uri: img,
-              priority: 'high',
-            }}
-            resizeMode={FastImage.resizeMode.contain}
-            onError={()=> {setIsUrlError(true); setImg(defaultImg);}}
-          />
-          {isUrlError ?  <View><Text style={style.titleStyle} numberOfLines={2}>{props.title}</Text></View> : undefined}
+          <SharedElement id={`item.${props.data.id}.photo`} >
+            <Image
+              style={[style.imgHolder,  isUrlError ? {height: 160} : {height: 207}]}
+              source={{
+                uri: img,
+              }}
+              resizeMode="contain"
+              onError={()=> {setIsUrlError(true); setImg(defaultImg);}}
+            />
+          </SharedElement>
+          {isUrlError ?  <View><Text style={style.titleStyle} numberOfLines={3}>{props.title}</Text></View> : undefined}
         </View>
       </View>
     </TouchableOpacity>

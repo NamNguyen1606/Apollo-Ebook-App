@@ -1,13 +1,13 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
 import Route from '../Utils/router';
 import {
   ListBookScreen,
   DiscoverScreen,
   DetailBookScreen,
 } from '../Screens/HomePage';
+import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 
-const Stack = createStackNavigator();
+const Stack = createSharedElementStackNavigator();
 const DiscoverStack = () => {
   return (
     <Stack.Navigator>
