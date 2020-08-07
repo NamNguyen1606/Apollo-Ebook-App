@@ -80,6 +80,7 @@ const SearchScreen = () => {
             data={list}
             renderItem={renderItem}
             keyExtractor={item => item.id}
+            getItemLayout={(data, index) => ({length: 60, offset: index * 60, index})}
             showsVerticalScrollIndicator={false}
           />
         </View>

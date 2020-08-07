@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useMemo} from 'react';
 import {
   View,
   StyleSheet,
@@ -16,7 +16,8 @@ import {useQuery} from 'react-query';
 import PacketApi from '../../Api/packetApi';
 import BookScrollView from '../BookScrollView';
 import Book from '../../Models/book';
-import Route from '../../Utils/router';
+import Button from '../Button';
+
 const Token =
   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
 interface Props {
@@ -43,9 +44,6 @@ const PacketCard: React.FC<Props> = (props) => {
   };
   const {status, data} = useQuery(['books', props.packetId], loadingBookList);
 
-  console.log(props.packetId);
-  console.log(data);
-
   function renderListBook() {
     const result = data.Books.map((item): any => {
       return new Book(
@@ -62,20 +60,41 @@ const PacketCard: React.FC<Props> = (props) => {
       );
     });
     return (
-      <BookScrollView
-        style={isExpand ? {height: 300} : {height: 0}}
-        title="Suggestion"
-        books={result}
-        onItemPress={(book) => props.onPressItem(book)}
-        onMorePress={() => {}}
-      />
+      <View
+        style={[
+          {height: 450, marginTop: 10},
+          isExpand ? {opacity: 1} : {opacity: 0},
+        ]}>
+        <Button
+          style={{width: '100%', height: 50, alignSelf: 'center'}}
+          tittle="Purchase"
+          onPress={() => {}}
+        />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginVertical: 7,
+          }}>
+          <Text style={{fontSize: 18}}>Book List</Text>
+          <Text style={{fontSize: 14, color: Colors.SubText}}>
+            {result.length} Books
+          </Text>
+        </View>
+        <BookScrollView
+          style={{height: 215}}
+          books={result}
+          onItemPress={(book) => props.onPressItem(book)}
+          onMorePress={() => {}}
+        />
+      </View>
     );
   }
 
   const onExpandPress = () => {
     setIsExpand(!isExpand);
     Animated.spring(heightAnimated, {
-      toValue: !isExpand ? 400 : 180,
+      toValue: !isExpand ? 500 : 180,
       useNativeDriver: false,
     }).start();
   };
@@ -160,7 +179,7 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-export default PacketCard;
+export default React.memo(PacketCard);
 
 interface TagProps {
   title: string;

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import React, {useState, useMemo} from 'react';
+import {View, StyleSheet, Text, TouchableOpacity, Animated} from 'react-native';
 import {Icon} from 'react-native-elements';
 import ChildCollection from '../../Models/childCollection';
 
@@ -13,7 +13,9 @@ interface Props {
 
 const CategoryCard: React.FC<Props> = (props) => {
   const [isExpand, setIsExpand] = useState<boolean>(false);
-  const [heightAnimated, setHeightAnimated] = useState(0);
+  const [heightAnimated] = useState(new Animated.Value(0));
+  const sizeCategory = useMemo<number>(()=> props.listSubCategory.length * 60, [props.listSubCategory.length]);
+
   function renderSubCategory(arr: ChildCollection[]){
     let result: ChildCollection[] = [];
     for (let item of arr){
@@ -24,13 +26,22 @@ const CategoryCard: React.FC<Props> = (props) => {
     }
     return result;
   }
+
+  const onPress = () => {
+    Animated.spring(heightAnimated, {
+      toValue: !isExpand ? sizeCategory : 0,
+      bounciness: 0,
+      useNativeDriver: false,
+    }).start();
+  };
+
   return (
     <View >
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => {
           setIsExpand(!isExpand);
-          setHeightAnimated(!isExpand ? undefined : 0);
+          onPress();
         }}>
         <View style={style.header}>
       <Text style={style.textStyle}>{props.title}</Text>
@@ -42,14 +53,14 @@ const CategoryCard: React.FC<Props> = (props) => {
           />
         </View>
       </TouchableOpacity>
-      <View
-        style={{
+      <Animated.View
+        style={[{
           height: heightAnimated,
           backgroundColor: 'white',
           marginLeft: 30,
-        }}>
+        }, isExpand ? {opacity: 1} : {opacity: 0}]}>
         {renderSubCategory(props.listSubCategory)}
-      </View>
+      </Animated.View>
     </View>
   );
 };

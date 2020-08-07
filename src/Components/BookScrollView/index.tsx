@@ -12,7 +12,7 @@ import Colors from '../../Utils/color';
 import Book from '../../Models/book';
 
 interface Props {
-  title: string;
+  title?: string;
   books: Book[];
   style?: TextStyle;
   onItemPress: (book: Book) => void;

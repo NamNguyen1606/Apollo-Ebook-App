@@ -1,5 +1,6 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   StyleSheet,
@@ -8,8 +9,10 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  Modal,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
+import {Icon, Input} from 'react-native-elements';
 import {Button} from '../../../Components';
 import MoneyFormat from '../../../Utils/moneyFormat';
 import Colors from '../../../Utils/color';
@@ -19,7 +22,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 import BookApi from '../../../Api/bookApi';
 import Book from '../../../Models/book';
 import {SharedElement} from 'react-navigation-shared-element';
-import Route from '../../../Utils/router';
 import axios from 'axios';
 
 const Token =
@@ -31,19 +33,20 @@ interface Props {
 
 const DetailBookScreen: React.FC<Props> = (props) => {
   const {book} = props.route.params;
-  console.log(`detail: ${book.id}`);
+  console.log(' book detail render' + book.id);
   const [data, setData] = useState(book);
   const [suggestionData, setSuggestionData] = useState(null);
   const [isReview, setIsReview] = useState(false);
   const [img, setImg] = useState(book.imgUrl);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const defaultImg =
     'https://cdn0.iconfinder.com/data/icons/book-and-library/64/Sad-Emotion-Book-512.png';
 
-  function onTabPress(value: boolean) {
+  const onTabPress = useCallback((value: boolean) => {
     setIsReview(value);
-  }
+  }, []);
   function onRead() {}
-
+  const showModal = () => setIsModalVisible(!isModalVisible);
   async function getBookInfoData(cancelToken: any, token: any) {
     const response: any = await BookApi.getDetailBook(
       data.id,
@@ -82,9 +85,9 @@ const DetailBookScreen: React.FC<Props> = (props) => {
   }
   useEffect(() => {
     const source = axios.CancelToken.source();
-    const loading = async (cancelToken: any) => {
-      await getBookInfoData(cancelToken, Token);
-      await getSuggestionData(cancelToken, Token);
+    const loading = (cancelToken: any) => {
+      getBookInfoData(cancelToken, Token);
+      getSuggestionData(cancelToken, Token);
     };
     loading(source.token);
     return () => {
@@ -92,6 +95,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
     };
   }, []);
   return (
+    <View style = {{flex: 1, backgroundColor: 'white'}}>
     <ScrollView style={style.container} showsVerticalScrollIndicator={false}>
       <ImageBackground
         style={style.header}
@@ -199,12 +203,38 @@ const DetailBookScreen: React.FC<Props> = (props) => {
         {isReview ? (
           <ReviewTab />
         ) : (
-          <SynopsisTab data={data} suggestionData={suggestionData} />
+            <SynopsisTab data={data} suggestionData={suggestionData} />
         )}
       </View>
     </ScrollView>
+    <Modal
+       animationType="slide"
+       transparent={true}
+       visible={isModalVisible}>
+       <TouchableWithoutFeedback onPress={showModal}>
+       <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.3)', justifyContent: 'center', alignItems: 'center'}}>
+        <View style={style.modal}>
+          <TouchableOpacity onPress={showModal}>
+          <Icon style={{alignSelf: 'flex-end', marginTop: 20, marginRight: 20}} name="close" type="font-awesome" size={20} color="black" />
+          </TouchableOpacity>
+          <Text style={{alignSelf: 'center', fontSize: 20}}>Review this book</Text>
+          <View style={{height: 100, backgroundColor: 'white'}}>
+            <Input placeholder="Write a review" multiline={true} scrollEnabled = {true}/>
+          </View>
+          <Button style={{width: '85%', alignSelf: 'center', marginBottom: 20}} tittle="SUBMIT" onPress={() => {}}/>
+        </View>
+        </View>
+       </TouchableWithoutFeedback>
+    </Modal>
+    {isReview && <TouchableOpacity onPress={showModal}>
+      <View style={style.reviewButton}>
+        <Text style={style.reviewTitle}>WRITE A REVIEW</Text>
+      </View>
+      </TouchableOpacity>}
+    </View>
   );
 };
+
 const style = StyleSheet.create({
   container: {
     flex: 1,
@@ -225,7 +255,7 @@ const style = StyleSheet.create({
   },
   middle: {
     height: 215,
-    top: 110,
+    top: 90,
     left: 20,
     flexDirection: 'row',
   },
@@ -280,6 +310,28 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
     color: '#F6F6F6',
   },
+  reviewButton: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: Colors.Background,
+    borderRadius: 5,
+    backgroundColor: 'white',
+    justifyContent:'center',
+    alignItems: 'center',
+    marginVertical: 10,
+    marginHorizontal: 20,
+  },
+  reviewTitle: {
+    fontSize: 16,
+    color: Colors.SubText,
+    fontWeight: 'bold',
+  },
+  modal: {
+    height: 350,
+    width: '90%',
+    backgroundColor: 'white',
+    justifyContent: 'space-between',
+    borderRadius: 20},
 });
 
 export default DetailBookScreen;

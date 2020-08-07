@@ -18,13 +18,22 @@ const HomeTabNavigation: React.FC<props> = (props) => {
     <BookDataContext.Provider
       value={{newBook: newBookData, bestSellerBook: bestSellerData}}>
       <Tab.Navigator
-        tabBarOptions={{showLabel: false, tabStyle: {marginBottom: 10}}}>
+        tabBarOptions={{showLabel: true, tabStyle: {marginBottom: 10}}}>
         <Tab.Screen
           name="Discover"
           component={DiscoverStack}
           options={{
             tabBarIcon: ({color, size}) => (
               <Icon name="explore" type="material" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Packet"
+          component={BookshelfScreen}
+          options={{
+            tabBarIcon: ({color, size}) => (
+              <Icon name="book" type="material" size={size} color={color} />
             ),
           }}
         />
@@ -39,15 +48,6 @@ const HomeTabNavigation: React.FC<props> = (props) => {
                 size={size}
                 color={color}
               />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Book Self"
-          component={BookshelfScreen}
-          options={{
-            tabBarIcon: ({color, size}) => (
-              <Icon name="book" type="material" size={size} color={color} />
             ),
           }}
         />

@@ -13,7 +13,7 @@ interface Props {
 }
 
 const SynopsisTab: React.FC<Props> = (props) => {
-  console.log(props.suggestionData);
+  console.log(props.suggestionData + 'render');
   return (
     <View style={style.container}>
       <Text style={[style.title, {marginTop: 0}]}>Information</Text>
@@ -70,7 +70,7 @@ const style = StyleSheet.create({
   },
 });
 
-export default SynopsisTab;
+export default React.memo(SynopsisTab);
 
 interface SubProps {
   title: string;

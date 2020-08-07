@@ -21,11 +21,10 @@ interface Props {
 }
 
 const BookshelfScreen: React.FC<Props> = (props) => {
-  // function onItemPress(book: Book) {}
   const [index, setIndex] = useState(0);
   const packetData = useRef<any[]>([]);
   const indexData = useRef<number>(0);
-  console.log(packetData.current.length);
+
   const loadingPacket = async (key: any, index: number) => {
     const res = await PacketApi.getPacket(Token, index * 10, 10, 0);
     return res;
@@ -88,6 +87,11 @@ const BookshelfScreen: React.FC<Props> = (props) => {
             data={mergeData()}
             renderItem={renderItem}
             keyExtractor={(item) => item.PacketID}
+            getItemLayout={(data: any, index: any) => ({
+              length: 180,
+              offset: 180 * index,
+              index,
+            })}
             onEndReachedThreshold={0.7}
             onEndReached={loadingMore}
             showsVerticalScrollIndicator={false}
@@ -103,6 +107,7 @@ const BookshelfScreen: React.FC<Props> = (props) => {
 const style = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F9F9F9',
   },
   header: {
     height: Dimensions.get('window').height / 10,
@@ -111,6 +116,7 @@ const style = StyleSheet.create({
   middle: {
     flex: 1,
     backgroundColor: '#F9F9F9',
+    // backgroundColor: 'black',
     marginHorizontal: 10,
   },
   category: {
