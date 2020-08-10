@@ -7,13 +7,17 @@ import {
   Dimensions,
   ImageBackground,
   ActivityIndicator,
+  Modal,
+  TouchableOpacity,
+  FlatList,
 } from 'react-native';
 import Colors from '../../../Utils/color';
 import {useQuery} from 'react-query';
 import PacketApi from '../../../Api/packetApi';
-import {FlatList} from 'react-native-gesture-handler';
 import {PacketCard} from '../../../Components';
 import Route from '../../../Utils/router';
+import {Icon} from 'react-native-elements';
+import LottieView from 'lottie-react-native';
 const Token =
   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
 interface Props {
@@ -24,13 +28,218 @@ const BookshelfScreen: React.FC<Props> = (props) => {
   const [index, setIndex] = useState(0);
   const packetData = useRef<any[]>([]);
   const indexData = useRef<number>(0);
+  const [isModalPurchasingVisible, setIsModalPurchasingVisible] = useState<
+    boolean
+  >(false);
+  const showPurchaseModal = () =>
+    setIsModalPurchasingVisible(!isModalPurchasingVisible);
+
+  const [idPacket, setIdPacket] = useState<string>('');
+
+  const getPurchaseApi = async (key: any, token: any, id: string) =>
+    await PacketApi.purchasePacket(token, id);
+  const {status: purchaseStatus, data: purchaseData}: any = useQuery(
+    ['purchase', Token, idPacket],
+    getPurchaseApi,
+  );
+
+  function showStatusPurchasing() {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={isModalPurchasingVisible}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          {/* //TODO: Loading */}
+          {purchaseStatus === 'loading' && (
+            <View
+              style={{
+                height: 250,
+                width: '70%',
+                backgroundColor: 'transparent',
+                borderRadius: 20,
+                justifyContent: 'center',
+              }}>
+              <LottieView
+                style={{height: 150, width: 150, alignSelf: 'center'}}
+                source={require('../../../Asset/Animation/loading.json')}
+                autoPlay
+                loop={true}
+              />
+            </View>
+          )}
+
+          {/* //TODO: Loading success */}
+          {purchaseStatus === 'success' && (
+            <View
+              style={{
+                height: 250,
+                width: '70%',
+                backgroundColor: 'white',
+                borderRadius: 20,
+              }}>
+              {purchaseData.Success !== true ? (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'space-between',
+                    paddingTop: 15,
+                  }}>
+                  <LottieView
+                    style={{height: 100, width: 100, alignSelf: 'center'}}
+                    source={require('../../../Asset/Animation/failure.json')}
+                    autoPlay
+                    loop={false}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: '#d32f2f',
+                      fontWeight: 'bold',
+                      alignSelf: 'center',
+                    }}>
+                    PAYMENT FAILED
+                  </Text>
+                  <TouchableOpacity onPress={showPurchaseModal}>
+                    <View
+                      style={{
+                        height: 50,
+                        backgroundColor: '#CD5050',
+                        justifyContent: 'center',
+                        borderBottomRightRadius: 20,
+                        borderBottomLeftRadius: 20,
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          color: 'white',
+                          fontWeight: 'bold',
+                          alignSelf: 'center',
+                        }}>
+                        TRY AGAIN
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'space-between',
+                    paddingTop: 15,
+                  }}>
+                  <LottieView
+                    style={{height: 100, width: 100, alignSelf: 'center'}}
+                    source={require('../../../Asset/Animation/success.json')}
+                    autoPlay
+                    loop={false}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: '#00c853',
+                      alignSelf: 'center',
+                    }}>
+                    PAYMENT SUCCESS
+                  </Text>
+                  <TouchableOpacity onPress={showPurchaseModal}>
+                    <View
+                      style={{
+                        height: 50,
+                        backgroundColor: '#00c853',
+                        justifyContent: 'center',
+                        borderBottomRightRadius: 20,
+                        borderBottomLeftRadius: 20,
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          color: 'white',
+                          fontWeight: 'bold',
+                          alignSelf: 'center',
+                        }}>
+                        DONE
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+          )}
+
+          {purchaseStatus === 'error' && (
+            <View
+              style={{
+                height: 250,
+                width: '70%',
+                backgroundColor: 'white',
+                borderRadius: 20,
+              }}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'space-between',
+                  paddingTop: 15,
+                }}>
+                <LottieView
+                  style={{height: 100, width: 100, alignSelf: 'center'}}
+                  source={require('../../../Asset/Animation/failure.json')}
+                  autoPlay
+                  loop={false}
+                />
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: '#d32f2f',
+                    fontWeight: 'bold',
+                    alignSelf: 'center',
+                  }}>
+                  PAYMENT FAILED
+                </Text>
+                <TouchableOpacity onPress={showPurchaseModal}>
+                  <View
+                    style={{
+                      height: 50,
+                      backgroundColor: '#CD5050',
+                      justifyContent: 'center',
+                      borderBottomRightRadius: 20,
+                      borderBottomLeftRadius: 20,
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: 'white',
+                        fontWeight: 'bold',
+                        alignSelf: 'center',
+                      }}>
+                      TRY AGAIN
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </View>
+      </Modal>
+    );
+  }
+
+  const onPurchasePacket = (packetId: any) => {
+    setIsModalPurchasingVisible(true);
+    setIdPacket(packetId);
+  };
 
   const loadingPacket = async (key: any, index: number) => {
     const res = await PacketApi.getPacket(Token, index * 10, 10, 0);
     return res;
   };
-
-  const {data, status} = useQuery(['packets', index], loadingPacket);
+  const {data, status}: any = useQuery(['packets', index], loadingPacket);
 
   function mergeData(): any[] {
     if (status === 'success') {
@@ -64,6 +273,7 @@ const BookshelfScreen: React.FC<Props> = (props) => {
       onPressItem={(book) =>
         props.navigation.navigate(Route.DetailBook, {book})
       }
+      onPurchasePress={(packetId) => onPurchasePacket(packetId)}
     />
   );
 
@@ -100,6 +310,7 @@ const BookshelfScreen: React.FC<Props> = (props) => {
           <ActivityIndicator color="black" size="large" />
         )}
       </View>
+      {showStatusPurchasing()}
     </View>
   );
 };

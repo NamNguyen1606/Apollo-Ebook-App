@@ -30,6 +30,7 @@ interface Props {
   style?: TextStyle;
   data?: any;
   onPressItem: (book: any) => void;
+  onPurchasePress: (packetId: any) => void;
 }
 
 const PacketCard: React.FC<Props> = (props) => {
@@ -68,7 +69,7 @@ const PacketCard: React.FC<Props> = (props) => {
         <Button
           style={{width: '100%', height: 50, alignSelf: 'center'}}
           tittle="Purchase"
-          onPress={() => {}}
+          onPress={() => props.onPurchasePress(props.packetId)}
         />
         <View
           style={{

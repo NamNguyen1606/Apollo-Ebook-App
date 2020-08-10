@@ -10,6 +10,8 @@ target 'BookApp' do
 
   pod 'RNSharedElement', :path => '../node_modules/react-native-shared-element'
 
+  pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
+
   target 'BookAppTests' do
     inherit! :complete
     # Pods for testing

@@ -6,11 +6,15 @@ import {
   DetailBookScreen,
 } from '../Screens/HomePage';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import {CardStyleInterpolators} from '@react-navigation/stack';
 
 const Stack = createSharedElementStackNavigator();
 const DiscoverStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }}>
       <Stack.Screen
         name={Route.Discover}
         component={DiscoverScreen}

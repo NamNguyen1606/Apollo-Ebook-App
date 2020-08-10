@@ -8,11 +8,16 @@ import {
   DetailPacketScreen,
 } from '../Screens/HomePage';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import {CardStyleInterpolators} from '@react-navigation/stack';
 
 const Stack = createSharedElementStackNavigator();
 const AuthNavigation = () => {
   return (
-    <Stack.Navigator screenOptions={{animationTypeForReplace: 'pop'}}>
+    <Stack.Navigator
+      screenOptions={{
+        animationTypeForReplace: 'pop',
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }}>
       <Stack.Screen
         name={Route.Welcome}
         component={WelcomeScreen}

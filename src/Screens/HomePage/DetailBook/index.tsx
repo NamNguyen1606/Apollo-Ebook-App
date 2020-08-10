@@ -3,10 +3,8 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
-  StyleSheet,
   Text,
   ImageBackground,
-  Dimensions,
   Image,
   TouchableOpacity,
   Modal,
@@ -23,6 +21,9 @@ import BookApi from '../../../Api/bookApi';
 import Book from '../../../Models/book';
 import {SharedElement} from 'react-navigation-shared-element';
 import axios from 'axios';
+import style from './style';
+import LottieView from 'lottie-react-native';
+import { useQuery } from 'react-query';
 
 const Token =
   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
@@ -34,40 +35,48 @@ interface Props {
 const DetailBookScreen: React.FC<Props> = (props) => {
   const {book} = props.route.params;
   console.log(' book detail render' + book.id);
-  const [data, setData] = useState(book);
+  const [dataBook, setDataBook] = useState(book);
   const [suggestionData, setSuggestionData] = useState(null);
   const [isReview, setIsReview] = useState(false);
   const [img, setImg] = useState(book.imgUrl);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [isModalPurchasingVisible, setIsModalPurchasingVisible] = useState<boolean>(false);
+  const [token, setToken] = useState<string>('');
+  const getPurchaseApi = async (key: any, token: any) => await BookApi.purchaseBook(token, dataBook.id);
+
+  const {status, data} : any = useQuery(['purchase', token], getPurchaseApi);
   const defaultImg =
     'https://cdn0.iconfinder.com/data/icons/book-and-library/64/Sad-Emotion-Book-512.png';
 
   const onTabPress = useCallback((value: boolean) => {
     setIsReview(value);
   }, []);
-  function onRead() {}
-  const showModal = () => setIsModalVisible(!isModalVisible);
+
+  const showReviewModal = () => setIsModalVisible(!isModalVisible);
+
+  const showPurchaseModal = () => setIsModalPurchasingVisible(!isModalPurchasingVisible);
+
   async function getBookInfoData(cancelToken: any, token: any) {
     const response: any = await BookApi.getDetailBook(
-      data.id,
+      dataBook.id,
       token,
       cancelToken,
     );
-    data.page = response.Pages;
-    data.authorMore = response.AuthorMore;
-    data.publisher = response.Publisher;
-    data.subject = response.Subject;
-    data.summary = response.Sumarize;
-    setData({...data, ...data});
+    dataBook.page = response.Pages;
+    dataBook.authorMore = response.AuthorMore;
+    dataBook.publisher = response.Publisher;
+    dataBook.subject = response.Subject;
+    dataBook.summary = response.Sumarize;
+    setDataBook({...dataBook, ...dataBook});
   }
 
   async function getSuggestionData(cancelToken: any, token: any) {
     const response: any = await BookApi.getSuggestionBooks(
-      data.id,
+      dataBook.id,
       token,
       cancelToken,
     );
-    const suggestData = response.map((item): any => {
+    const suggestData = response.map((item : any) => {
       return new Book(
         item.Success,
         item.Author,
@@ -83,6 +92,69 @@ const DetailBookScreen: React.FC<Props> = (props) => {
     });
     setSuggestionData(suggestData);
   }
+
+  function showStatusPurchasing() {
+    return <Modal
+    animationType = "fade"
+    transparent={true}
+    visible = {isModalPurchasingVisible}>
+      <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center'}}>
+
+      {/* //TODO: Loading */}
+      { status === 'loading' &&
+        <View style ={{height: 250, width: '70%', backgroundColor: 'transparent', borderRadius: 20, justifyContent: 'center'}}>
+          <LottieView style={{height: 150, width: 150, alignSelf: 'center'}} source={require('../../../Asset/Animation/loading.json')} autoPlay loop={true}/>
+        </View> }
+
+      {/* //TODO: Loading success */}
+      { status === 'success' &&
+       <View style ={{height: 250, width: '70%', backgroundColor: 'white', borderRadius: 20}}>
+            {data.Success !== true
+            ?
+            <View style = {{flex: 1,justifyContent: 'space-between', paddingTop: 15}}>
+              <LottieView style={{height: 100, width: 100, alignSelf: 'center'}} source={require('../../../Asset/Animation/failure.json')} autoPlay loop={false}/>
+              <Text style={{fontSize: 20, color: '#d32f2f', fontWeight: 'bold', alignSelf: 'center'}}>PAYMENT FAILED</Text>
+              <TouchableOpacity onPress={showPurchaseModal}>
+                <View style={{height: 50, backgroundColor: '#CD5050', justifyContent: 'center', borderBottomRightRadius: 20, borderBottomLeftRadius: 20}}>
+                  <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold', alignSelf: 'center'}}>TRY AGAIN</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+            :
+            <View style = {{flex: 1,justifyContent: 'space-between', paddingTop: 15}}>
+              <LottieView style={{height: 100, width: 100, alignSelf: 'center'}} source={require('../../../Asset/Animation/success.json')} autoPlay loop={false}/>
+              <Text style={{fontSize: 20, color: '#00c853', alignSelf: 'center'}}>PAYMENT SUCCESS</Text>
+              <TouchableOpacity onPress={showPurchaseModal}>
+                <View style={{height: 50, backgroundColor: '#00c853', justifyContent: 'center', borderBottomRightRadius: 20, borderBottomLeftRadius: 20}}>
+                <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold', alignSelf: 'center'}}>DONE</Text>
+                </View>
+              </TouchableOpacity>
+            </View>}
+          </View>
+      }
+
+      { status === 'error' &&
+       <View style ={{height: 250, width: '70%', backgroundColor: 'white', borderRadius: 20}}>
+            <View style = {{flex: 1,justifyContent: 'space-between', paddingTop: 15}}>
+              <LottieView style={{height: 100, width: 100, alignSelf: 'center'}} source={require('../../../Asset/Animation/failure.json')} autoPlay loop={false}/>
+              <Text style={{fontSize: 20, color: '#d32f2f', fontWeight: 'bold', alignSelf: 'center'}}>PAYMENT FAILED</Text>
+              <TouchableOpacity onPress={showPurchaseModal}>
+                <View style={{height: 50, backgroundColor: '#CD5050', justifyContent: 'center', borderBottomRightRadius: 20, borderBottomLeftRadius: 20}}>
+                  <Text style={{fontSize: 20, color: 'white', fontWeight: 'bold', alignSelf: 'center'}}>TRY AGAIN</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+      }
+      </View>
+    </Modal>;
+  }
+
+  function purchaseBook() {
+    setIsModalPurchasingVisible(true);
+    setToken(Token);
+  }
+
   useEffect(() => {
     const source = axios.CancelToken.source();
     const loading = (cancelToken: any) => {
@@ -94,6 +166,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
       source.cancel();
     };
   }, []);
+
   return (
     <View style = {{flex: 1, backgroundColor: 'white'}}>
     <ScrollView style={style.container} showsVerticalScrollIndicator={false}>
@@ -142,21 +215,21 @@ const DetailBookScreen: React.FC<Props> = (props) => {
               adjustsFontSizeToFit
               minimumFontScale={0.5}
               numberOfLines={4}>
-              {data.title}
+              {dataBook.title}
             </Text>
             <Text
               adjustsFontSizeToFit
               minimumFontScale={0.5}
               numberOfLines={1}
               style={style.author}>
-              by {data.author}
+              by {dataBook.author}
             </Text>
-            <Text style={style.author}>Published: {data.publicYear}</Text>
-            <Text style={style.price}>{MoneyFormat.VND(data.price)}</Text>
+            <Text style={style.author}>Published: {dataBook.publicYear}</Text>
+            <Text style={style.price}>{MoneyFormat.VND(dataBook.price)}</Text>
             <Button
               style={{borderRadius: 15, height: 45, width: 120}}
-              tittle="READ NOW"
-              onPress={onRead}
+              tittle="PURCHASE"
+              onPress={() => purchaseBook()}
             />
           </View>
         </View>
@@ -203,7 +276,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
         {isReview ? (
           <ReviewTab />
         ) : (
-            <SynopsisTab data={data} suggestionData={suggestionData} />
+            <SynopsisTab data={dataBook} suggestionData={suggestionData} />
         )}
       </View>
     </ScrollView>
@@ -211,10 +284,10 @@ const DetailBookScreen: React.FC<Props> = (props) => {
        animationType="slide"
        transparent={true}
        visible={isModalVisible}>
-       <TouchableWithoutFeedback onPress={showModal}>
+       <TouchableWithoutFeedback onPress={showReviewModal}>
        <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.3)', justifyContent: 'center', alignItems: 'center'}}>
         <View style={style.modal}>
-          <TouchableOpacity onPress={showModal}>
+          <TouchableOpacity onPress={showReviewModal}>
           <Icon style={{alignSelf: 'flex-end', marginTop: 20, marginRight: 20}} name="close" type="font-awesome" size={20} color="black" />
           </TouchableOpacity>
           <Text style={{alignSelf: 'center', fontSize: 20}}>Review this book</Text>
@@ -226,112 +299,14 @@ const DetailBookScreen: React.FC<Props> = (props) => {
         </View>
        </TouchableWithoutFeedback>
     </Modal>
-    {isReview && <TouchableOpacity onPress={showModal}>
+    {isReview && <TouchableOpacity onPress={showReviewModal}>
       <View style={style.reviewButton}>
         <Text style={style.reviewTitle}>WRITE A REVIEW</Text>
       </View>
       </TouchableOpacity>}
+      {showStatusPurchasing()}
     </View>
   );
 };
-
-const style = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  header: {
-    height: Dimensions.get('window').height * 0.45,
-    alignItems: 'flex-start',
-    backgroundColor: 'black',
-  },
-  subHeader: {
-    flexDirection: 'row',
-    marginHorizontal: 10,
-    marginTop: 20,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '92%',
-  },
-  middle: {
-    height: 215,
-    top: 90,
-    left: 20,
-    flexDirection: 'row',
-  },
-  bottom: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 30,
-  },
-  tabHolder: {
-    height: 45,
-    marginTop: 10,
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    paddingVertical: 3,
-    borderWidth: 0.5,
-    borderColor: 'grey',
-    borderRadius: 5,
-    marginBottom: 15,
-  },
-  tab: {
-    flex: 1,
-    backgroundColor: 'white',
-    marginHorizontal: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-  },
-  img: {
-    height: 200,
-    width: 140,
-    borderRadius: 8,
-  },
-  detail: {
-    marginLeft: 10,
-    justifyContent: 'space-between',
-    width: Dimensions.get('window').width * 0.56,
-  },
-  title: {
-    fontSize: 20,
-    color: '#F6F6F6',
-    fontWeight: 'bold',
-  },
-  titleTab: {
-    fontSize: 16,
-  },
-  author: {
-    fontSize: 15,
-    color: '#E1E1E1',
-  },
-  price: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#F6F6F6',
-  },
-  reviewButton: {
-    height: 50,
-    borderWidth: 1,
-    borderColor: Colors.Background,
-    borderRadius: 5,
-    backgroundColor: 'white',
-    justifyContent:'center',
-    alignItems: 'center',
-    marginVertical: 10,
-    marginHorizontal: 20,
-  },
-  reviewTitle: {
-    fontSize: 16,
-    color: Colors.SubText,
-    fontWeight: 'bold',
-  },
-  modal: {
-    height: 350,
-    width: '90%',
-    backgroundColor: 'white',
-    justifyContent: 'space-between',
-    borderRadius: 20},
-});
 
 export default DetailBookScreen;

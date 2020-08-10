@@ -53,6 +53,11 @@ class BookApi {
       cancelToken: cancelToken || null,
     });
   }
+
+  static purchaseBook(token: any, id: number){
+    const url = `Book/Purchase?id=${id}`;
+    return axiosClient.get(url, {headers: {Token: token}});
+  }
 }
 
 export default BookApi;

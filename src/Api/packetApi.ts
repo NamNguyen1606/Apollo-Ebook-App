@@ -18,5 +18,10 @@ export default class PacketApi {
   static getDetailPacket = (token: any, id: string) => {
     const url = `Packet/Detail?id=${id}`;
     return axiosClient.get(url, {headers: {Token: token}});
-  }
+  };
+
+  static purchasePacket = (token: any, id: string) => {
+    const url = `Packet/Purchase?id=${id}`;
+    return axiosClient.get(url, {headers: {Token: token}});
+  };
 }
