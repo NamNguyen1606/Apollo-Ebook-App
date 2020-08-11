@@ -11,12 +11,16 @@ interface props {
   route: any;
 }
 const Tab = createBottomTabNavigator();
-export const BookDataContext = React.createContext({});
+export const DataContext = React.createContext({});
 const HomeTabNavigation: React.FC<props> = (props) => {
-  const {newBookData, bestSellerData} = props.route.params;
+  const {newBookData, bestSellerData, categoryData} = props.route.params;
   return (
-    <BookDataContext.Provider
-      value={{newBook: newBookData, bestSellerBook: bestSellerData}}>
+    <DataContext.Provider
+      value={{
+        newBook: newBookData,
+        bestSellerBook: bestSellerData,
+        categoryData: categoryData,
+      }}>
       <Tab.Navigator
         tabBarOptions={{showLabel: true, tabStyle: {marginBottom: 10}}}>
         <Tab.Screen
@@ -61,7 +65,7 @@ const HomeTabNavigation: React.FC<props> = (props) => {
           }}
         />
       </Tab.Navigator>
-    </BookDataContext.Provider>
+    </DataContext.Provider>
   );
 };
 

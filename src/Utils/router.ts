@@ -1,5 +1,6 @@
 export default class Route {
   // Authentication
+  static Splash: string = 'splash_screen';
   static Welcome: string = 'welcome_screen';
   static Register: string = 'register_screen';
   static Login: string = 'login_screen';

@@ -16,7 +16,6 @@ import {useQuery} from 'react-query';
 import PacketApi from '../../../Api/packetApi';
 import {PacketCard} from '../../../Components';
 import Route from '../../../Utils/router';
-import {Icon} from 'react-native-elements';
 import LottieView from 'lottie-react-native';
 const Token =
   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
@@ -307,7 +306,12 @@ const BookshelfScreen: React.FC<Props> = (props) => {
             showsVerticalScrollIndicator={false}
           />
         ) : (
-          <ActivityIndicator color="black" size="large" />
+          <LottieView
+            style={{height: 100, width: 100}}
+            source={require('../../../Asset/Animation/loading.json')}
+            autoPlay
+            loop
+          />
         )}
       </View>
       {showStatusPurchasing()}
@@ -327,7 +331,8 @@ const style = StyleSheet.create({
   middle: {
     flex: 1,
     backgroundColor: '#F9F9F9',
-    // backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginHorizontal: 10,
   },
   category: {

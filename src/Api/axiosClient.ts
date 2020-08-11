@@ -5,7 +5,7 @@ const API_URL_GLOBAL: string = 'http://bookstoreapi.libvn.net/yb/';
 const API_URL_LOCAL: string = 'http://192.168.1.249:55/yb/';
 
 const axiosClient = axios.create({
-  baseURL: API_URL_LOCAL,
+  baseURL: API_URL_GLOBAL,
   headers: {
     'content-type': 'application/json',
   },

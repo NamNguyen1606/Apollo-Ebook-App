@@ -7,9 +7,11 @@ import {Button} from '../../Components';
 import Route from '../../Utils/router';
 interface Props {
   navigation: any;
+  route: any;
 }
 
-const WelcomeScreen: React.FC<Props> = ({navigation}) => {
+const WelcomeScreen: React.FC<Props> = ({navigation, route}) => {
+  const {newBookData, bestSellerData, categoryData} = route.params;
   return (
     <View style={style.container}>
       <View style={style.header}>
@@ -19,16 +21,20 @@ const WelcomeScreen: React.FC<Props> = ({navigation}) => {
       <View style={style.footer}>
         <Button
           style={{marginBottom: 10}}
-          tittle="REGISTER"
+          tittle="LOGIN / REGISTER"
           onPress={() => {
             navigation.navigate(Route.Register);
           }}
         />
         <Button
-          tittle="LOG IN"
+          tittle="START BROWSING"
           isReserve={true}
           onPress={() => {
-            navigation.navigate('login_screen');
+            navigation.navigate(Route.HomePage, {
+              newBookData: newBookData,
+              bestSellerData: bestSellerData,
+              categoryData: categoryData,
+            });
           }}
         />
         <Text style={style.subFooterStyle}>

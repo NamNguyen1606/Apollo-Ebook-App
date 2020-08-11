@@ -1,13 +1,19 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, {useContext} from 'react';
-import {View, StyleSheet, Text, ImageBackground, Dimensions} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  ImageBackground,
+  Dimensions,
+} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Colors from '../../../Utils/color';
 import {BookScrollView} from '../../../Components';
 import Book from '../../../Models/book';
 import Route from '../../../Utils/router';
-import { BookDataContext } from '../../../Navigation/homeTab';
+import {DataContext} from '../../../Navigation/homeTab';
 
 interface Props {
   navigation: any;
@@ -15,50 +21,64 @@ interface Props {
 }
 
 const DiscoverScreen: React.FC<Props> = (props) => {
-  const bookData = useContext(BookDataContext);
-  const {newBook, bestSellerBook} : any = bookData;
+  const bookData = useContext(DataContext);
+  const {newBook, bestSellerBook}: any = bookData;
+
   function onItemPress(book: Book) {
     props.navigation.navigate(Route.DetailBook, {book});
   }
 
   function renderBookScrollView() {
-    return [<BookScrollView
-    key={1}
-    title="New Books"
-    books={newBook}
-    style={{marginHorizontal: 20}}
-    isShowHeader={true}
-    onItemPress={(book) => onItemPress(book)}
-    onMorePress={()=>{props.navigation.navigate(Route.ListBook, {title: 'New Books',collection: 'AllBooks' , data: newBook});}}
-  />,
-  <BookScrollView
-    key={2}
-    title="Best Seller"
-    books={bestSellerBook}
-    style={{marginBottom: 20, marginHorizontal: 20}}
-    isShowHeader={true}
-    onItemPress={(book) => onItemPress(book)}
-    onMorePress={()=>{props.navigation.navigate(Route.ListBook, {title: 'Best Seller',collection: 'TopSell', data: bestSellerBook});}}
-  />];
+    return [
+      <BookScrollView
+        key={1}
+        title="New Books"
+        books={newBook}
+        style={{marginHorizontal: 20}}
+        isShowHeader={true}
+        onItemPress={(book) => onItemPress(book)}
+        onMorePress={() => {
+          props.navigation.navigate(Route.ListBook, {
+            title: 'New Books',
+            collection: 'AllBooks',
+            data: newBook,
+          });
+        }}
+      />,
+      <BookScrollView
+        key={2}
+        title="Best Seller"
+        books={bestSellerBook}
+        style={{marginBottom: 20, marginHorizontal: 20}}
+        isShowHeader={true}
+        onItemPress={(book) => onItemPress(book)}
+        onMorePress={() => {
+          props.navigation.navigate(Route.ListBook, {
+            title: 'Best Seller',
+            collection: 'TopSell',
+            data: bestSellerBook,
+          });
+        }}
+      />,
+    ];
   }
-
 
   return (
     <View style={style.container}>
-     <ScrollView style={style.middle} showsVerticalScrollIndicator ={false}>
+      <ScrollView style={style.middle} showsVerticalScrollIndicator={false}>
         <View style={style.header}>
-        <ImageBackground
-          style={style.backgroundStyle}
-          source={{
-            uri:
-              'https://images.creativemarket.com/0.1.0/ps/6374392/300/200/m2/fpc/wm0/rz7tt7epyeamedl02kmk27udgkcpjcltux0kweivmuodculwfbq3roybhxfw7kfq-.jpg?1557575922&s=f9500d0ae1b0e8a3679358049c4ea48f',
-          }}>
-          <View style={{flex: 1, justifyContent: 'center'}}>
-            <Text style={style.titleHeader}>Discover</Text>
-          </View>
-        </ImageBackground>
-      </View>
-          {renderBookScrollView()}
+          <ImageBackground
+            style={style.backgroundStyle}
+            source={{
+              uri:
+                'https://images.creativemarket.com/0.1.0/ps/6374392/300/200/m2/fpc/wm0/rz7tt7epyeamedl02kmk27udgkcpjcltux0kweivmuodculwfbq3roybhxfw7kfq-.jpg?1557575922&s=f9500d0ae1b0e8a3679358049c4ea48f',
+            }}>
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <Text style={style.titleHeader}>Discover</Text>
+            </View>
+          </ImageBackground>
+        </View>
+        {renderBookScrollView()}
       </ScrollView>
     </View>
   );

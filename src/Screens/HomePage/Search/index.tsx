@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   StyleSheet,
@@ -10,55 +10,25 @@ import {
 import Colors from '../../../Utils/color';
 import {TextField, CategoryCard} from '../../../Components';
 import {FlatList} from 'react-native-gesture-handler';
-import CategoryApi from '../../../Api/categoryApi';
 import ParentCollection from '../../../Models/parentCollection';
-import ChildCollection from '../../../Models/childCollection';
+import {DataContext} from '../../../Navigation/homeTab';
 
 interface Props {}
 
 const SearchScreen = () => {
+  const data = useContext(DataContext);
+  const {categoryData} = data;
   const [search, setSearch] = useState<string>();
-  const [list, setList] = useState<ParentCollection[]>([]);
+  const [list] = useState<ParentCollection[]>(categoryData);
 
-  const renderItem = ({item}: any) => (  <CategoryCard
-    title={item.name}
-    listSubCategory={item.children}
-    onPressSubItem={(val) => console.log(val)}
-  />);
+  const renderItem = ({item}: any) => (
+    <CategoryCard
+      title={item.name}
+      listSubCategory={item.children}
+      onPressSubItem={(val) => console.log(val)}
+    />
+  );
 
-  async function LoadingCategory() {
-    const response = await CategoryApi.getCategory(
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE',
-    );
-    let collection: any;
-    let isAdd: boolean = true;
-    let listCategory: ParentCollection[] = [];
-    response.map((item: any) => {
-      if (item.ParentID === '') {
-        isAdd = !isAdd;
-        if (isAdd) {
-          listCategory.push(collection);
-          isAdd = !isAdd;
-        }
-        collection = new ParentCollection(
-          item.CollectionID,
-          item.CollectionName,
-        );
-      } else {
-        let subCollection = new ChildCollection(
-          item.CollectionID,
-          item.CollectionName,
-          item.TotalBooks,
-          item.ParentID,
-        );
-        collection.children.push(subCollection);
-      }
-    });
-    setList(listCategory);
-  }
-  useEffect(()=>{
-    LoadingCategory();
-  }, []);
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -71,7 +41,7 @@ const SearchScreen = () => {
             title="Search book or author"
             icon="search"
             onChangeText={(val) => setSearch(val)}
-            onIconPress={LoadingCategory}
+            onIconPress={() => {}}
           />
         </View>
         <View style={style.middle}>
@@ -79,8 +49,12 @@ const SearchScreen = () => {
           <FlatList
             data={list}
             renderItem={renderItem}
-            keyExtractor={item => item.id}
-            getItemLayout={(data, index) => ({length: 60, offset: index * 60, index})}
+            keyExtractor={(item) => item.id}
+            getItemLayout={(data, index) => ({
+              length: 60,
+              offset: index * 60,
+              index,
+            })}
             showsVerticalScrollIndicator={false}
           />
         </View>

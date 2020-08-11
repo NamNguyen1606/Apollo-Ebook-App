@@ -1,11 +1,17 @@
 import React from 'react';
-import {WelcomeScreen, RegisterScreen, LoginScreen} from '../Screens';
+import {
+  WelcomeScreen,
+  RegisterScreen,
+  LoginScreen,
+  SplashScreen,
+} from '../Screens';
 import HomeTabNavigation from './homeTab';
 import Route from '../Utils/router';
 import {
   DetailBookScreen,
   SynopsisTab,
   DetailPacketScreen,
+  ListBookScreen,
 } from '../Screens/HomePage';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import {CardStyleInterpolators} from '@react-navigation/stack';
@@ -18,6 +24,11 @@ const AuthNavigation = () => {
         animationTypeForReplace: 'pop',
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
+      <Stack.Screen
+        name={Route.Splash}
+        component={SplashScreen}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name={Route.Welcome}
         component={WelcomeScreen}
