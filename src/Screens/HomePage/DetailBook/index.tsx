@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   View,
   Text,
@@ -18,9 +18,7 @@ import ReviewTab from '../ReviewTab';
 import SynopsisTab from '../Synopsis';
 import {ScrollView} from 'react-native-gesture-handler';
 import BookApi from '../../../Api/bookApi';
-import Book from '../../../Models/book';
 import {SharedElement} from 'react-navigation-shared-element';
-import axios from 'axios';
 import style from './style';
 import LottieView from 'lottie-react-native';
 import {useQuery} from 'react-query';
@@ -34,9 +32,6 @@ interface Props {
 
 const DetailBookScreen: React.FC<Props> = (props) => {
   const {book} = props.route.params;
-  console.log(' book detail render' + book.id);
-  const [dataBook, setDataBook] = useState(book);
-  const [suggestionData, setSuggestionData] = useState(null);
   const [isReview, setIsReview] = useState(false);
   const [img, setImg] = useState(book.imgUrl);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -45,7 +40,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
   >(false);
   const [token, setToken] = useState<string>('');
   const getPurchaseApi = async (key: any, token: any) =>
-    await BookApi.purchaseBook(token, dataBook.id);
+    await BookApi.purchaseBook(token, book.id);
 
   const {status, data}: any = useQuery(['purchase', token], getPurchaseApi);
   const defaultImg =
@@ -60,42 +55,21 @@ const DetailBookScreen: React.FC<Props> = (props) => {
   const showPurchaseModal = () =>
     setIsModalPurchasingVisible(!isModalPurchasingVisible);
 
-  async function getBookInfoData(cancelToken: any, token: any) {
-    const response: any = await BookApi.getDetailBook(
-      dataBook.id,
-      token,
-      cancelToken,
-    );
-    dataBook.page = response.Pages;
-    dataBook.authorMore = response.AuthorMore;
-    dataBook.publisher = response.Publisher;
-    dataBook.subject = response.Subject;
-    dataBook.summary = response.Sumarize;
-    setDataBook({...dataBook, ...dataBook});
+  async function getBookInfoData(key: any, token: any) {
+    const response: any = await BookApi.getDetailBook(book.id, token);
+    book.page = response.Pages;
+    book.authorMore = response.AuthorMore;
+    book.publisher = response.Publisher;
+    book.subject = response.Subject;
+    book.summary = response.Sumarize;
+    return {...book, ...book};
   }
 
-  async function getSuggestionData(cancelToken: any, token: any) {
-    const response: any = await BookApi.getSuggestionBooks(
-      dataBook.id,
-      token,
-      cancelToken,
-    );
-    const suggestData = response.map((item: any) => {
-      return new Book(
-        item.Success,
-        item.Author,
-        item.BookID,
-        item.CoverUrl,
-        item.FileSize,
-        item.Price,
-        item.PublishYear,
-        item.Title,
-        item.TotalBooks,
-        item.Sumarize,
-      );
-    });
-    setSuggestionData(suggestData);
-  }
+  // api
+  const {data: bookData, isSuccess: isBookLoadingSuccess} = useQuery(
+    ['book', {Token}],
+    getBookInfoData,
+  );
 
   function showStatusPurchasing() {
     return (
@@ -289,18 +263,6 @@ const DetailBookScreen: React.FC<Props> = (props) => {
     setToken(Token);
   }
 
-  useEffect(() => {
-    const source = axios.CancelToken.source();
-    const loading = (cancelToken: any) => {
-      getBookInfoData(cancelToken, Token);
-      getSuggestionData(cancelToken, Token);
-    };
-    loading(source.token);
-    return () => {
-      source.cancel();
-    };
-  }, []);
-
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <ScrollView style={style.container} showsVerticalScrollIndicator={false}>
@@ -349,17 +311,17 @@ const DetailBookScreen: React.FC<Props> = (props) => {
                 adjustsFontSizeToFit
                 minimumFontScale={0.5}
                 numberOfLines={4}>
-                {dataBook.title}
+                {book.title}
               </Text>
               <Text
                 adjustsFontSizeToFit
                 minimumFontScale={0.5}
                 numberOfLines={1}
                 style={style.author}>
-                by {dataBook.author}
+                by {book.author}
               </Text>
-              <Text style={style.author}>Published: {dataBook.publicYear}</Text>
-              <Text style={style.price}>{MoneyFormat.VND(dataBook.price)}</Text>
+              <Text style={style.author}>Published: {book.publicYear}</Text>
+              <Text style={style.price}>{MoneyFormat.VND(book.price)}</Text>
               <Button
                 style={{borderRadius: 15, height: 45, width: 120}}
                 tittle="PURCHASE"
@@ -409,8 +371,15 @@ const DetailBookScreen: React.FC<Props> = (props) => {
           </View>
           {isReview ? (
             <ReviewTab />
+          ) : isBookLoadingSuccess ? (
+            <SynopsisTab data={bookData} />
           ) : (
-            <SynopsisTab data={dataBook} suggestionData={suggestionData} />
+            <LottieView
+              style={style.loadingLottie}
+              source={require('../../../Asset/Animation/loading.json')}
+              autoPlay
+              loop
+            />
           )}
         </View>
       </ScrollView>

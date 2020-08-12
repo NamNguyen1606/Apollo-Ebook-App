@@ -346,6 +346,9 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  // loading: {
+
+  // }
 });
 
 export default BookshelfScreen;

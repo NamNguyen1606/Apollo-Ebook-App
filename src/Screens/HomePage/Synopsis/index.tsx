@@ -4,16 +4,47 @@ import {View, StyleSheet, Text} from 'react-native';
 import Book from '../../../Models/book';
 import Colors from '../../../Utils/color';
 import {BookScrollView} from '../../../Components';
-
+import BookApi from '../../../Api/bookApi';
+import {useQuery} from 'react-query';
+import LottieView from 'lottie-react-native';
+const Token =
+  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
 interface Props {
   data: Book;
-  suggestionData: any;
+  // suggestionData: any;
   // navigation: any;
   // onSuggestionBook?: (book: any) => void;
 }
 
 const SynopsisTab: React.FC<Props> = (props) => {
-  console.log(props.suggestionData + 'render');
+  async function getSuggestionData(key: any, token: any) {
+    const response: any = await BookApi.getSuggestionBooks(
+      props.data.id,
+      token,
+    );
+    const suggestData = response.map((item: any) => {
+      return new Book(
+        item.Success,
+        item.Author,
+        item.BookID,
+        item.CoverUrl,
+        item.FileSize,
+        item.Price,
+        item.PublishYear,
+        item.Title,
+        item.TotalBooks,
+        item.Sumarize,
+      );
+    });
+    return suggestData;
+  }
+
+  const {data, isSuccess} = useQuery(
+    ['suggestion', {Token}],
+    getSuggestionData,
+    {cacheTime: 0},
+  );
+
   return (
     <View style={style.container}>
       <Text style={[style.title, {marginTop: 0}]}>Information</Text>
@@ -29,15 +60,22 @@ const SynopsisTab: React.FC<Props> = (props) => {
       <Text style={style.title}>Summary</Text>
       <Text style={style.summaryStyle}>{props.data.summary}</Text>
       <Text style={style.title}>Suggestion</Text>
-      {props.suggestionData !== null && props.suggestionData.length !== 0 ? (
+      {isSuccess ? (
         <BookScrollView
           key={1}
           title="Suggestion"
-          books={props.suggestionData}
+          books={data}
           onItemPress={(book) => console.log(book)}
           onMorePress={() => {}}
         />
-      ) : null}
+      ) : (
+        <LottieView
+          style={style.loadingLottie}
+          source={require('../../../Asset/Animation/loading.json')}
+          autoPlay
+          loop
+        />
+      )}
     </View>
   );
 };
@@ -63,6 +101,7 @@ const style = StyleSheet.create({
     borderLeftWidth: 0.5,
     borderBottomColor: 'black',
   },
+  loadingLottie: {height: 100, width: 100, alignSelf: 'center'},
   title: {
     fontSize: 20,
     color: 'black',

@@ -38,23 +38,36 @@ class BookApi {
     );
   };
 
-  static getDetailBook(id: number, token: string, cancelToken?: any) {
+  static getDetailBook(id: number, token: string) {
     const url = `Book/Detail?id=${id}`;
     return axiosClient.get(url, {
       headers: {Token: token},
-      cancelToken: cancelToken || null,
     });
   }
 
-  static getSuggestionBooks(id: number, token: string, cancelToken?: any) {
+  static getSuggestionBooks(id: number, token: string) {
     const url = `Book/RefBooks?id=${id}`;
     return axiosClient.get(url, {
       headers: {token: token},
-      cancelToken: cancelToken || null,
     });
   }
 
-  static purchaseBook(token: any, id: number){
+  static getCollection(
+    id: string,
+    token: string,
+    index: number,
+    count: number,
+    status: number,
+  ) {
+    const url = `Book/Search?collection=${id}&index=${index}&count=${count}&status=${status}`;
+    return axiosClient.post(
+      url,
+      {search: '', author: ''},
+      {headers: {Token: token}},
+    );
+  }
+
+  static purchaseBook(token: any, id: number) {
     const url = `Book/Purchase?id=${id}`;
     return axiosClient.get(url, {headers: {Token: token}});
   }

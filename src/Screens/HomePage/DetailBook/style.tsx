@@ -99,6 +99,7 @@ const style = StyleSheet.create({
     justifyContent: 'space-between',
     borderRadius: 20,
   },
+  loadingLottie: {height: 100, width: 100, alignSelf: 'center'},
 });
 
 export default style;

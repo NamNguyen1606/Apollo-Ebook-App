@@ -14,13 +14,21 @@ interface Props {
 const CategoryCard: React.FC<Props> = (props) => {
   const [isExpand, setIsExpand] = useState<boolean>(false);
   const [heightAnimated] = useState(new Animated.Value(0));
-  const sizeCategory = useMemo<number>(()=> props.listSubCategory.length * 60, [props.listSubCategory.length]);
+  const sizeCategory = useMemo<number>(
+    () => props.listSubCategory.length * 60,
+    [props.listSubCategory.length],
+  );
 
-  function renderSubCategory(arr: ChildCollection[]){
+  function renderSubCategory(arr: ChildCollection[]) {
     let result: ChildCollection[] = [];
-    for (let item of arr){
+    for (let item of arr) {
       let widget: any = (
-        <SubCardCategory key={item.id} tittle= {item.name} isDisable={!isExpand}  onPressItem={(val) => props.onPressSubItem(val)}/>
+        <SubCardCategory
+          key={item.id}
+          tittle={item.name}
+          isDisable={!isExpand}
+          onPressItem={(val) => props.onPressSubItem(val)}
+        />
       );
       result.push(widget);
     }
@@ -36,7 +44,7 @@ const CategoryCard: React.FC<Props> = (props) => {
   };
 
   return (
-    <View >
+    <View>
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => {
@@ -44,7 +52,7 @@ const CategoryCard: React.FC<Props> = (props) => {
           onPress();
         }}>
         <View style={style.header}>
-      <Text style={style.textStyle}>{props.title}</Text>
+          <Text style={style.textStyle}>{props.title}</Text>
           <Icon
             name={isExpand ? 'angle-down' : 'angle-right'}
             type="font-awesome"
@@ -54,11 +62,14 @@ const CategoryCard: React.FC<Props> = (props) => {
         </View>
       </TouchableOpacity>
       <Animated.View
-        style={[{
-          height: heightAnimated,
-          backgroundColor: 'white',
-          marginLeft: 30,
-        }, isExpand ? {opacity: 1} : {opacity: 0}]}>
+        style={[
+          {
+            height: heightAnimated,
+            backgroundColor: 'white',
+            marginLeft: 30,
+          },
+          isExpand ? {opacity: 1} : {opacity: 0},
+        ]}>
         {renderSubCategory(props.listSubCategory)}
       </Animated.View>
     </View>
@@ -73,7 +84,6 @@ const style = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     borderTopWidth: 0.5,
-    borderBottomWidth: 0.5,
     borderColor: '#6D7176',
   },
   imgStyle: {
@@ -96,16 +106,24 @@ const style = StyleSheet.create({
 export default CategoryCard;
 
 interface subProps {
- tittle: string;
- isDisable: boolean;
- onPressItem: (val: string) => void;
+  tittle: string;
+  isDisable: boolean;
+  onPressItem: (val: string) => void;
 }
 export const SubCardCategory: React.FC<subProps> = (prop) => {
   return (
-    <TouchableOpacity activeOpacity={0.6} onPress = {() => prop.onPressItem(prop.tittle)} disabled={prop.isDisable}>
-       <View style={{height: 60, justifyContent:'center', backgroundColor: 'white'}}>
-  <Text style={style.subTextStyle}>{prop.tittle}</Text>
-        </View>
+    <TouchableOpacity
+      activeOpacity={0.6}
+      onPress={() => prop.onPressItem(prop.tittle)}
+      disabled={prop.isDisable}>
+      <View
+        style={{
+          height: 60,
+          justifyContent: 'center',
+          backgroundColor: 'white',
+        }}>
+        <Text style={style.subTextStyle}>{prop.tittle}</Text>
+      </View>
     </TouchableOpacity>
   );
 };
