@@ -109,4 +109,4 @@ const style = StyleSheet.create({
     color: Colors.Text,
   },
 });
-export default DiscoverScreen;
+export default React.memo(DiscoverScreen);

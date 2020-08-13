@@ -69,4 +69,4 @@ const HomeTabNavigation: React.FC<props> = (props) => {
   );
 };
 
-export default HomeTabNavigation;
+export default React.memo(HomeTabNavigation);

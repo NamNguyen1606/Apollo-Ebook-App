@@ -12,10 +12,13 @@ import {TextField, CategoryCard} from '../../../Components';
 import {FlatList} from 'react-native-gesture-handler';
 import ParentCollection from '../../../Models/parentCollection';
 import {DataContext} from '../../../Navigation/homeTab';
+import {useNavigation} from '@react-navigation/native';
+import Route from '../../../Utils/router';
 
 interface Props {}
 
 const SearchScreen = () => {
+  const navigation = useNavigation();
   const data: any = useContext(DataContext);
   const [search, setSearch] = useState<string>();
   const [list] = useState<ParentCollection[]>(data.categoryData);
@@ -24,7 +27,12 @@ const SearchScreen = () => {
     <CategoryCard
       title={item.name}
       listSubCategory={item.children}
-      onPressSubItem={(val) => console.log(val)}
+      onPressSubItem={(val) =>
+        navigation.navigate(Route.SearchResult, {
+          title: val.title,
+          collectionId: val.id,
+        })
+      }
     />
   );
 

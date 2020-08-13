@@ -351,4 +351,4 @@ const style = StyleSheet.create({
   // }
 });
 
-export default BookshelfScreen;
+export default React.memo(BookshelfScreen);

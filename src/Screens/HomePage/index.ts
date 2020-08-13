@@ -7,7 +7,7 @@ import DetailBookScreen from './DetailBook/index';
 import SynopsisTab from './Synopsis/index';
 import ReviewTab from './ReviewTab/index';
 import DetailPacketScreen from '../DetailPacket/index';
-import SearchResultScreen from './SearchResult/index';
+import CategoryResultScreen from './SearchResult/index';
 export {
   DiscoverScreen,
   BookshelfScreen,
@@ -18,5 +18,5 @@ export {
   SynopsisTab,
   ReviewTab,
   DetailPacketScreen,
-  SearchResultScreen,
+  CategoryResultScreen,
 };

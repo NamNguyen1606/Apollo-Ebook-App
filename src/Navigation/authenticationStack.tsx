@@ -11,7 +11,7 @@ import {
   DetailBookScreen,
   SynopsisTab,
   DetailPacketScreen,
-  ListBookScreen,
+  CategoryResultScreen,
 } from '../Screens/HomePage';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import {CardStyleInterpolators} from '@react-navigation/stack';
@@ -66,6 +66,11 @@ const AuthNavigation = () => {
       <Stack.Screen
         name={Route.DetailPacket}
         component={DetailPacketScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name={Route.SearchResult}
+        component={CategoryResultScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

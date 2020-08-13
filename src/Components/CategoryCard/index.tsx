@@ -8,7 +8,7 @@ import ChildCollection from '../../Models/childCollection';
 interface Props {
   title: string;
   listSubCategory: ChildCollection[];
-  onPressSubItem: (val: string) => void;
+  onPressSubItem: (val: {id: string; title: string}) => void;
 }
 
 const CategoryCard: React.FC<Props> = (props) => {
@@ -26,8 +26,9 @@ const CategoryCard: React.FC<Props> = (props) => {
         <SubCardCategory
           key={item.id}
           tittle={item.name}
+          id={item.id}
           isDisable={!isExpand}
-          onPressItem={(val) => props.onPressSubItem(val)}
+          onPressItem={({id, title}) => props.onPressSubItem({id, title})}
         />
       );
       result.push(widget);
@@ -107,22 +108,23 @@ export default CategoryCard;
 
 interface subProps {
   tittle: string;
+  id: string;
   isDisable: boolean;
-  onPressItem: (val: string) => void;
+  onPressItem: (val: {id: string; title: string}) => void;
 }
-export const SubCardCategory: React.FC<subProps> = (prop) => {
+export const SubCardCategory: React.FC<subProps> = (props) => {
   return (
     <TouchableOpacity
       activeOpacity={0.6}
-      onPress={() => prop.onPressItem(prop.tittle)}
-      disabled={prop.isDisable}>
+      onPress={() => props.onPressItem({id: props.id, title: props.tittle})}
+      disabled={props.isDisable}>
       <View
         style={{
           height: 60,
           justifyContent: 'center',
           backgroundColor: 'white',
         }}>
-        <Text style={style.subTextStyle}>{prop.tittle}</Text>
+        <Text style={style.subTextStyle}>{props.tittle}</Text>
       </View>
     </TouchableOpacity>
   );
