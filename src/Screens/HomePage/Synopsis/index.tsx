@@ -7,16 +7,17 @@ import {BookScrollView} from '../../../Components';
 import BookApi from '../../../Api/bookApi';
 import {useQuery} from 'react-query';
 import LottieView from 'lottie-react-native';
+import Route from '../../../Utils/router';
+import {useNavigation} from '@react-navigation/native';
 const Token =
   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
 interface Props {
   data: Book;
-  // suggestionData: any;
-  // navigation: any;
   // onSuggestionBook?: (book: any) => void;
 }
 
 const SynopsisTab: React.FC<Props> = (props) => {
+  const navigation = useNavigation();
   async function getSuggestionData(key: any, token: any) {
     const response: any = await BookApi.getSuggestionBooks(
       props.data.id,
@@ -45,6 +46,9 @@ const SynopsisTab: React.FC<Props> = (props) => {
     {cacheTime: 0},
   );
 
+  const onSuggestionItemPress = (book: Book) =>
+    navigation.push(Route.DetailBook, {book: book});
+
   return (
     <View style={style.container}>
       <Text style={[style.title, {marginTop: 0}]}>Information</Text>
@@ -65,7 +69,7 @@ const SynopsisTab: React.FC<Props> = (props) => {
           key={1}
           title="Suggestion"
           books={data}
-          onItemPress={(book) => console.log(book)}
+          onItemPress={(book) => onSuggestionItemPress(book)}
           onMorePress={() => {}}
         />
       ) : (

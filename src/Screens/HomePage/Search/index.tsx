@@ -16,10 +16,9 @@ import {DataContext} from '../../../Navigation/homeTab';
 interface Props {}
 
 const SearchScreen = () => {
-  const data = useContext(DataContext);
-  const {categoryData} = data;
+  const data: any = useContext(DataContext);
   const [search, setSearch] = useState<string>();
-  const [list] = useState<ParentCollection[]>(categoryData);
+  const [list] = useState<ParentCollection[]>(data.categoryData);
 
   const renderItem = ({item}: any) => (
     <CategoryCard
@@ -50,11 +49,6 @@ const SearchScreen = () => {
             data={list}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
-            getItemLayout={(data, index) => ({
-              length: 60,
-              offset: index * 60,
-              index,
-            })}
             showsVerticalScrollIndicator={false}
           />
         </View>
