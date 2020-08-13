@@ -20,6 +20,7 @@ interface Props {}
 const SearchScreen = () => {
   const navigation = useNavigation();
   const data: any = useContext(DataContext);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [search, setSearch] = useState<string>();
   const [list] = useState<ParentCollection[]>(data.categoryData);
 
@@ -44,7 +45,7 @@ const SearchScreen = () => {
       <View style={style.container}>
         <View style={style.header}>
           <TextField
-            style={{backgroundColor: 'white'}}
+            style={style.textField}
             title="Search book or author"
             icon="search"
             onChangeText={(val) => setSearch(val)}
@@ -83,6 +84,9 @@ const style = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 15,
     fontWeight: 'bold',
+  },
+  textField: {
+    backgroundColor: 'white',
   },
 });
 export default SearchScreen;

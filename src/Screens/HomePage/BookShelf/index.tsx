@@ -1,18 +1,18 @@
+/* eslint-disable no-shadow */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useRef} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
   Text,
   Dimensions,
   ImageBackground,
-  ActivityIndicator,
   Modal,
   TouchableOpacity,
   FlatList,
 } from 'react-native';
 import Colors from '../../../Utils/color';
-import {useQuery} from 'react-query';
+import {useQuery, useInfiniteQuery} from 'react-query';
 import PacketApi from '../../../Api/packetApi';
 import {PacketCard} from '../../../Components';
 import Route from '../../../Utils/router';
@@ -24,9 +24,6 @@ interface Props {
 }
 
 const BookshelfScreen: React.FC<Props> = (props) => {
-  const [index, setIndex] = useState(0);
-  const packetData = useRef<any[]>([]);
-  const indexData = useRef<number>(0);
   const [isModalPurchasingVisible, setIsModalPurchasingVisible] = useState<
     boolean
   >(false);
@@ -234,32 +231,36 @@ const BookshelfScreen: React.FC<Props> = (props) => {
     setIdPacket(packetId);
   };
 
-  const loadingPacket = async (key: any, index: number) => {
-    const res = await PacketApi.getPacket(Token, index * 10, 10, 0);
+  const loadingPacket = async (key: any, index: number = 0) => {
+    const res = await PacketApi.getPacket(Token, index, 10, 0);
     return res;
   };
-  const {data, status}: any = useQuery(['packets', index], loadingPacket);
 
-  function mergeData(): any[] {
-    if (status === 'success') {
-      if (
-        packetData.current.length === 0 ||
-        packetData.current[packetData.current.length - 1].PacketID !==
-          data[data.length - 1].PacketID
-      ) {
-        packetData.current = [...packetData.current, ...data];
-      }
-    }
-    return packetData.current;
-  }
+  const convertData: any = () => {
+    var result: any = [];
+    data?.map((item: any) => item.map((subItem: any) => result.push(subItem)));
+    return result;
+  };
 
   const loadingMore = () => {
-    const totalPacket = packetData.current[0].TotalPackets;
-    const maxIndex = Math.floor(totalPacket / 10);
-    console.log(`max index: ${maxIndex}`);
-    console.log(`index: ${indexData}`);
-    indexData.current < maxIndex && setIndex(++indexData.current);
+    canFetchMore && fetchMore();
   };
+
+  const {
+    data,
+    isSuccess,
+    fetchMore,
+    isFetching,
+    canFetchMore,
+  } = useInfiniteQuery(['packet'], loadingPacket, {
+    getFetchMore: (lastGroup: any, allGroup: any) => {
+      if (lastGroup.length === 10) {
+        return allGroup.length * 10;
+      } else {
+        return false;
+      }
+    },
+  });
 
   const renderItem = ({item}: any) => (
     <PacketCard
@@ -276,6 +277,21 @@ const BookshelfScreen: React.FC<Props> = (props) => {
     />
   );
 
+  const renderFooter = () => {
+    if (isFetching) {
+      return (
+        <LottieView
+          style={style.loading}
+          source={require('../../../Asset/Animation/loading.json')}
+          autoPlay
+          loop
+        />
+      );
+    } else {
+      return null;
+    }
+  };
+
   return (
     <View style={style.container}>
       <View style={style.header}>
@@ -291,9 +307,9 @@ const BookshelfScreen: React.FC<Props> = (props) => {
         </ImageBackground>
       </View>
       <View style={style.middle}>
-        {packetData.current.length !== 0 || status === 'success' ? (
+        {isSuccess ? (
           <FlatList
-            data={mergeData()}
+            data={convertData}
             renderItem={renderItem}
             keyExtractor={(item) => item.PacketID}
             getItemLayout={(data: any, index: any) => ({
@@ -304,6 +320,7 @@ const BookshelfScreen: React.FC<Props> = (props) => {
             onEndReachedThreshold={0.7}
             onEndReached={loadingMore}
             showsVerticalScrollIndicator={false}
+            ListFooterComponent={renderFooter}
           />
         ) : (
           <LottieView
@@ -346,9 +363,11 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  // loading: {
-
-  // }
+  loading: {
+    height: 100,
+    width: 100,
+    alignSelf: 'center',
+  },
 });
 
-export default React.memo(BookshelfScreen);
+export default BookshelfScreen;
