@@ -309,7 +309,7 @@ const BookshelfScreen: React.FC<Props> = (props) => {
       <View style={style.middle}>
         {isSuccess ? (
           <FlatList
-            data={convertData}
+            data={convertData()}
             renderItem={renderItem}
             keyExtractor={(item) => item.PacketID}
             getItemLayout={(data: any, index: any) => ({

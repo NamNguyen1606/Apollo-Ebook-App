@@ -1,11 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
+import React, {useState} from 'react';
+import {View, StyleSheet, TouchableOpacity, Text, Image} from 'react-native';
 import Book from '../../Models/book';
 import Colors from '../../Utils/color';
-import FastImage from 'react-native-fast-image';
-import { SharedElement } from 'react-navigation-shared-element';
 
 interface Props {
   img: string;
@@ -16,24 +14,37 @@ interface Props {
 const BookProduct: React.FC<Props> = (props) => {
   const [isUrlError, setIsUrlError] = useState(false);
   const [img, setImg] = useState(props.img);
-  const defaultImg = 'https://cdn0.iconfinder.com/data/icons/book-and-library/64/Sad-Emotion-Book-512.png';
+  const defaultImg =
+    'https://cdn0.iconfinder.com/data/icons/book-and-library/64/Sad-Emotion-Book-512.png';
   return (
-    <TouchableOpacity activeOpacity={0.65} onPress={() => {
+    <TouchableOpacity
+      activeOpacity={0.65}
+      onPress={() => {
         props.onPress(props.data);
-        }}>
+      }}>
       <View style={style.container}>
         <View style={style.imgHolder}>
-          <SharedElement id={`item.${props.data.id}.photo`} >
-            <Image
-              style={[style.imgHolder,  isUrlError ? {height: 160} : {height: 207}]}
-              source={{
-                uri: img,
-              }}
-              resizeMode="contain"
-              onError={()=> {setIsUrlError(true); setImg(defaultImg);}}
-            />
-          </SharedElement>
-          {isUrlError ?  <View><Text style={style.titleStyle} numberOfLines={3}>{props.title}</Text></View> : undefined}
+          <Image
+            style={[
+              style.imgHolder,
+              isUrlError ? {height: 160} : {height: 207},
+            ]}
+            source={{
+              uri: img,
+            }}
+            resizeMode="contain"
+            onError={() => {
+              setIsUrlError(true);
+              setImg(defaultImg);
+            }}
+          />
+          {isUrlError ? (
+            <View>
+              <Text style={style.titleStyle} numberOfLines={3}>
+                {props.title}
+              </Text>
+            </View>
+          ) : undefined}
         </View>
       </View>
     </TouchableOpacity>
@@ -55,7 +66,7 @@ const style = StyleSheet.create({
     width: 135,
     backgroundColor: 'white',
   },
-  titleStyle:{
+  titleStyle: {
     textAlign: 'center',
     fontSize: 14,
     marginHorizontal: 3,

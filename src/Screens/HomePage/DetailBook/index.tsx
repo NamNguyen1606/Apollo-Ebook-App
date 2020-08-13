@@ -18,7 +18,6 @@ import ReviewTab from '../ReviewTab';
 import SynopsisTab from '../Synopsis';
 import {ScrollView} from 'react-native-gesture-handler';
 import BookApi from '../../../Api/bookApi';
-import {SharedElement} from 'react-navigation-shared-element';
 import style from './style';
 import LottieView from 'lottie-react-native';
 import {useQuery} from 'react-query';
@@ -295,16 +294,14 @@ const DetailBookScreen: React.FC<Props> = (props) => {
             />
           </View>
           <View style={style.middle}>
-            <SharedElement id={`item.${book.id}.photo`}>
-              <Image
-                style={{height: 220, width: 140, borderRadius: 8}}
-                resizeMode="cover"
-                source={{
-                  uri: img,
-                }}
-                onError={() => setImg(defaultImg)}
-              />
-            </SharedElement>
+            <Image
+              style={{height: 220, width: 140, borderRadius: 8}}
+              resizeMode="cover"
+              source={{
+                uri: img,
+              }}
+              onError={() => setImg(defaultImg)}
+            />
             <View style={style.detail}>
               <Text
                 style={style.title}

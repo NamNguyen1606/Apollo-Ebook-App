@@ -13,10 +13,13 @@ import {
   DetailPacketScreen,
   CategoryResultScreen,
 } from '../Screens/HomePage';
-import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
-import {CardStyleInterpolators} from '@react-navigation/stack';
 
-const Stack = createSharedElementStackNavigator();
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
+
+const Stack = createStackNavigator();
 const AuthNavigation = () => {
   return (
     <Stack.Navigator
@@ -53,10 +56,6 @@ const AuthNavigation = () => {
         name={Route.DetailBook}
         component={DetailBookScreen}
         options={{headerShown: false}}
-        sharedElementsConfig={(route) => {
-          const {book} = route.params;
-          return [`item.${book.id}.photo`, `item.${book.id}.text`];
-        }}
       />
       <Stack.Screen
         name={Route.SynopsisTab}

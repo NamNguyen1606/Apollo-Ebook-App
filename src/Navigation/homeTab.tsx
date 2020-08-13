@@ -22,7 +22,11 @@ const HomeTabNavigation: React.FC<props> = (props) => {
         categoryData: categoryData,
       }}>
       <Tab.Navigator
-        tabBarOptions={{showLabel: true, tabStyle: {marginBottom: 10}}}>
+        tabBarOptions={{
+          showLabel: true,
+          tabStyle: {marginBottom: 10},
+          keyboardHidesTabBar: true,
+        }}>
         <Tab.Screen
           name="Discover"
           component={DiscoverStack}

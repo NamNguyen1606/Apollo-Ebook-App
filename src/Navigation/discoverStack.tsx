@@ -5,10 +5,12 @@ import {
   DiscoverScreen,
   DetailBookScreen,
 } from '../Screens/HomePage';
-import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
-import {CardStyleInterpolators} from '@react-navigation/stack';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
 
-const Stack = createSharedElementStackNavigator();
+const Stack = createStackNavigator();
 const DiscoverStack = () => {
   return (
     <Stack.Navigator

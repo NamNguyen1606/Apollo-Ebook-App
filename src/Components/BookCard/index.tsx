@@ -5,7 +5,6 @@ import Colors from '../../Utils/color';
 import {TextStyle} from 'react-native';
 import MoneyFormat from '../../Utils/moneyFormat';
 import Book from '../../Models/book';
-import {SharedElement} from 'react-navigation-shared-element';
 
 interface Props {
   tittle: string;
@@ -29,21 +28,19 @@ const BookCard: React.FC<Props> = (props) => {
       onPress={() => props.onPress(props.data)}>
       <View style={[style.container, props.style]}>
         <View style={style.imgHolder}>
-          <SharedElement id={`item.${props.data.id}.photo`}>
-            <Image
-              style={{
-                height: 175,
-                width: 115,
-              }}
-              resizeMode="contain"
-              source={{
-                uri: img,
-              }}
-              onError={() => {
-                setImg(defaultImg);
-              }}
-            />
-          </SharedElement>
+          <Image
+            style={{
+              height: 175,
+              width: 115,
+            }}
+            resizeMode="contain"
+            source={{
+              uri: img,
+            }}
+            onError={() => {
+              setImg(defaultImg);
+            }}
+          />
         </View>
         <View style={style.detailHolder}>
           <Text numberOfLines={3} style={style.nameStyle}>
