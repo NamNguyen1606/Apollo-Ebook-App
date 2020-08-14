@@ -9,7 +9,6 @@ import {
   ImageBackground,
   Modal,
   TouchableOpacity,
-  FlatList,
 } from 'react-native';
 import Colors from '../../../Utils/color';
 import {useQuery, useInfiniteQuery} from 'react-query';
@@ -17,6 +16,7 @@ import PacketApi from '../../../Api/packetApi';
 import {PacketCard} from '../../../Components';
 import Route from '../../../Utils/router';
 import LottieView from 'lottie-react-native';
+import {Animated} from 'react-native';
 const Token =
   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
 interface Props {
@@ -38,6 +38,19 @@ const PacketScreen: React.FC<Props> = (props) => {
     ['purchase', Token, idPacket],
     getPurchaseApi,
   );
+
+  const scrollY = new Animated.Value(0);
+  const diffClamp = Animated.diffClamp(scrollY, 0, 80);
+  const scrollTranslateHeaderY = diffClamp.interpolate({
+    inputRange: [0, 80],
+    outputRange: [0, -80],
+    extrapolate: 'clamp',
+  });
+  const scrollTranslateListY = diffClamp.interpolate({
+    inputRange: [0, 80],
+    outputRange: [80, 0],
+    extrapolate: 'clamp',
+  });
 
   function showStatusPurchasing() {
     return (
@@ -294,7 +307,11 @@ const PacketScreen: React.FC<Props> = (props) => {
 
   return (
     <View style={style.container}>
-      <View style={style.header}>
+      <Animated.View
+        style={[
+          style.header,
+          {transform: [{translateY: scrollTranslateHeaderY}]},
+        ]}>
         <ImageBackground
           style={{flex: 1}}
           source={{
@@ -305,13 +322,24 @@ const PacketScreen: React.FC<Props> = (props) => {
             <Text style={style.titleHeader}>Packet</Text>
           </View>
         </ImageBackground>
-      </View>
+      </Animated.View>
       <View style={style.middle}>
         {isSuccess ? (
-          <FlatList
+          <Animated.FlatList
+            style={{transform: [{translateY: scrollTranslateListY}]}}
+            onScroll={Animated.event(
+              [
+                {
+                  nativeEvent: {
+                    contentOffset: {y: scrollY},
+                  },
+                },
+              ],
+              {useNativeDriver: true},
+            )}
             data={convertData()}
             renderItem={renderItem}
-            keyExtractor={(item) => item.PacketID}
+            keyExtractor={(item: any) => item.PacketID}
             getItemLayout={(data: any, index: any) => ({
               length: 180,
               offset: 180 * index,
@@ -344,6 +372,9 @@ const style = StyleSheet.create({
   header: {
     height: Dimensions.get('window').height / 10,
     backgroundColor: Colors.Background,
+    position: 'absolute',
+    zIndex: 1,
+    width: '100%',
   },
   middle: {
     flex: 1,

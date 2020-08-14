@@ -53,7 +53,13 @@ const CategoryCard: React.FC<Props> = (props) => {
           onPress();
         }}>
         <View style={style.header}>
-          <Text style={style.textStyle}>{props.title}</Text>
+          <Text
+            style={[
+              style.textStyle,
+              isExpand ? {fontWeight: 'bold'} : {fontWeight: 'normal'},
+            ]}>
+            {props.title}
+          </Text>
           <Icon
             name={isExpand ? 'angle-down' : 'angle-right'}
             type="font-awesome"

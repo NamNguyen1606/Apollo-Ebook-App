@@ -5,7 +5,7 @@ import {ProfileScreen} from '../Screens/HomePage';
 import DiscoverStack from './discoverStack';
 import PacketStack from './packetStack';
 import SearchStack from './searchStack';
-import BookShelfScreen from '../Screens/HomePage/BookShelf/index';
+import BookSelfStack from './bookShelfStack';
 interface props {
   route: any;
 }
@@ -46,7 +46,7 @@ const HomeTabNavigation: React.FC<props> = (props) => {
         />
         <Tab.Screen
           name="BookShelf"
-          component={BookShelfScreen}
+          component={BookSelfStack}
           options={{
             tabBarIcon: ({color, size}) => (
               <Icon name="book" type="ionicon" size={size} color={color} />

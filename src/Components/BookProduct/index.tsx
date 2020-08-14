@@ -58,8 +58,6 @@ const style = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     marginLeft: 10,
-    // borderWidth: 0.3,
-    // borderRadius: 10,
   },
   imgHolder: {
     height: 207,
@@ -75,4 +73,4 @@ const style = StyleSheet.create({
     color: Colors.DarkGrey,
   },
 });
-export default BookProduct;
+export default React.memo(BookProduct);

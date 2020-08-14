@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useRef, useMemo} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -11,7 +11,6 @@ import {
 import Colors from '../../Utils/color';
 import {TextStyle} from 'react-native';
 import MoneyFormat from '../../Utils/moneyFormat';
-import {SharedElement} from 'react-navigation-shared-element';
 import {useQuery} from 'react-query';
 import PacketApi from '../../Api/packetApi';
 import BookScrollView from '../BookScrollView';
@@ -46,7 +45,7 @@ const PacketCard: React.FC<Props> = (props) => {
   const {status, data} = useQuery(['books', props.packetId], loadingBookList);
 
   function renderListBook() {
-    const result = data.Books.map((item): any => {
+    const result = data?.Books.map((item): any => {
       return new Book(
         item.Success,
         item.Author,
@@ -101,19 +100,13 @@ const PacketCard: React.FC<Props> = (props) => {
   };
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.5}
-      // onPress={() => props.onPress(props.data)}
-      onPress={onExpandPress}>
+    <TouchableOpacity activeOpacity={0.5} onPress={onExpandPress}>
       <Animated.View
         style={[style.container, props.style, {height: heightAnimated}]}>
         <View style={{height: 180, flexDirection: 'row'}}>
           <View style={style.imgHolder}>
             <Image
-              style={{
-                height: 175,
-                width: 115,
-              }}
+              style={style.imgSize}
               resizeMode="contain"
               source={{
                 uri: img,
@@ -178,6 +171,11 @@ const style = StyleSheet.create({
     fontSize: 16,
     color: 'black',
     fontWeight: 'bold',
+  },
+  imgSize: {
+    height: 175,
+    width: 115,
+    borderRadius: 1.5,
   },
 });
 export default React.memo(PacketCard);

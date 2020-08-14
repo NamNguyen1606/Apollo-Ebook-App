@@ -29,10 +29,7 @@ const BookCard: React.FC<Props> = (props) => {
       <View style={[style.container, props.style]}>
         <View style={style.imgHolder}>
           <Image
-            style={{
-              height: 175,
-              width: 115,
-            }}
+            style={style.imgSize}
             resizeMode="contain"
             source={{
               uri: img,
@@ -97,8 +94,13 @@ const style = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
   },
+  imgSize: {
+    height: 175,
+    width: 115,
+    borderRadius: 1.5,
+  },
 });
-export default BookCard;
+export default React.memo(BookCard);
 
 interface TagProps {
   title: string;

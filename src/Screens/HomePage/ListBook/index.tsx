@@ -1,11 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Text, Dimensions} from 'react-native';
+import {View, StyleSheet, Text, Dimensions, Animated} from 'react-native';
 import Colors from '../../../Utils/color';
 import {BookCard} from '../../../Components';
 import {Icon} from 'react-native-elements';
 import Route from '../../../Utils/router';
-import {FlatList} from 'react-native-gesture-handler';
 import Book from '../../../Models/book';
 import BookApi from '../../../Api/bookApi';
 import LottieView from 'lottie-react-native';
@@ -20,6 +19,19 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
   const [bookData, setBookData] = useState(() => data);
   const [index, setIndex] = useState(10);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const scrollY = new Animated.Value(0);
+  const diffClamp = Animated.diffClamp(scrollY, 0, 80);
+  const scrollHeaderTranslateY = diffClamp.interpolate({
+    inputRange: [0, 80],
+    outputRange: [0, -80],
+    extrapolate: 'clamp',
+  });
+  const scrollListTranslateY = diffClamp.interpolate({
+    inputRange: [0, 80],
+    outputRange: [80, 0],
+    extrapolate: 'clamp',
+  });
 
   async function loadMore() {
     setIndex(index + 5);
@@ -69,7 +81,11 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
   useEffect(() => {}, [bookData]);
   return (
     <View style={style.container}>
-      <View style={style.header}>
+      <Animated.View
+        style={[
+          style.header,
+          {transform: [{translateY: scrollHeaderTranslateY}]},
+        ]}>
         <Icon
           name="chevron-back"
           type="ionicon"
@@ -80,11 +96,21 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
           }}
         />
         <Text style={style.titleHeader}>{title}</Text>
-      </View>
+      </Animated.View>
       <View style={style.middle}>
-        <FlatList
+        <Animated.FlatList
+          style={{transform: [{translateY: scrollListTranslateY}]}}
+          scrollEventThrottle={16}
+          onScroll={Animated.event(
+            [
+              {
+                nativeEvent: {contentOffset: {y: scrollY}},
+              },
+            ],
+            {useNativeDriver: true},
+          )}
           data={bookData}
-          renderItem={({item}) => (
+          renderItem={({item}: any) => (
             <BookCard
               style={{marginTop: 10}}
               key={item.id}
@@ -120,6 +146,9 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 10,
+    position: 'absolute',
+    width: '100%',
+    zIndex: 1,
   },
   middle: {
     flex: 1,
