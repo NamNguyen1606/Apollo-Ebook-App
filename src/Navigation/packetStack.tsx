@@ -1,17 +1,15 @@
 import React from 'react';
-import Route from '../Utils/router';
 import {
-  ListBookScreen,
-  DiscoverScreen,
-  DetailBookScreen,
-} from '../Screens/HomePage';
-import {
-  CardStyleInterpolators,
   createStackNavigator,
+  CardStyleInterpolators,
 } from '@react-navigation/stack';
+import Route from '../Utils/router';
+import {PacketScreen} from '../Screens/HomePage';
+import DetailBookScreen from '../Screens/HomePage/DetailBook/index';
 
 const Stack = createStackNavigator();
-const DiscoverStack = () => {
+
+const PacketStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -20,13 +18,8 @@ const DiscoverStack = () => {
         gestureDirection: 'horizontal',
       }}>
       <Stack.Screen
-        name={Route.Discover}
-        component={DiscoverScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name={Route.ListBook}
-        component={ListBookScreen}
+        name={Route.Packet}
+        component={PacketScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -37,4 +30,4 @@ const DiscoverStack = () => {
     </Stack.Navigator>
   );
 };
-export default DiscoverStack;
+export default PacketStack;

@@ -1,12 +1,11 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Icon} from 'react-native-elements';
-import {
-  BookshelfScreen,
-  SearchScreen,
-  ProfileScreen,
-} from '../Screens/HomePage';
+import {ProfileScreen} from '../Screens/HomePage';
 import DiscoverStack from './discoverStack';
+import PacketStack from './packetStack';
+import SearchStack from './searchStack';
+import BookShelfScreen from '../Screens/HomePage/BookShelf/index';
 interface props {
   route: any;
 }
@@ -38,7 +37,7 @@ const HomeTabNavigation: React.FC<props> = (props) => {
         />
         <Tab.Screen
           name="Packet"
-          component={BookshelfScreen}
+          component={PacketStack}
           options={{
             tabBarIcon: ({color, size}) => (
               <Icon name="book" type="material" size={size} color={color} />
@@ -46,8 +45,17 @@ const HomeTabNavigation: React.FC<props> = (props) => {
           }}
         />
         <Tab.Screen
+          name="BookShelf"
+          component={BookShelfScreen}
+          options={{
+            tabBarIcon: ({color, size}) => (
+              <Icon name="book" type="ionicon" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
           name="Search"
-          component={SearchScreen}
+          component={SearchStack}
           options={{
             tabBarIcon: ({color, size}) => (
               <Icon
@@ -73,4 +81,4 @@ const HomeTabNavigation: React.FC<props> = (props) => {
   );
 };
 
-export default React.memo(HomeTabNavigation);
+export default HomeTabNavigation;

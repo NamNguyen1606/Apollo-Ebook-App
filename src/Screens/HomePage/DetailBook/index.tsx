@@ -16,11 +16,11 @@ import MoneyFormat from '../../../Utils/moneyFormat';
 import Colors from '../../../Utils/color';
 import ReviewTab from '../ReviewTab';
 import SynopsisTab from '../Synopsis';
-import {ScrollView} from 'react-native-gesture-handler';
 import BookApi from '../../../Api/bookApi';
 import style from './style';
 import LottieView from 'lottie-react-native';
 import {useQuery} from 'react-query';
+import {Animated} from 'react-native';
 
 const Token =
   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
@@ -28,6 +28,8 @@ interface Props {
   navigation: any;
   route: any;
 }
+const defaultImg =
+  'https://cdn0.iconfinder.com/data/icons/book-and-library/64/Sad-Emotion-Book-512.png';
 
 const DetailBookScreen: React.FC<Props> = (props) => {
   const {book} = props.route.params;
@@ -37,13 +39,20 @@ const DetailBookScreen: React.FC<Props> = (props) => {
   const [isModalPurchasingVisible, setIsModalPurchasingVisible] = useState<
     boolean
   >(false);
+
+  const scrollY = new Animated.Value(0);
+  const diffClampScrollY = Animated.diffClamp(scrollY, 0, 80);
+  const headerTranslateY = diffClampScrollY.interpolate({
+    inputRange: [0, 80],
+    outputRange: [0, -80],
+    extrapolate: 'clamp',
+  });
+
   const [token, setToken] = useState<string>('');
   const getPurchaseApi = async (key: any, token: any) =>
     await BookApi.purchaseBook(token, book.id);
 
   const {status, data}: any = useQuery(['purchase', token], getPurchaseApi);
-  const defaultImg =
-    'https://cdn0.iconfinder.com/data/icons/book-and-library/64/Sad-Emotion-Book-512.png';
 
   const onTabPress = useCallback((value: boolean) => {
     setIsReview(value);
@@ -263,8 +272,44 @@ const DetailBookScreen: React.FC<Props> = (props) => {
   }
 
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
-      <ScrollView style={style.container} showsVerticalScrollIndicator={false}>
+    <View style={{flex: 1, backgroundColor: 'transparent'}}>
+      <Animated.View
+        style={[
+          style.subHeader,
+          {
+            transform: [{translateY: headerTranslateY}],
+          },
+        ]}>
+        <Icon
+          name="chevron-back"
+          type="ionicon"
+          color="white"
+          size={33}
+          onPress={() => {
+            props.navigation.pop();
+          }}
+        />
+
+        <Icon
+          name="cloud-download"
+          type="font-awesome"
+          color="white"
+          size={26}
+          onPress={() => {
+            props.navigation.pop();
+          }}
+        />
+      </Animated.View>
+
+      <Animated.ScrollView
+        bounces={false}
+        style={style.container}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: scrollY}}}],
+          {useNativeDriver: true},
+        )}>
         <ImageBackground
           style={style.header}
           resizeMode="cover"
@@ -273,26 +318,6 @@ const DetailBookScreen: React.FC<Props> = (props) => {
             uri: img,
           }}
           onError={() => setImg(defaultImg)}>
-          <View style={style.subHeader}>
-            <Icon
-              name="chevron-back"
-              type="ionicon"
-              color="white"
-              size={33}
-              onPress={() => {
-                props.navigation.pop();
-              }}
-            />
-            <Icon
-              name="cloud-download"
-              type="font-awesome"
-              color="white"
-              size={26}
-              onPress={() => {
-                props.navigation.pop();
-              }}
-            />
-          </View>
           <View style={style.middle}>
             <Image
               style={{height: 220, width: 140, borderRadius: 8}}
@@ -379,7 +404,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
             />
           )}
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
       <Modal animationType="slide" transparent={true} visible={isModalVisible}>
         <TouchableWithoutFeedback onPress={showReviewModal}>
           <View

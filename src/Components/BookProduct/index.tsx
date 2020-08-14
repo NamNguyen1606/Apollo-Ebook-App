@@ -58,13 +58,14 @@ const style = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     marginLeft: 10,
-    borderWidth: 0.3,
-    borderColor: Colors.Background,
+    // borderWidth: 0.3,
+    // borderRadius: 10,
   },
   imgHolder: {
     height: 207,
     width: 135,
     backgroundColor: 'white',
+    borderRadius: 1.5,
   },
   titleStyle: {
     textAlign: 'center',

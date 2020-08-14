@@ -7,9 +7,13 @@ export default class Route {
 
   //Home
   static HomePage: string = 'home_page';
-  static BookShelf: string = 'book_shelf';
+
+  static Packet: string = 'packet_tab';
+  static SearchTab: string = 'search_tab';
+  static Discover: string = 'discover_tab';
+  static BookSelf: string = 'book_self_tab';
+
   static ListBook: string = 'list_book';
-  static Discover: string = 'discover';
   static DetailBook: string = 'detail_book';
   static SynopsisTab: string = 'synopsis';
   static DetailPacket: string = 'detail_packet';

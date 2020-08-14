@@ -7,12 +7,6 @@ import {
 } from '../Screens';
 import HomeTabNavigation from './homeTab';
 import Route from '../Utils/router';
-import {
-  DetailBookScreen,
-  SynopsisTab,
-  DetailPacketScreen,
-  CategoryResultScreen,
-} from '../Screens/HomePage';
 
 import {
   CardStyleInterpolators,
@@ -50,26 +44,6 @@ const AuthNavigation = () => {
       <Stack.Screen
         name={Route.HomePage}
         component={HomeTabNavigation}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name={Route.DetailBook}
-        component={DetailBookScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name={Route.SynopsisTab}
-        component={SynopsisTab}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name={Route.DetailPacket}
-        component={DetailPacketScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name={Route.SearchResult}
-        component={CategoryResultScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

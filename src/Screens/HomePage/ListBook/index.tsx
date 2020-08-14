@@ -8,6 +8,7 @@ import Route from '../../../Utils/router';
 import {FlatList} from 'react-native-gesture-handler';
 import Book from '../../../Models/book';
 import BookApi from '../../../Api/bookApi';
+import LottieView from 'lottie-react-native';
 
 interface Props {
   navigation: any;
@@ -18,9 +19,11 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
   const {title, collection, data} = route.params;
   const [bookData, setBookData] = useState(() => data);
   const [index, setIndex] = useState(10);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function loadMore() {
     setIndex(index + 5);
+    setIsLoading(!isLoading);
     const response: any = await BookApi.getAll(
       collection,
       index,
@@ -42,7 +45,23 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
       );
     });
     setBookData([...bookData, ...newBookData]);
+    setIsLoading(!isLoading);
   }
+
+  const renderFooter = () => {
+    if (isLoading) {
+      return (
+        <LottieView
+          style={style.loading}
+          source={require('../../../Asset/Animation/loading.json')}
+          autoPlay
+          loop
+        />
+      );
+    } else {
+      return null;
+    }
+  };
 
   const onItemPress = (data: Book) =>
     navigation.navigate(Route.DetailBook, {book: data});
@@ -83,11 +102,13 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
           onEndReached={loadMore}
           onEndReachedThreshold={0.2}
           showsVerticalScrollIndicator={false}
+          ListFooterComponent={renderFooter}
         />
       </View>
     </View>
   );
 };
+
 const style = StyleSheet.create({
   container: {
     flex: 1,
@@ -117,6 +138,11 @@ const style = StyleSheet.create({
   quantityStyle: {
     fontSize: 16,
     color: '#5E6162',
+  },
+  loading: {
+    height: 100,
+    width: 100,
+    alignSelf: 'center',
   },
 });
 export default ListBookScreen;
