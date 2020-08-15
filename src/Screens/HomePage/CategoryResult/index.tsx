@@ -19,13 +19,13 @@ interface Props {
   route: any;
 }
 
-const SearchResultScreen: React.FC<Props> = ({navigation, route}) => {
-  const {collection, searchContent} = route.params;
+const CategoryResultScreen: React.FC<Props> = ({navigation, route}) => {
+  const {title, collectionId} = route.params;
+
   const loadMore: any = async (key: any, index: number = 0) => {
-    const response: any = await BookApi.search(
+    const response: any = await BookApi.getCollection(
+      collectionId,
       Token,
-      collection,
-      searchContent,
       index,
       10,
       0,
@@ -62,7 +62,6 @@ const SearchResultScreen: React.FC<Props> = ({navigation, route}) => {
 
   const {
     data,
-    isLoading,
     isSuccess,
     fetchMore,
     isFetching,
@@ -77,22 +76,6 @@ const SearchResultScreen: React.FC<Props> = ({navigation, route}) => {
       }
     },
   });
-
-  const renderEmptyAnimation = () => {
-    if (!isLoading) {
-      if (data[0].length === 0) {
-        return (
-          <LottieView
-            source={require('../../../Asset/Animation/empty-box.json')}
-            autoPlay
-            loop
-          />
-        );
-      }
-    } else {
-      return null;
-    }
-  };
 
   const onFetch = () => {
     canFetchMore && fetchMore();
@@ -140,7 +123,7 @@ const SearchResultScreen: React.FC<Props> = ({navigation, route}) => {
             navigation.goBack();
           }}
         />
-        <Text style={style.titleHeader}>{searchContent}</Text>
+        <Text style={style.titleHeader}>{title}</Text>
       </Animated.View>
       <View style={style.middle}>
         {isSuccess ? (
@@ -184,7 +167,6 @@ const SearchResultScreen: React.FC<Props> = ({navigation, route}) => {
             loop
           />
         )}
-        {renderEmptyAnimation()}
       </View>
     </View>
   );
@@ -229,9 +211,5 @@ const style = StyleSheet.create({
     width: 100,
     alignSelf: 'center',
   },
-  emptyView: {
-    height: '80%',
-    width: '80%',
-  },
 });
-export default SearchResultScreen;
+export default CategoryResultScreen;

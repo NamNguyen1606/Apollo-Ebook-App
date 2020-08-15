@@ -19,7 +19,7 @@ const style = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: 'rgba(0, 0, 0, 0)',
     position: 'absolute',
   },
   middle: {
@@ -103,6 +103,14 @@ const style = StyleSheet.create({
     borderRadius: 20,
   },
   loadingLottie: {height: 100, width: 100, alignSelf: 'center'},
+  boxIcon: {
+    height: 50,
+    width: 50,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 15,
+  },
 });
 
 export default style;

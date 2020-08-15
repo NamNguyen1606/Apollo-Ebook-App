@@ -5,8 +5,9 @@ import {
 } from '@react-navigation/stack';
 import Route from '../Utils/router';
 import DetailBookScreen from '../Screens/HomePage/DetailBook/index';
-import CategoryResultScreen from '../Screens/HomePage/SearchResult/index';
+import CategoryResultScreen from '../Screens/HomePage/CategoryResult/index';
 import SearchScreen from '../Screens/HomePage/Search/index';
+import SearchResultScreen from '../Screens/HomePage/SearchResult/index';
 
 const Stack = createStackNavigator();
 
@@ -24,13 +25,18 @@ const SearchStack = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name={Route.SearchResult}
+        name={Route.CategoryResult}
         component={CategoryResultScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen
         name={Route.DetailBook}
         component={DetailBookScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name={Route.SearchResult}
+        component={SearchResultScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

@@ -14,13 +14,13 @@ import ParentCollection from '../../../Models/parentCollection';
 import {DataContext} from '../../../Navigation/homeTab';
 import {useNavigation} from '@react-navigation/native';
 import Route from '../../../Utils/router';
+import {BookCollectionType} from '../../../Utils/SearchCollection';
 
 interface Props {}
 
 const SearchScreen = () => {
   const navigation = useNavigation();
   const data: any = useContext(DataContext);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [search, setSearch] = useState<string>();
   const [list] = useState<ParentCollection[]>(data.categoryData);
 
@@ -29,14 +29,19 @@ const SearchScreen = () => {
       title={item.name}
       listSubCategory={item.children}
       onPressSubItem={(val) =>
-        navigation.navigate(Route.SearchResult, {
+        navigation.navigate(Route.CategoryResult, {
           title: val.title,
           collectionId: val.id,
         })
       }
     />
   );
-
+  const onSearch = () => {
+    navigation.navigate(Route.SearchResult, {
+      collection: BookCollectionType.All,
+      searchContent: search,
+    });
+  };
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -49,7 +54,7 @@ const SearchScreen = () => {
             title="Search book or author"
             icon="search"
             onChangeText={(val) => setSearch(val)}
-            onIconPress={() => {}}
+            onIconPress={onSearch}
           />
         </View>
         <View style={style.middle}>

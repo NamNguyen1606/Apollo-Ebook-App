@@ -280,25 +280,29 @@ const DetailBookScreen: React.FC<Props> = (props) => {
             transform: [{translateY: headerTranslateY}],
           },
         ]}>
-        <Icon
-          name="chevron-back"
-          type="ionicon"
-          color="white"
-          size={33}
-          onPress={() => {
-            props.navigation.pop();
-          }}
-        />
+        <View style={style.boxIcon}>
+          <Icon
+            name="chevron-back"
+            type="ionicon"
+            color="white"
+            size={33}
+            onPress={() => {
+              props.navigation.pop();
+            }}
+          />
+        </View>
 
-        <Icon
-          name="cloud-download"
-          type="font-awesome"
-          color="white"
-          size={26}
-          onPress={() => {
-            props.navigation.pop();
-          }}
-        />
+        <View style={style.boxIcon}>
+          <Icon
+            name="cloud-download"
+            type="font-awesome"
+            color="white"
+            size={26}
+            onPress={() => {
+              props.navigation.pop();
+            }}
+          />
+        </View>
       </Animated.View>
 
       <Animated.ScrollView

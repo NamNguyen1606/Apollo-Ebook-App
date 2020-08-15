@@ -5,6 +5,7 @@ import {Icon} from 'react-native-elements';
 import Colors from '../../Utils/color';
 import {Button} from '../../Components';
 import Route from '../../Utils/router';
+import LottieView from 'lottie-react-native';
 interface Props {
   navigation: any;
   route: any;
@@ -14,6 +15,7 @@ const WelcomeScreen: React.FC<Props> = ({navigation, route}) => {
   const {newBookData, bestSellerData, categoryData} = route.params;
   return (
     <View style={style.container}>
+      <LottieView source={require('../../Asset/Animation/loading.json')} />
       <View style={style.header}>
         <Icon name="book" type="Feather" size={70} color="white" />
         <Text style={style.tittleStyle}>Apollo</Text>

@@ -71,6 +71,22 @@ class BookApi {
     const url = `Book/Purchase?id=${id}`;
     return axiosClient.get(url, {headers: {Token: token}});
   }
+
+  static search(
+    token: any,
+    collection: any,
+    searchContent: string,
+    index: number,
+    count: number,
+    status: number,
+  ) {
+    const url = `Book/Search?collection=${collection}&index=${index}&count=${count}&status=${status}`;
+    return axiosClient.post(
+      url,
+      {search: searchContent, author: ''},
+      {headers: {Token: token}},
+    );
+  }
 }
 
 export default BookApi;
