@@ -9,7 +9,8 @@
     "moduleResolution": "node",
     "noEmit": true,
     "strict": true,
-    "target": "ESNext"
+    "target": "ESNext",
+    "noImplicitAny": false
   },
   "exclude": [
     "node_modules",

@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   View,
   StyleSheet,
@@ -91,19 +91,19 @@ const PacketCard: React.FC<Props> = (props) => {
     );
   }
 
-  const onExpandPress = () => {
+  const onExpandPress = useCallback(() => {
     setIsExpand(!isExpand);
     Animated.spring(heightAnimated, {
       toValue: !isExpand ? 500 : 180,
       useNativeDriver: false,
     }).start();
-  };
+  }, [heightAnimated, isExpand]);
 
   return (
     <TouchableOpacity activeOpacity={0.5} onPress={onExpandPress}>
       <Animated.View
         style={[style.container, props.style, {height: heightAnimated}]}>
-        <View style={{height: 180, flexDirection: 'row'}}>
+        <View style={style.view}>
           <View style={style.imgHolder}>
             <Image
               style={style.imgSize}
@@ -141,6 +141,7 @@ const style = StyleSheet.create({
     borderBottomWidth: 0.3,
     paddingRight: 10,
   },
+  view: {height: 180, flexDirection: 'row'},
   imgHolder: {
     height: 165,
     width: 115,

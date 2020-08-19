@@ -1137,6 +1137,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
   integrity sha512-rk4sWFsmtOw8oyx8SD3KSvawwaK7gRBSEIy2TAwURyGt+3TizssXP1r8nx3zY+R7v2vYYHXZ+k2/GULAT/bcaQ==
 
+"@react-native-community/picker@^1.6.6":
+  version "1.6.6"
+  resolved "https://registry.yarnpkg.com/@react-native-community/picker/-/picker-1.6.6.tgz#827edfbcb6c2e3f6f5c68674f52249fd7d03a0bc"
+  integrity sha512-R2QUEcpdOClgvCsTUzfJcb/qcRy40ikHoJslvnRRj2iP8zCaB1k/3XK3JKCo3e+Alux1fR5o7edlDOIOtwx1YQ==
+
 "@react-navigation/bottom-tabs@^5.7.2":
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/@react-navigation/bottom-tabs/-/bottom-tabs-5.7.2.tgz#330c8ade026030830fce7806ce53cbae97a36e28"
@@ -1391,6 +1396,13 @@
     lodash "^4.17.15"
     semver "^7.3.2"
     tsutils "^3.17.1"
+
+"@welldone-software/why-did-you-render@^4.3.1":
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/@welldone-software/why-did-you-render/-/why-did-you-render-4.3.1.tgz#f344647cf826117431da7ab4c70cf28a2cf578a3"
+  integrity sha512-1Axk7YWHbXlOgMJ1Wmal7Nmd8a7k+VLr7YFwQsY7CB4SsjJCOyyjbnLLZQ4t6ojw4Wn1suqhcj8leBPMwKjzmA==
+  dependencies:
+    lodash "^4"
 
 abab@^2.0.0:
   version "2.0.3"
@@ -2647,6 +2659,11 @@ eslint-plugin-react-hooks@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-3.0.0.tgz#9e80c71846eb68dd29c3b21d832728aa66e5bd35"
   integrity sha512-EjxTHxjLKIBWFgDJdhKKzLh5q+vjTFrqNZX36uIxWS4OfyXe5DawqPj3U5qeJ1ngLwatjzQnmR0Lz0J0YH3kxw==
+
+eslint-plugin-react-hooks@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.1.0.tgz#6323fbd5e650e84b2987ba76370523a60f4e7925"
+  integrity sha512-36zilUcDwDReiORXmcmTc6rRumu9JIM3WjSvV0nclHoUQ0CNrX866EwONvLR/UqaeqFutbAnVu8PEmctdo2SRQ==
 
 eslint-plugin-react-native-globals@^0.1.1:
   version "0.1.2"
@@ -4497,6 +4514,11 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
+lodash@^4:
+  version "4.17.20"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
+  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
+
 lodash@^4.17.10, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.16, lodash@^4.17.19, lodash@^4.17.4, lodash@^4.3.0:
   version "4.17.19"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
@@ -5792,10 +5814,10 @@ react-number-format@^4.4.1:
   dependencies:
     prop-types "^15.7.2"
 
-react-query@^2.5.13:
-  version "2.5.13"
-  resolved "https://registry.yarnpkg.com/react-query/-/react-query-2.5.13.tgz#0948e044416562c4c58c966c27387ce4037bbf5a"
-  integrity sha512-jdpHWav8hh8KwIL6v021/S1jE7GTKBcZe7o86MfKObZ7fIAz8Rx6HhC8Pej5MwcR//uESdnfNoyr+OQr2Pbfeg==
+react-query@^2.5.14:
+  version "2.5.14"
+  resolved "https://registry.yarnpkg.com/react-query/-/react-query-2.5.14.tgz#690bd85c83fafe8dd6453a6cafb922d475a1eea4"
+  integrity sha512-uXitanViwKKKSgpEDQZLoABziZwlF9rerDJ1qundfaVYyI2bg20AglZTT9AbMoMsd9F/okhYtB0GFUkK8bOQqg==
   dependencies:
     ts-toolbelt "^6.9.4"
 

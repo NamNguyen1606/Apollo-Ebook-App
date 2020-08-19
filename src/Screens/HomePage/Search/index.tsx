@@ -1,19 +1,21 @@
 /* eslint-disable prettier/prettier */
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useCallback, useMemo} from 'react';
 import {
   View,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
   Keyboard,
+  ScrollView,
 } from 'react-native';
 import Colors from '../../../Utils/color';
 import {TextField, CategoryCard} from '../../../Components';
 import {FlatList} from 'react-native-gesture-handler';
-import ParentCollection from '../../../Models/parentCollection';
 import {DataContext} from '../../../Navigation/homeTab';
 import {useNavigation} from '@react-navigation/native';
 import Route from '../../../Utils/router';
+import {Animated} from 'react-native';
+import {ButtonGroup} from 'react-native-elements';
 import {BookCollectionType} from '../../../Utils/SearchCollection';
 
 interface Props {}
@@ -22,50 +24,111 @@ const SearchScreen = () => {
   const navigation = useNavigation();
   const data: any = useContext(DataContext);
   const [search, setSearch] = useState<string>();
-  const [list] = useState<ParentCollection[]>(data.categoryData);
+  const [indexType, setIndexType] = useState(0);
+  const [isShow, setIsShow] = useState<boolean>(false);
+  const [pickerViewHeight] = useState(new Animated.Value(100));
 
-  const renderItem = ({item}: any) => (
-    <CategoryCard
-      title={item.name}
-      listSubCategory={item.children}
-      onPressSubItem={(val) =>
-        navigation.navigate(Route.CategoryResult, {
-          title: val.title,
-          collectionId: val.id,
-        })
-      }
-    />
+  const showPicker = () => {
+    Animated.spring(pickerViewHeight, {
+      toValue: !isShow ? 150 : 100,
+      bounciness: 0,
+      speed: 20,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const onSubItemPress = useCallback(
+    (val) =>
+      navigation.navigate(Route.CategoryResult, {
+        title: val.title,
+        collectionId: val.id,
+      }),
+    [navigation],
   );
+
+  const onShowPicker = () => {
+    showPicker();
+    setIsShow(!isShow);
+  };
+
+  const onSelected = (index: number) => {
+    setIndexType(index);
+  };
+
+  const fillTypes = ['All', 'Top Sell', 'Introduce'];
+
   const onSearch = () => {
+    var searchType = BookCollectionType.All;
+    switch (indexType) {
+      case 0:
+        searchType = BookCollectionType.All;
+        break;
+      case 1:
+        searchType = BookCollectionType.BestSeller;
+        break;
+      case 2:
+        searchType = BookCollectionType.Introduce;
+        break;
+    }
     navigation.navigate(Route.SearchResult, {
-      collection: BookCollectionType.All,
+      collection: searchType,
       searchContent: search,
     });
   };
+
+  // FlatList
+  const renderItem = useCallback(
+    ({item}: any) => (
+      <CategoryCard
+        title={item.name}
+        listSubCategory={item.children}
+        onPressSubItem={(val) => onSubItemPress(val)}
+      />
+    ),
+    [onSubItemPress],
+  );
+  const getKeyExtractor = (item: any) => item.id;
+
+  const renderFlatList = useMemo(() => {
+    return (
+      <FlatList
+        data={data.categoryData}
+        renderItem={renderItem}
+        keyExtractor={getKeyExtractor}
+        showsVerticalScrollIndicator={false}
+      />
+    );
+  }, [data.categoryData, renderItem]);
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
         Keyboard.dismiss();
       }}>
       <View style={style.container}>
-        <View style={style.header}>
+        <Animated.View style={[style.header, {height: pickerViewHeight}]}>
           <TextField
             style={style.textField}
             title="Search book or author"
             icon="search"
             onChangeText={(val) => setSearch(val)}
-            onIconPress={onSearch}
+            onFocus={onShowPicker}
+            onBlur={onShowPicker}
+            returnKeyType="search"
+            onSubmit={onSearch}
           />
-        </View>
-        <View style={style.middle}>
+
+          <ButtonGroup
+            containerStyle={isShow ? style.btnGroupShow : style.btnGroupHide}
+            buttons={fillTypes}
+            onPress={onSelected}
+            selectedIndex={indexType}
+          />
+        </Animated.View>
+        <ScrollView style={style.middle}>
           <Text style={style.title}>All Categories</Text>
-          <FlatList
-            data={list}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
+          {renderFlatList}
+        </ScrollView>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -93,5 +156,11 @@ const style = StyleSheet.create({
   textField: {
     backgroundColor: 'white',
   },
+  picker: {
+    height: '30%',
+    width: 150,
+  },
+  btnGroupShow: {height: 35, marginTop: 15},
+  btnGroupHide: {height: 0, opacity: 0},
 });
 export default SearchScreen;

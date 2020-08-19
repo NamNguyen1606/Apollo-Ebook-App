@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   View,
   StyleSheet,
@@ -255,6 +255,11 @@ const PacketScreen: React.FC<Props> = (props) => {
     return result;
   };
 
+  const onPressItem = useCallback(
+    (book) => props.navigation.navigate(Route.DetailBook, {book}),
+    [],
+  );
+
   const loadingMore = () => {
     canFetchMore && fetchMore();
   };
@@ -283,9 +288,7 @@ const PacketScreen: React.FC<Props> = (props) => {
       img={item.CoverUrl}
       price={item.Price}
       packetId={item.PacketID}
-      onPressItem={(book) =>
-        props.navigation.navigate(Route.DetailBook, {book})
-      }
+      onPressItem={(book) => onPressItem(book)}
       onPurchasePress={(packetId) => onPurchasePacket(packetId)}
     />
   );

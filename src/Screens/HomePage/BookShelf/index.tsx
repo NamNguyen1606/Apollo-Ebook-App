@@ -103,6 +103,21 @@ const BookShelfScreen: React.FC<Props> = ({navigation}) => {
     }
   };
 
+  const renderItem = ({item}: any) => (
+    <BookCard
+      style={{marginTop: 10}}
+      key={item.id}
+      author={item.author}
+      tittle={item.title}
+      img={item.imgUrl}
+      price={item.price}
+      quantity={item.total}
+      publishYear={item.publicYear}
+      data={item}
+      onPress={(data: Book) => onItemPress(data)}
+    />
+  );
+
   return (
     <View style={style.container}>
       <Animated.View
@@ -126,20 +141,7 @@ const BookShelfScreen: React.FC<Props> = ({navigation}) => {
               {useNativeDriver: true},
             )}
             data={covertData()}
-            renderItem={({item}: any) => (
-              <BookCard
-                style={{marginTop: 10}}
-                key={item.id}
-                author={item.author}
-                tittle={item.title}
-                img={item.imgUrl}
-                price={item.price}
-                quantity={item.total}
-                publishYear={item.publicYear}
-                data={item}
-                onPress={(data: Book) => onItemPress(data)}
-              />
-            )}
+            renderItem={renderItem}
             onEndReachedThreshold={0.5}
             onEndReached={onFetch}
             keyExtractor={(item: any, index: any) => `${index}`}
