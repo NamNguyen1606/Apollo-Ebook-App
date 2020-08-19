@@ -101,36 +101,36 @@ const SearchScreen = () => {
   }, [data.categoryData, renderItem]);
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
-      }}>
-      <View style={style.container}>
-        <Animated.View style={[style.header, {height: pickerViewHeight}]}>
-          <TextField
-            style={style.textField}
-            title="Search book or author"
-            icon="search"
-            onChangeText={(val) => setSearch(val)}
-            onFocus={onShowPicker}
-            onBlur={onShowPicker}
-            returnKeyType="search"
-            onSubmit={onSearch}
-          />
+    <View style={style.container}>
+      <Animated.View style={[style.header, {height: pickerViewHeight}]}>
+        <TextField
+          style={style.textField}
+          title="Search book or author"
+          icon="search"
+          onChangeText={(val) => setSearch(val)}
+          onFocus={onShowPicker}
+          onBlur={onShowPicker}
+          returnKeyType="search"
+          onSubmit={onSearch}
+        />
 
-          <ButtonGroup
-            containerStyle={isShow ? style.btnGroupShow : style.btnGroupHide}
-            buttons={fillTypes}
-            onPress={onSelected}
-            selectedIndex={indexType}
-          />
-        </Animated.View>
+        <ButtonGroup
+          containerStyle={isShow ? style.btnGroupShow : style.btnGroupHide}
+          buttons={fillTypes}
+          onPress={onSelected}
+          selectedIndex={indexType}
+        />
+      </Animated.View>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+        }}>
         <ScrollView style={style.middle}>
           <Text style={style.title}>All Categories</Text>
           {renderFlatList}
         </ScrollView>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </View>
   );
 };
 const style = StyleSheet.create({

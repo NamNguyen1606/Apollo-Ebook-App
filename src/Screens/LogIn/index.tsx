@@ -14,6 +14,8 @@ import Route from '../../Utils/router';
 import {TextField, Button, IconBox} from '../../Components';
 import Book from '../../Models/book';
 import BookApi from '../../Api/bookApi';
+const Token =
+  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
 interface Props {
   navigation: any;
 }
@@ -22,53 +24,7 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isLogin, setIsLogin] = useState<boolean>(false);
-  let newBookList: Book[] = [];
-  let bestSellerBookList: Book[] = [];
-  async function getBookData(index: number, count: number) {
-    const newBookResponse: any = await BookApi.getAllNewBook(
-      index,
-      count,
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE',
-    );
-    const bestSellerResponse: any = await BookApi.getAllBestSellerBook(
-      index,
-      count,
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE',
-    );
-    const newBookListData: Book[] = newBookResponse.map((item: any) => {
-      return new Book(
-        item.Success,
-        item.Author,
-        item.BookID,
-        item.CoverUrl,
-        item.FileSize,
-        item.Price,
-        item.PublishYear,
-        item.Title,
-        item.TotalBooks,
-        item.Sumarize,
-      );
-    });
-    const bestSellerListData: Book[] = bestSellerResponse.map((item: any) => {
-      return new Book(
-        item.Success,
-        item.Author,
-        item.BookID,
-        item.CoverUrl,
-        item.FileSize,
-        item.Price,
-        item.PublishYear,
-        item.Title,
-        item.TotalBooks,
-        item.Sumarize,
-      );
-    });
-    newBookList = newBookListData;
-    bestSellerBookList = bestSellerListData;
-  }
-  useEffect(() => {
-    getBookData(0, 10);
-  }, []);
+
   async function logIn() {
     // setIsLogin(true);
     // console.log(`${email} + ${password}`);
@@ -84,10 +40,7 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
     //   Alert.alert('Error', response.Message);
     // }
     // setIsLogin(false);
-    navigation.navigate(Route.HomePage, {
-      newBookData: newBookList,
-      bestSellerData: bestSellerBookList,
-    });
+    navigation.navigate(Route.HomePage);
   }
 
   return (
@@ -107,7 +60,7 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
               color="white"
               size={33}
               onPress={() => {
-                navigation.navigate(Route.Welcome);
+                navigation.pop();
               }}
             />
           </View>
@@ -135,6 +88,14 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
             tittle="LOG IN"
             isDisable={isLogin}
             onPress={logIn}
+          />
+          <Button
+            style={{height: 55, marginTop: 14}}
+            tittle="REGISTER"
+            isReserve={true}
+            onPress={() => {
+              navigation.navigate(Route.Register);
+            }}
           />
         </View>
         <View style={style.footer}>
@@ -166,17 +127,17 @@ const style = StyleSheet.create({
     backgroundColor: 'white',
   },
   header: {
-    flex: 5,
+    flex: 3,
     backgroundColor: Colors.Background,
   },
   middle: {
-    flex: 2.5,
+    flex: 3,
     backgroundColor: 'white',
     marginHorizontal: 20,
     marginTop: 15,
   },
   footer: {
-    flex: 2.5,
+    flex: 2,
     backgroundColor: 'white',
     alignItems: 'center',
   },

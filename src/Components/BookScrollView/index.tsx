@@ -96,4 +96,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default BookScrollView;
+export default React.memo(BookScrollView);

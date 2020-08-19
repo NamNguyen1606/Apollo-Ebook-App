@@ -255,15 +255,14 @@ const PacketScreen: React.FC<Props> = (props) => {
     return result;
   };
 
-  const onPressItem = useCallback(
-    (book) => props.navigation.navigate(Route.DetailBook, {book}),
-    [],
-  );
-
   const loadingMore = () => {
     canFetchMore && fetchMore();
   };
 
+  const onPressItem = useCallback(
+    (book) => props.navigation.navigate(Route.DetailBook, {book}),
+    [props.navigation],
+  );
   const {
     data,
     isSuccess,
@@ -280,19 +279,30 @@ const PacketScreen: React.FC<Props> = (props) => {
     },
   });
 
-  const renderItem = ({item}: any) => (
-    <PacketCard
-      style={{marginTop: 10}}
-      tittle={item.PacketName}
-      description={item.Descriptions}
-      img={item.CoverUrl}
-      price={item.Price}
-      packetId={item.PacketID}
-      onPressItem={(book) => onPressItem(book)}
-      onPurchasePress={(packetId) => onPurchasePacket(packetId)}
-    />
+  const renderItem = useCallback(
+    ({item}: any) => (
+      <PacketCard
+        style={{marginTop: 10}}
+        tittle={item.PacketName}
+        description={item.Descriptions}
+        img={item.CoverUrl}
+        price={item.Price}
+        packetId={item.PacketID}
+        onPressItem={(book) => onPressItem(book)}
+        onPurchasePress={(packetId) => onPurchasePacket(packetId)}
+      />
+    ),
+    [onPressItem],
   );
-
+  const getKeyExtractor = useCallback((item: any) => item.PacketID, []);
+  const getItemLayout = useCallback(
+    (data: any, index: any) => ({
+      length: 180,
+      offset: 180 * index,
+      index,
+    }),
+    [],
+  );
   const renderFooter = () => {
     if (isFetching) {
       return (
@@ -342,12 +352,8 @@ const PacketScreen: React.FC<Props> = (props) => {
             )}
             data={convertData()}
             renderItem={renderItem}
-            keyExtractor={(item: any) => item.PacketID}
-            getItemLayout={(data: any, index: any) => ({
-              length: 180,
-              offset: 180 * index,
-              index,
-            })}
+            keyExtractor={getKeyExtractor}
+            getItemLayout={getItemLayout}
             onEndReachedThreshold={0.7}
             onEndReached={loadingMore}
             showsVerticalScrollIndicator={false}

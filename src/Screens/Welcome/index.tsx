@@ -13,6 +13,19 @@ interface Props {
 
 const WelcomeScreen: React.FC<Props> = ({navigation, route}) => {
   const {newBookData, bestSellerData, categoryData} = route.params;
+
+  const onStartBrowsing = () => {
+    navigation.navigate(Route.HomePage, {
+      newBookData: newBookData,
+      bestSellerData: bestSellerData,
+      categoryData: categoryData,
+    });
+  };
+
+  const onLoginNav = () => {
+    navigation.navigate(Route.Login);
+  };
+
   return (
     <View style={style.container}>
       <LottieView source={require('../../Asset/Animation/loading.json')} />
@@ -24,20 +37,12 @@ const WelcomeScreen: React.FC<Props> = ({navigation, route}) => {
         <Button
           style={{marginBottom: 10}}
           tittle="LOGIN / REGISTER"
-          onPress={() => {
-            navigation.navigate(Route.Register);
-          }}
+          onPress={onLoginNav}
         />
         <Button
           tittle="START BROWSING"
           isReserve={true}
-          onPress={() => {
-            navigation.navigate(Route.HomePage, {
-              newBookData: newBookData,
-              bestSellerData: bestSellerData,
-              categoryData: categoryData,
-            });
-          }}
+          onPress={onStartBrowsing}
         />
         <Text style={style.subFooterStyle}>
           by signing up to you agree to our{' '}

@@ -42,7 +42,7 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
               color="white"
               size={33}
               onPress={() => {
-                navigation.navigate(Route.Welcome);
+                navigation.pop();
               }}
             />
           </View>

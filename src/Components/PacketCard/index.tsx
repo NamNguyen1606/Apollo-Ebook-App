@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useMemo} from 'react';
 import {
   View,
   StyleSheet,
@@ -44,7 +44,7 @@ const PacketCard: React.FC<Props> = (props) => {
   };
   const {status, data} = useQuery(['books', props.packetId], loadingBookList);
 
-  function renderListBook() {
+  const renderListBook = useMemo(() => {
     const result = data?.Books.map((item): any => {
       return new Book(
         item.Success,
@@ -78,7 +78,7 @@ const PacketCard: React.FC<Props> = (props) => {
           }}>
           <Text style={{fontSize: 18}}>Book List</Text>
           <Text style={{fontSize: 14, color: Colors.SubText}}>
-            {result.length} Books
+            {status === 'success' ? data?.length : 0} Books
           </Text>
         </View>
         <BookScrollView
@@ -89,7 +89,7 @@ const PacketCard: React.FC<Props> = (props) => {
         />
       </View>
     );
-  }
+  }, [data, isExpand, props, status]);
 
   const onExpandPress = useCallback(() => {
     setIsExpand(!isExpand);
@@ -127,7 +127,7 @@ const PacketCard: React.FC<Props> = (props) => {
             />
           </View>
         </View>
-        {status === 'success' && renderListBook()}
+        {status === 'success' && renderListBook}
       </Animated.View>
     </TouchableOpacity>
   );
