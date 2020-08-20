@@ -8,6 +8,7 @@ import Route from '../../../Utils/router';
 import Book from '../../../Models/book';
 import BookApi from '../../../Api/bookApi';
 import LottieView from 'lottie-react-native';
+import {APP_TOKEN} from '../../../Api/axiosClient';
 
 interface Props {
   navigation: any;
@@ -36,12 +37,7 @@ const ListBookScreen: React.FC<Props> = ({navigation, route}) => {
   async function loadMore() {
     setIndex(index + 5);
     setIsLoading(!isLoading);
-    const response: any = await BookApi.getAll(
-      collection,
-      index,
-      5,
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE',
-    );
+    const response: any = await BookApi.getAll(collection, index, 5, APP_TOKEN);
     const newBookData: Book[] = response.map((item: any) => {
       return new Book(
         item.Success,

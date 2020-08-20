@@ -10,9 +10,7 @@ import Book from '../../../Models/book';
 import BookApi from '../../../Api/bookApi';
 import {useInfiniteQuery} from 'react-query';
 import LottieView from 'lottie-react-native';
-
-const Token =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
+import {APP_TOKEN} from '../../../Api/axiosClient';
 
 interface Props {
   navigation: any;
@@ -23,7 +21,7 @@ const SearchResultScreen: React.FC<Props> = ({navigation, route}) => {
   const {collection, searchContent} = route.params;
   const loadMore: any = async (key: any, index: number = 0) => {
     const response: any = await BookApi.search(
-      Token,
+      APP_TOKEN,
       collection,
       searchContent,
       index,
@@ -80,7 +78,7 @@ const SearchResultScreen: React.FC<Props> = ({navigation, route}) => {
 
   const renderEmptyAnimation = () => {
     if (!isLoading) {
-      if (data[0].length === 0) {
+      if (data![0].length === 0) {
         return (
           <LottieView
             source={require('../../../Asset/Animation/empty-box.json')}

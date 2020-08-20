@@ -21,9 +21,9 @@ import style from './style';
 import LottieView from 'lottie-react-native';
 import {useQuery} from 'react-query';
 import {Animated} from 'react-native';
+import {APP_TOKEN} from '../../../Api/axiosClient';
 
-const Token =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
+const AppToken = APP_TOKEN;
 interface Props {
   navigation: any;
   route: any;
@@ -75,7 +75,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
 
   // api
   const {data: bookData, isSuccess: isBookLoadingSuccess} = useQuery(
-    ['book', {Token}],
+    ['book', {Token: AppToken}],
     getBookInfoData,
   );
 
@@ -268,7 +268,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
 
   function purchaseBook() {
     setIsModalPurchasingVisible(true);
-    setToken(Token);
+    setToken(AppToken);
   }
 
   return (

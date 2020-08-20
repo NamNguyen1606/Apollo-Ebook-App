@@ -9,8 +9,8 @@ import CategoryApi from '../../Api/categoryApi';
 import ParentCollection from '../../Models/parentCollection';
 import ChildCollection from '../../Models/childCollection';
 import {StoreProviderInterface, GlobalContext} from '../../Utils/StoreProvider';
-const Token =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
+import {APP_TOKEN} from '../../Api/axiosClient';
+
 interface Props {
   navigation: any;
 }
@@ -26,12 +26,12 @@ const SplashScreen: React.FC<Props> = (props) => {
     const newBookResponse: any = await BookApi.getAllNewBook(
       index,
       count,
-      Token,
+      APP_TOKEN,
     );
     const bestSellerResponse: any = await BookApi.getAllBestSellerBook(
       index,
       count,
-      Token,
+      APP_TOKEN,
     );
     const newBookListData: Book[] = newBookResponse.map((item: any) => {
       return new Book(
@@ -67,7 +67,7 @@ const SplashScreen: React.FC<Props> = (props) => {
   }
 
   async function getCategory() {
-    const response: any = await CategoryApi.getCategory(Token);
+    const response: any = await CategoryApi.getCategory(APP_TOKEN);
     let collection: any;
     let isAdd: boolean = true;
     let listCategory: ParentCollection[] = [];
@@ -101,13 +101,14 @@ const SplashScreen: React.FC<Props> = (props) => {
       const isBookLoadingDone = await getBookData(0, 10);
       const isCategoryLoadingDone = await getCategory();
       if (isBookLoadingDone && isCategoryLoadingDone) {
-        newBook.setData(newBookList);
-        bestSellerBook.setData(bestSellerBookList);
-        categoryData.setData(categoryList);
+        newBook!.setData(newBookList);
+        bestSellerBook!.setData(bestSellerBookList);
+        categoryData!.setData(categoryList);
         props.navigation.navigate(Route.Welcome);
       }
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <View style={style.container}>
