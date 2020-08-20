@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useContext} from 'react';
 import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import Colors from '../../Utils/color';
 import LottieView from 'lottie-react-native';
@@ -8,6 +8,7 @@ import Route from '../../Utils/router';
 import CategoryApi from '../../Api/categoryApi';
 import ParentCollection from '../../Models/parentCollection';
 import ChildCollection from '../../Models/childCollection';
+import {StoreProviderInterface, GlobalContext} from '../../Utils/StoreProvider';
 const Token =
   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
 interface Props {
@@ -18,7 +19,9 @@ const SplashScreen: React.FC<Props> = (props) => {
   let newBookList: Book[] = [];
   let bestSellerBookList: Book[] = [];
   let categoryList: ParentCollection[] = [];
-
+  const {newBook, bestSellerBook, categoryData} = useContext<
+    StoreProviderInterface
+  >(GlobalContext);
   async function getBookData(index: number, count: number) {
     const newBookResponse: any = await BookApi.getAllNewBook(
       index,
@@ -98,11 +101,10 @@ const SplashScreen: React.FC<Props> = (props) => {
       const isBookLoadingDone = await getBookData(0, 10);
       const isCategoryLoadingDone = await getCategory();
       if (isBookLoadingDone && isCategoryLoadingDone) {
-        props.navigation.navigate(Route.Welcome, {
-          newBookData: newBookList,
-          bestSellerData: bestSellerBookList,
-          categoryData: categoryList,
-        });
+        newBook.setData(newBookList);
+        bestSellerBook.setData(bestSellerBookList);
+        categoryData.setData(categoryList);
+        props.navigation.navigate(Route.Welcome);
       }
     };
     fetchData();

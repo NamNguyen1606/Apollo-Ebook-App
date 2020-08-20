@@ -13,7 +13,7 @@ import Colors from '../../../Utils/color';
 import {BookScrollView} from '../../../Components';
 import Book from '../../../Models/book';
 import Route from '../../../Utils/router';
-import {DataContext} from '../../../Navigation/homeTab';
+import {GlobalContext} from '../../../Utils/StoreProvider';
 
 interface Props {
   navigation: any;
@@ -21,8 +21,7 @@ interface Props {
 }
 
 const DiscoverScreen: React.FC<Props> = (props) => {
-  const bookData = useContext(DataContext);
-  const {newBook, bestSellerBook}: any = bookData;
+  const {bestSellerBook, newBook} = useContext(GlobalContext);
 
   function onItemPress(book: Book) {
     props.navigation.navigate(Route.DetailBook, {book});
@@ -33,7 +32,7 @@ const DiscoverScreen: React.FC<Props> = (props) => {
       <BookScrollView
         key={1}
         title="New Books"
-        books={newBook}
+        books={newBook?.data}
         style={{marginHorizontal: 20}}
         isShowHeader={true}
         onItemPress={(book) => onItemPress(book)}
@@ -48,7 +47,7 @@ const DiscoverScreen: React.FC<Props> = (props) => {
       <BookScrollView
         key={2}
         title="Best Seller"
-        books={bestSellerBook}
+        books={bestSellerBook?.data}
         style={{marginBottom: 20, marginHorizontal: 20}}
         isShowHeader={true}
         onItemPress={(book) => onItemPress(book)}

@@ -6,23 +6,22 @@ import {
   Text,
   TouchableWithoutFeedback,
   Keyboard,
-  ScrollView,
 } from 'react-native';
 import Colors from '../../../Utils/color';
 import {TextField, CategoryCard} from '../../../Components';
 import {FlatList} from 'react-native-gesture-handler';
-import {DataContext} from '../../../Navigation/homeTab';
 import {useNavigation} from '@react-navigation/native';
 import Route from '../../../Utils/router';
 import {Animated} from 'react-native';
 import {ButtonGroup} from 'react-native-elements';
 import {BookCollectionType} from '../../../Utils/SearchCollection';
+import {GlobalContext} from '../../../Utils/StoreProvider';
 
 interface Props {}
 
 const SearchScreen = () => {
   const navigation = useNavigation();
-  const data: any = useContext(DataContext);
+  const {categoryData} = useContext(GlobalContext);
   const [search, setSearch] = useState<string>();
   const [indexType, setIndexType] = useState(0);
   const [isShow, setIsShow] = useState<boolean>(false);
@@ -89,16 +88,19 @@ const SearchScreen = () => {
   );
   const getKeyExtractor = (item: any) => item.id;
 
+  const renderHearList = () => <Text style={style.title}>All Categories</Text>;
+
   const renderFlatList = useMemo(() => {
     return (
       <FlatList
-        data={data.categoryData}
+        ListHeaderComponent={renderHearList}
+        data={categoryData?.data}
         renderItem={renderItem}
         keyExtractor={getKeyExtractor}
         showsVerticalScrollIndicator={false}
       />
     );
-  }, [data.categoryData, renderItem]);
+  }, [categoryData?.data, renderItem]);
 
   return (
     <View style={style.container}>
@@ -125,10 +127,7 @@ const SearchScreen = () => {
         onPress={() => {
           Keyboard.dismiss();
         }}>
-        <ScrollView style={style.middle}>
-          <Text style={style.title}>All Categories</Text>
-          {renderFlatList}
-        </ScrollView>
+        <View style={style.middle}>{renderFlatList}</View>
       </TouchableWithoutFeedback>
     </View>
   );

@@ -8,18 +8,11 @@ import Route from '../../Utils/router';
 import LottieView from 'lottie-react-native';
 interface Props {
   navigation: any;
-  route: any;
 }
 
-const WelcomeScreen: React.FC<Props> = ({navigation, route}) => {
-  const {newBookData, bestSellerData, categoryData} = route.params;
-
+const WelcomeScreen: React.FC<Props> = ({navigation}) => {
   const onStartBrowsing = () => {
-    navigation.navigate(Route.HomePage, {
-      newBookData: newBookData,
-      bestSellerData: bestSellerData,
-      categoryData: categoryData,
-    });
+    navigation.navigate(Route.HomePage);
   };
 
   const onLoginNav = () => {
