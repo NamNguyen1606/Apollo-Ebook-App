@@ -21,8 +21,7 @@ interface Props {
 }
 
 const DiscoverScreen: React.FC<Props> = (props) => {
-  const {bestSellerBook, newBook, userInfo} = useContext(GlobalContext);
-  console.log(userInfo?.data);
+  const {bestSellerBook, newBook} = useContext(GlobalContext);
 
   function onItemPress(book: Book) {
     props.navigation.navigate(Route.DetailBook, {book});

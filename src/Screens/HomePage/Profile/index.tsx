@@ -1,10 +1,22 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet, Text, Image} from 'react-native';
 import Colors from '../../../Utils/color';
+import {Button} from '../../../Components';
+import StoreData from '../../../Utils/storeData';
+import {GlobalContext} from '../../../Utils/StoreProvider';
+import {useNavigation} from '@react-navigation/native';
+import Route from '../../../Utils/router';
 
 interface Props {}
 
 const ProfileScreen = () => {
+  const {userInfo} = useContext(GlobalContext);
+  const navigation = useNavigation();
+  const logout = () => {
+    StoreData.clear();
+    userInfo?.setData(null);
+  };
+
   return (
     <View style={style.container}>
       <View style={style.header}>
@@ -15,19 +27,27 @@ const ProfileScreen = () => {
           <View style={style.imgHolder}>
             <Image
               style={style.img}
-              source={{uri: 'https://i.imgflip.com/2pg1ta.jpg'}}
+              source={{
+                uri:
+                  'https://png.pngtree.com/element_our/png_detail/20181226/avatar-vector-icon-png_276860.jpg',
+              }}
               resizeMode="cover"
             />
           </View>
-          <View style={style.info}>
-            <Text style={style.nameTxt}>Nam Nguyen</Text>
-            <Text style={style.addressTxt}>Binh Thanh, Tp.HCM</Text>
-          </View>
-          {/* <View style={style.iconHolder}>
-            <Icon style={style.icon} name="edit" type="entypo" color="grey" />
-          </View> */}
+          {userInfo!.data ? (
+            <View style={style.info}>
+              <Text style={style.nameTxt}>{userInfo?.data.name}</Text>
+              <Text style={style.addressTxt}>Binh Thanh, Tp.HCM</Text>
+            </View>
+          ) : (
+            <Button
+              tittle="Login"
+              onPress={() => navigation.navigate(Route.Welcome)}
+            />
+          )}
         </View>
       </View>
+      <Button tittle="Log Out" onPress={logout} />
     </View>
   );
 };

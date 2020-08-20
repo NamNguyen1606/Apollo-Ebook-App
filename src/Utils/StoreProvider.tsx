@@ -1,10 +1,11 @@
 import React, {useState, useMemo} from 'react';
+import UserInfo from '../Models/userInfo';
 
 export interface StoreProviderInterface {
   newBook?: Data;
   bestSellerBook?: Data;
   categoryData?: Data;
-  userInfo?: Data;
+  userInfo?: {data: UserInfo; setData: Function};
 }
 
 export interface Data {

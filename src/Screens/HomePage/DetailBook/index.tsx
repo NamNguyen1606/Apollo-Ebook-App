@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useContext} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Modal,
   TouchableWithoutFeedback,
+  Alert,
 } from 'react-native';
 import {Icon, Input} from 'react-native-elements';
 import {Button} from '../../../Components';
@@ -22,6 +23,7 @@ import LottieView from 'lottie-react-native';
 import {useQuery} from 'react-query';
 import {Animated} from 'react-native';
 import {APP_TOKEN} from '../../../Api/axiosClient';
+import {GlobalContext} from '../../../Utils/StoreProvider';
 
 const AppToken = APP_TOKEN;
 interface Props {
@@ -32,6 +34,7 @@ const defaultImg =
   'https://cdn0.iconfinder.com/data/icons/book-and-library/64/Sad-Emotion-Book-512.png';
 
 const DetailBookScreen: React.FC<Props> = (props) => {
+  const {userInfo} = useContext(GlobalContext);
   const {book} = props.route.params;
   const [isReview, setIsReview] = useState(false);
   const [img, setImg] = useState(book.imgUrl);
@@ -267,8 +270,13 @@ const DetailBookScreen: React.FC<Props> = (props) => {
   }
 
   function purchaseBook() {
-    setIsModalPurchasingVisible(true);
-    setToken(AppToken);
+    console.log(userInfo?.data);
+    if (userInfo!.data) {
+      setIsModalPurchasingVisible(true);
+      setToken(userInfo!.data.token);
+    } else {
+      Alert.alert('Warning', 'you should login for purchase');
+    }
   }
 
   return (

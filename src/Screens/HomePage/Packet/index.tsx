@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useContext} from 'react';
 import {
   View,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
   ImageBackground,
   Modal,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import Colors from '../../../Utils/color';
 import {useQuery, useInfiniteQuery} from 'react-query';
@@ -18,12 +19,14 @@ import Route from '../../../Utils/router';
 import LottieView from 'lottie-react-native';
 import {Animated} from 'react-native';
 import {APP_TOKEN} from '../../../Api/axiosClient';
+import {GlobalContext} from '../../../Utils/StoreProvider';
 
 interface Props {
   navigation: any;
 }
 
 const PacketScreen: React.FC<Props> = (props) => {
+  const {userInfo} = useContext(GlobalContext);
   const [isModalPurchasingVisible, setIsModalPurchasingVisible] = useState<
     boolean
   >(false);
@@ -239,10 +242,17 @@ const PacketScreen: React.FC<Props> = (props) => {
     );
   }
 
-  const onPurchasePacket = (packetId: any) => {
-    setIsModalPurchasingVisible(true);
-    setIdPacket(packetId);
-  };
+  const onPurchasePacket = useCallback(
+    (packetId: any) => {
+      if (userInfo!.data) {
+        setIsModalPurchasingVisible(true);
+        setIdPacket(packetId);
+      } else {
+        Alert.alert('Warning', 'you should login for purchase');
+      }
+    },
+    [userInfo],
+  );
 
   const loadingPacket = async (key: any, index: number = 0) => {
     const res = await PacketApi.getPacket(APP_TOKEN, index, 10, 0);
@@ -292,7 +302,7 @@ const PacketScreen: React.FC<Props> = (props) => {
         onPurchasePress={(packetId) => onPurchasePacket(packetId)}
       />
     ),
-    [onPressItem],
+    [onPressItem, onPurchasePacket],
   );
   const getKeyExtractor = useCallback((item: any) => item.PacketID, []);
   const getItemLayout = useCallback(
