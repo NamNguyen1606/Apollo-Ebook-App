@@ -1,21 +1,22 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from 'react-native';
 import Colors from '../../Utils/color';
 import {Icon} from 'react-native-elements';
 import Route from '../../Utils/router';
 import {TextField, Button, IconBox} from '../../Components';
-import Book from '../../Models/book';
-import BookApi from '../../Api/bookApi';
-const Token =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
+import StoreData from '../../Utils/storeData';
+import AuthApi from '../../Api/authApi';
+import {GlobalContext, StoreProviderInterface} from '../../Utils/StoreProvider';
+import UserInfo from '../../Models/userInfo';
 interface Props {
   navigation: any;
 }
@@ -24,27 +25,41 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isLogin, setIsLogin] = useState<boolean>(false);
+  const {userInfo} = useContext<StoreProviderInterface>(GlobalContext);
 
   async function logIn() {
-    // setIsLogin(true);
-    // console.log(`${email} + ${password}`);
-    // const response: any = await AuthApi.loginByPassword(
-    //   'rv7yjdz10sh0q06362ugd1n4gjpy4b',
-    //   email,
-    //   password,
-    // );
-    // StoreData.setUserInfo(response);
-    // if (response.Success) {
-    //   navigation.navigate('HomePage');
-    // } else {
-    //   Alert.alert('Error', response.Message);
-    // }
-    // setIsLogin(false);
-    navigation.navigate(Route.HomePage);
+    dismissKeyboard();
+    setIsLogin(true);
+    const response: any = await AuthApi.loginByPassword(
+      'rv7yjdz10sh0q06362ugd1n4gjpy4b',
+      email,
+      password,
+    );
+
+    if (response.Success) {
+      StoreData.setUserInfo(response);
+      let userData = new UserInfo(
+        response.CustomerID,
+        response.Login,
+        response.CustomerName,
+        response.Email,
+        response.Token,
+      );
+      userInfo?.setData(userData);
+      navigation.navigate(Route.HomePage);
+    } else {
+      Alert.alert('Error', response.Message);
+    }
+    setIsLogin(false);
   }
 
+  const handleEmail = (val) => setEmail(val);
+  const handlePassword = (val) => setPassword(val);
+
+  const dismissKeyboard = () => Keyboard.dismiss();
+
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+    <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <View style={style.container}>
         <View style={style.header}>
           <View
@@ -72,16 +87,12 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
           </View>
         </View>
         <View style={style.middle}>
-          <TextField
-            title="Email"
-            icon="envelope"
-            onChangeText={(val) => setEmail(val)}
-          />
+          <TextField title="Email" icon="envelope" onChangeText={handleEmail} />
           <TextField
             style={{marginTop: 10}}
             title="Password"
             isPassword={true}
-            onChangeText={(val) => setPassword(val)}
+            onChangeText={handlePassword}
           />
           <Button
             style={{height: 55, marginTop: 14}}

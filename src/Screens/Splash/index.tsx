@@ -10,6 +10,7 @@ import ParentCollection from '../../Models/parentCollection';
 import ChildCollection from '../../Models/childCollection';
 import {StoreProviderInterface, GlobalContext} from '../../Utils/StoreProvider';
 import {APP_TOKEN} from '../../Api/axiosClient';
+import StoreData from '../../Utils/storeData';
 
 interface Props {
   navigation: any;
@@ -19,7 +20,7 @@ const SplashScreen: React.FC<Props> = (props) => {
   let newBookList: Book[] = [];
   let bestSellerBookList: Book[] = [];
   let categoryList: ParentCollection[] = [];
-  const {newBook, bestSellerBook, categoryData} = useContext<
+  const {newBook, bestSellerBook, categoryData, userInfo} = useContext<
     StoreProviderInterface
   >(GlobalContext);
   async function getBookData(index: number, count: number) {
@@ -101,9 +102,11 @@ const SplashScreen: React.FC<Props> = (props) => {
       const isBookLoadingDone = await getBookData(0, 10);
       const isCategoryLoadingDone = await getCategory();
       if (isBookLoadingDone && isCategoryLoadingDone) {
+        const userData = await StoreData.getUserInfo();
         newBook!.setData(newBookList);
         bestSellerBook!.setData(bestSellerBookList);
         categoryData!.setData(categoryList);
+        userInfo!.setData(userData);
         props.navigation.navigate(Route.Welcome);
       }
     };

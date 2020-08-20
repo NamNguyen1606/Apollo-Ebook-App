@@ -30,4 +30,10 @@ export default class StoreData {
       // error reading value
     }
   };
+
+  static clear = async () => {
+    try {
+      await AsyncStorage.clear();
+    } catch (e) {}
+  };
 }

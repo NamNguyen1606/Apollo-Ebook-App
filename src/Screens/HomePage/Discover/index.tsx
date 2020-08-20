@@ -21,7 +21,8 @@ interface Props {
 }
 
 const DiscoverScreen: React.FC<Props> = (props) => {
-  const {bestSellerBook, newBook} = useContext(GlobalContext);
+  const {bestSellerBook, newBook, userInfo} = useContext(GlobalContext);
+  console.log(userInfo?.data);
 
   function onItemPress(book: Book) {
     props.navigation.navigate(Route.DetailBook, {book});
@@ -40,7 +41,7 @@ const DiscoverScreen: React.FC<Props> = (props) => {
           props.navigation.navigate(Route.ListBook, {
             title: 'New Books',
             collection: 'AllBooks',
-            data: newBook,
+            data: newBook?.data,
           });
         }}
       />,
@@ -55,7 +56,7 @@ const DiscoverScreen: React.FC<Props> = (props) => {
           props.navigation.navigate(Route.ListBook, {
             title: 'Best Seller',
             collection: 'TopSell',
-            data: bestSellerBook,
+            data: bestSellerBook?.data,
           });
         }}
       />,
