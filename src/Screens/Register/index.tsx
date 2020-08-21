@@ -6,11 +6,12 @@ import {
   Text,
   TouchableWithoutFeedback,
   Keyboard,
+  Dimensions,
 } from 'react-native';
 import Colors from '../../Utils/color';
 import {Icon, Divider} from 'react-native-elements';
-import Route from '../../Utils/router';
 import {TextField, Button, IconBox} from '../../Components';
+import {vs, ms, hs} from '../../Utils/Scaling';
 
 interface Props {
   navigation: any;
@@ -22,20 +23,15 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
   const [password, setPassword] = useState();
 
   async function register() {
-    console.log(`${fullName} + ${email} + ${password}`);
+    const size = Dimensions.get('window');
+    console.log(`${size.width} x ${size.height}`);
   }
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={style.container}>
         <View style={style.header}>
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'flex-start',
-              marginTop: 20,
-              marginLeft: 15,
-            }}>
+          <View style={style.iconHolder}>
             <Icon
               name="chevron-back"
               type="ionicon"
@@ -55,13 +51,13 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
         </View>
         <View style={style.middle}>
           <TextField
-            style={{marginBottom: 10}}
+            style={{marginBottom: vs(10)}}
             title="Full Name"
             icon="user"
             onChangeText={(val) => setFullName(val)}
           />
           <TextField
-            style={{marginBottom: 10}}
+            style={{marginBottom: vs(10)}}
             title="Email"
             icon="envelope"
             onChangeText={(val) => setEmail(val)}
@@ -71,18 +67,14 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
             isPassword={true}
             onChangeText={(val) => setPassword(val)}
           />
-          <Button
-            style={{height: 55, marginTop: 14}}
-            tittle="REGISTER NOW"
-            onPress={register}
-          />
+          <Button style={style.btn} tittle="REGISTER NOW" onPress={register} />
         </View>
         <View style={style.footer}>
-          <Text style={{fontSize: 15, color: Colors.SubText}}>
+          <Text style={{fontSize: ms(15), color: Colors.SubText}}>
             Already have an account?{' '}
             <Text
               style={{
-                fontSize: 15,
+                fontSize: ms(15),
                 color: Colors.Background,
                 textDecorationLine: 'underline',
               }}>
@@ -94,11 +86,13 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
               flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',
-              height: 70,
+              height: vs(50),
               width: '100%',
             }}>
             <Divider style={{backgroundColor: 'black'}} />
-            <Text style={{fontSize: 15, color: '#A4A7A9'}}>Register With</Text>
+            <Text style={{fontSize: ms(15), color: '#A4A7A9'}}>
+              Register With
+            </Text>
             <Divider style={{backgroundColor: 'black'}} />
           </View>
           <View
@@ -123,14 +117,20 @@ const style = StyleSheet.create({
     backgroundColor: 'white',
   },
   header: {
-    flex: 3.8,
+    flex: 3.5,
     backgroundColor: Colors.Background,
   },
+  iconHolder: {
+    flex: 1,
+    alignItems: 'flex-start',
+    marginTop: vs(20),
+    marginLeft: hs(15),
+  },
   middle: {
-    flex: 3.2,
+    flex: 4,
     backgroundColor: 'white',
-    marginHorizontal: 20,
-    marginTop: 15,
+    marginHorizontal: hs(20),
+    marginTop: vs(15),
   },
   footer: {
     flex: 2,
@@ -138,15 +138,16 @@ const style = StyleSheet.create({
     alignItems: 'center',
   },
   titleStyle: {
-    fontSize: 25,
+    fontSize: ms(25),
     color: Colors.Text,
     fontWeight: '700',
     textAlign: 'center',
   },
   subTitleStyle: {
-    fontSize: 16,
+    fontSize: ms(16),
     color: Colors.Text,
     textAlign: 'center',
   },
+  btn: {height: vs(55), marginTop: vs(14)},
 });
 export default RegisterScreen;

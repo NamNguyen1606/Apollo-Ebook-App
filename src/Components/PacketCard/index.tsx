@@ -16,9 +16,9 @@ import PacketApi from '../../Api/packetApi';
 import BookScrollView from '../BookScrollView';
 import Book from '../../Models/book';
 import Button from '../Button';
+import {APP_TOKEN} from '../../Api/axiosClient';
+import {vs} from '../../Utils/Scaling';
 
-const Token =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySUQiOiIyNTVFRURGRS05RUNFLTQ3MUItOEFENS1BMjNCRDQzRDA3MTYiLCJVc2VybmFtZSI6ImRhbmdsdW9uZ3RobyIsIkZ1bGxuYW1lIjoixJDhurduZyBMxrDGoW5nIFRo4buNIiwiRW1haWwiOiJkYW5nbHVvbmd0aG9AZ21haWwuY29tIiwiUGFzc3dvcmQiOiJGQkZFQzdFODIxRjRDNDNDQjE2MjcwNDAxNzhENkMwNiIsIkFnZW50SUQiOiJZQk9PSyIsIlN1cHBsaWVySUQiOm51bGwsIkRldmljZVR5cGUiOiJBTkRST0lEIiwiRGV2aWNlTnVtYmVyIjoiMTIzNDU2IiwiTGlicmFyeVBhY2tldElEIjoiIiwiTGlicmFyeVBhY2tldE5hbWUiOiIiLCJleHAiOiIxNTk4MTY2MTQ1In0.z6dP9Wfmhe0G_b_MJhgk2G22pKKf1m1lPpdnWRLNRwE';
 interface Props {
   packetId: string;
   tittle: string;
@@ -40,7 +40,7 @@ const PacketCard: React.FC<Props> = (props) => {
     'https://cdn0.iconfinder.com/data/icons/book-and-library/64/Sad-Emotion-Book-512.png';
 
   const loadingBookList = async (key: any, packetId: string) => {
-    return await PacketApi.getDetailPacket(Token, packetId);
+    return await PacketApi.getDetailPacket(APP_TOKEN, packetId);
   };
   const {status, data} = useQuery(['books', props.packetId], loadingBookList);
 
@@ -62,7 +62,7 @@ const PacketCard: React.FC<Props> = (props) => {
     return (
       <View
         style={[
-          {height: 450, marginTop: 10},
+          {height: vs(450), marginTop: 10},
           isExpand ? {opacity: 1} : {opacity: 0},
         ]}>
         <Button
@@ -78,11 +78,11 @@ const PacketCard: React.FC<Props> = (props) => {
           }}>
           <Text style={{fontSize: 18}}>Book List</Text>
           <Text style={{fontSize: 14, color: Colors.SubText}}>
-            {status === 'success' ? data?.length : 0} Books
+            {status === 'success' ? result.length : 0} Books
           </Text>
         </View>
         <BookScrollView
-          style={{height: 215}}
+          style={{height: vs(215)}}
           books={result}
           onItemPress={(book) => props.onPressItem(book)}
           onMorePress={() => {}}

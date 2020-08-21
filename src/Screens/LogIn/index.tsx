@@ -17,6 +17,7 @@ import StoreData from '../../Utils/storeData';
 import AuthApi from '../../Api/authApi';
 import {GlobalContext, StoreProviderInterface} from '../../Utils/StoreProvider';
 import UserInfo from '../../Models/userInfo';
+import {vs, hs, ms} from '../../Utils/Scaling';
 interface Props {
   navigation: any;
 }
@@ -53,8 +54,8 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
     setIsLogin(false);
   }
 
-  const handleEmail = (val) => setEmail(val);
-  const handlePassword = (val) => setPassword(val);
+  const handleEmail = (val: string) => setEmail(val);
+  const handlePassword = (val: string) => setPassword(val);
 
   const dismissKeyboard = () => Keyboard.dismiss();
 
@@ -66,8 +67,8 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
             style={{
               flex: 1,
               alignItems: 'flex-start',
-              marginTop: 20,
-              marginLeft: 15,
+              marginTop: vs(20),
+              marginLeft: hs(15),
             }}>
             <Icon
               name="chevron-back"
@@ -89,19 +90,19 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
         <View style={style.middle}>
           <TextField title="Email" icon="envelope" onChangeText={handleEmail} />
           <TextField
-            style={{marginTop: 10}}
+            style={{marginTop: vs(15)}}
             title="Password"
             isPassword={true}
             onChangeText={handlePassword}
           />
           <Button
-            style={{height: 55, marginTop: 14}}
+            style={style.btn}
             tittle="LOG IN"
             isDisable={isLogin}
             onPress={logIn}
           />
           <Button
-            style={{height: 55, marginTop: 14}}
+            style={style.btn}
             tittle="REGISTER"
             isReserve={true}
             onPress={() => {
@@ -110,10 +111,20 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
           />
         </View>
         <View style={style.footer}>
-          <Text style={{fontSize: 15, color: Colors.SubText, marginTop: 15}}>
+          <Text
+            style={{
+              fontSize: ms(14),
+              color: Colors.SubText,
+              marginTop: vs(15),
+            }}>
             Forgot Password?
           </Text>
-          <Text style={{fontSize: 15, color: '#A4A7A9', marginVertical: 25}}>
+          <Text
+            style={{
+              fontSize: ms(14),
+              color: '#A4A7A9',
+              marginVertical: vs(14),
+            }}>
             Log in With
           </Text>
           <View
@@ -138,30 +149,31 @@ const style = StyleSheet.create({
     backgroundColor: 'white',
   },
   header: {
-    flex: 3,
+    flex: 2.5,
     backgroundColor: Colors.Background,
   },
   middle: {
     flex: 3,
     backgroundColor: 'white',
-    marginHorizontal: 20,
-    marginTop: 15,
+    marginHorizontal: hs(20),
+    marginTop: hs(15),
   },
   footer: {
-    flex: 2,
+    flex: 1.8,
     backgroundColor: 'white',
     alignItems: 'center',
   },
   titleStyle: {
-    fontSize: 25,
+    fontSize: ms(24),
     color: Colors.Text,
     fontWeight: '700',
     textAlign: 'center',
   },
   subTitleStyle: {
-    fontSize: 16,
+    fontSize: ms(16),
     color: Colors.Text,
     textAlign: 'center',
   },
+  btn: {height: vs(55), marginTop: vs(10)},
 });
 export default LoginScreen;

@@ -10,6 +10,7 @@ import {
 import BookProduct from '../BookProduct';
 import Colors from '../../Utils/color';
 import Book from '../../Models/book';
+import {vs, ms} from '../../Utils/Scaling';
 
 interface Props {
   title?: string;
@@ -66,11 +67,11 @@ const BookScrollView: React.FC<Props> = (props) => {
 };
 const style = StyleSheet.create({
   container: {
-    height: 300,
+    height: vs(300),
     backgroundColor: 'white',
   },
   header: {
-    height: 70,
+    height: vs(70),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -80,7 +81,7 @@ const style = StyleSheet.create({
     backgroundColor: 'white',
   },
   titleStyle: {
-    fontSize: 20,
+    fontSize: ms(20),
     color: 'black',
   },
   subTitleStyle: {

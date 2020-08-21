@@ -24,6 +24,7 @@ import {useQuery} from 'react-query';
 import {Animated} from 'react-native';
 import {APP_TOKEN} from '../../../Api/axiosClient';
 import {GlobalContext} from '../../../Utils/StoreProvider';
+import {vs} from '../../../Utils/Scaling';
 
 const AppToken = APP_TOKEN;
 interface Props {
@@ -99,14 +100,14 @@ const DetailBookScreen: React.FC<Props> = (props) => {
           {status === 'loading' && (
             <View
               style={{
-                height: 250,
+                height: vs(250),
                 width: '70%',
                 backgroundColor: 'transparent',
                 borderRadius: 20,
                 justifyContent: 'center',
               }}>
               <LottieView
-                style={{height: 150, width: 150, alignSelf: 'center'}}
+                style={style.lottieStatus}
                 source={require('../../../Asset/Animation/loading.json')}
                 autoPlay
                 loop={true}
@@ -116,13 +117,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
 
           {/* //TODO: Loading success */}
           {status === 'success' && (
-            <View
-              style={{
-                height: 250,
-                width: '70%',
-                backgroundColor: 'white',
-                borderRadius: 20,
-              }}>
+            <View style={style.headerModal}>
               {data.Success !== true ? (
                 <View
                   style={{
@@ -131,7 +126,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
                     paddingTop: 15,
                   }}>
                   <LottieView
-                    style={{height: 100, width: 100, alignSelf: 'center'}}
+                    style={style.lottieStatus}
                     source={require('../../../Asset/Animation/failure.json')}
                     autoPlay
                     loop={false}
@@ -174,7 +169,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
                     paddingTop: 15,
                   }}>
                   <LottieView
-                    style={{height: 100, width: 100, alignSelf: 'center'}}
+                    style={style.lottieStatus}
                     source={require('../../../Asset/Animation/success.json')}
                     autoPlay
                     loop={false}
@@ -213,13 +208,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
           )}
 
           {status === 'error' && (
-            <View
-              style={{
-                height: 250,
-                width: '70%',
-                backgroundColor: 'white',
-                borderRadius: 20,
-              }}>
+            <View style={style.headerModal}>
               <View
                 style={{
                   flex: 1,
@@ -227,7 +216,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
                   paddingTop: 15,
                 }}>
                 <LottieView
-                  style={{height: 100, width: 100, alignSelf: 'center'}}
+                  style={style.lottieStatus}
                   source={require('../../../Asset/Animation/failure.json')}
                   autoPlay
                   loop={false}
@@ -332,7 +321,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
           onError={() => setImg(defaultImg)}>
           <View style={style.middle}>
             <Image
-              style={{height: 220, width: 140, borderRadius: 8}}
+              style={style.img}
               resizeMode="cover"
               source={{
                 uri: img,
@@ -357,7 +346,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
               <Text style={style.author}>Published: {book.publicYear}</Text>
               <Text style={style.price}>{MoneyFormat.VND(book.price)}</Text>
               <Button
-                style={{borderRadius: 15, height: 45, width: 120}}
+                style={style.btnPurchase}
                 tittle="PURCHASE"
                 onPress={() => purchaseBook()}
               />
