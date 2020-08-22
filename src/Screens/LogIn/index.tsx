@@ -74,7 +74,7 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
               name="chevron-back"
               type="ionicon"
               color="white"
-              size={33}
+              size={hs(33)}
               onPress={() => {
                 navigation.pop();
               }}
@@ -88,9 +88,14 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
           </View>
         </View>
         <View style={style.middle}>
-          <TextField title="Email" icon="envelope" onChangeText={handleEmail} />
           <TextField
-            style={{marginTop: vs(15)}}
+            style={style.textField}
+            title="Email"
+            icon="envelope"
+            onChangeText={handleEmail}
+          />
+          <TextField
+            style={[style.textField, {marginTop: vs(15)}]}
             title="Password"
             isPassword={true}
             onChangeText={handlePassword}
@@ -174,6 +179,9 @@ const style = StyleSheet.create({
     color: Colors.Text,
     textAlign: 'center',
   },
-  btn: {height: vs(55), marginTop: vs(10)},
+  btn: {height: vs(50), marginTop: vs(10)},
+  textField: {
+    height: vs(45),
+  },
 });
 export default LoginScreen;

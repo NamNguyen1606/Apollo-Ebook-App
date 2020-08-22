@@ -10,6 +10,7 @@ import {
   Modal,
   TouchableOpacity,
   Alert,
+  FlatList,
 } from 'react-native';
 import Colors from '../../../Utils/color';
 import {useQuery, useInfiniteQuery} from 'react-query';
@@ -17,7 +18,6 @@ import PacketApi from '../../../Api/packetApi';
 import {PacketCard} from '../../../Components';
 import Route from '../../../Utils/router';
 import LottieView from 'lottie-react-native';
-import {Animated} from 'react-native';
 import {APP_TOKEN} from '../../../Api/axiosClient';
 import {GlobalContext} from '../../../Utils/StoreProvider';
 
@@ -41,19 +41,6 @@ const PacketScreen: React.FC<Props> = (props) => {
     ['purchase', APP_TOKEN, idPacket],
     getPurchaseApi,
   );
-
-  const scrollY = new Animated.Value(0);
-  const diffClamp = Animated.diffClamp(scrollY, 0, 80);
-  const scrollTranslateHeaderY = diffClamp.interpolate({
-    inputRange: [0, 80],
-    outputRange: [0, -80],
-    extrapolate: 'clamp',
-  });
-  const scrollTranslateListY = diffClamp.interpolate({
-    inputRange: [0, 80],
-    outputRange: [80, 0],
-    extrapolate: 'clamp',
-  });
 
   function showStatusPurchasing() {
     return (
@@ -292,7 +279,7 @@ const PacketScreen: React.FC<Props> = (props) => {
   const renderItem = useCallback(
     ({item}: any) => (
       <PacketCard
-        style={{marginTop: 10}}
+        style={style.packetCard}
         tittle={item.PacketName}
         description={item.Descriptions}
         img={item.CoverUrl}
@@ -313,6 +300,7 @@ const PacketScreen: React.FC<Props> = (props) => {
     }),
     [],
   );
+
   const renderFooter = () => {
     if (isFetching) {
       return (
@@ -328,56 +316,43 @@ const PacketScreen: React.FC<Props> = (props) => {
     }
   };
 
+  const renderHeader = () => (
+    <View style={style.header}>
+      <ImageBackground
+        style={{flex: 1}}
+        source={{
+          uri:
+            'https://images.creativemarket.com/0.1.0/ps/6374392/300/200/m2/fpc/wm0/rz7tt7epyeamedl02kmk27udgkcpjcltux0kweivmuodculwfbq3roybhxfw7kfq-.jpg?1557575922&s=f9500d0ae1b0e8a3679358049c4ea48f',
+        }}>
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <Text style={style.titleHeader}>Packet</Text>
+        </View>
+      </ImageBackground>
+    </View>
+  );
+
   return (
     <View style={style.container}>
-      <Animated.View
-        style={[
-          style.header,
-          {transform: [{translateY: scrollTranslateHeaderY}]},
-        ]}>
-        <ImageBackground
-          style={{flex: 1}}
-          source={{
-            uri:
-              'https://images.creativemarket.com/0.1.0/ps/6374392/300/200/m2/fpc/wm0/rz7tt7epyeamedl02kmk27udgkcpjcltux0kweivmuodculwfbq3roybhxfw7kfq-.jpg?1557575922&s=f9500d0ae1b0e8a3679358049c4ea48f',
-          }}>
-          <View style={{flex: 1, justifyContent: 'center'}}>
-            <Text style={style.titleHeader}>Packet</Text>
-          </View>
-        </ImageBackground>
-      </Animated.View>
-      <View style={style.middle}>
-        {isSuccess ? (
-          <Animated.FlatList
-            style={{transform: [{translateY: scrollTranslateListY}]}}
-            onScroll={Animated.event(
-              [
-                {
-                  nativeEvent: {
-                    contentOffset: {y: scrollY},
-                  },
-                },
-              ],
-              {useNativeDriver: true},
-            )}
-            data={convertData()}
-            renderItem={renderItem}
-            keyExtractor={getKeyExtractor}
-            getItemLayout={getItemLayout}
-            onEndReachedThreshold={0.7}
-            onEndReached={loadingMore}
-            showsVerticalScrollIndicator={false}
-            ListFooterComponent={renderFooter}
-          />
-        ) : (
-          <LottieView
-            style={{height: 100, width: 100}}
-            source={require('../../../Asset/Animation/loading.json')}
-            autoPlay
-            loop
-          />
-        )}
-      </View>
+      {isSuccess ? (
+        <FlatList
+          data={convertData()}
+          renderItem={renderItem}
+          keyExtractor={getKeyExtractor}
+          getItemLayout={getItemLayout}
+          onEndReachedThreshold={0.7}
+          onEndReached={loadingMore}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={renderFooter}
+          ListHeaderComponent={renderHeader}
+        />
+      ) : (
+        <LottieView
+          style={{height: 100, width: 100}}
+          source={require('../../../Asset/Animation/loading.json')}
+          autoPlay
+          loop
+        />
+      )}
       {showStatusPurchasing()}
     </View>
   );
@@ -391,8 +366,6 @@ const style = StyleSheet.create({
   header: {
     height: Dimensions.get('window').height / 10,
     backgroundColor: Colors.Background,
-    position: 'absolute',
-    zIndex: 1,
     width: '100%',
   },
   middle: {
@@ -418,6 +391,7 @@ const style = StyleSheet.create({
     width: 100,
     alignSelf: 'center',
   },
+  packetCard: {marginTop: 10, marginHorizontal: 10},
 });
 
 export default PacketScreen;

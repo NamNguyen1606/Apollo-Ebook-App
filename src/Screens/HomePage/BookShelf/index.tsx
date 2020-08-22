@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, StyleSheet, Text, Animated} from 'react-native';
+import {View, StyleSheet, Text, FlatList} from 'react-native';
 import Colors from '../../../Utils/color';
 import {BookCard} from '../../../Components';
 import Route from '../../../Utils/router';
@@ -41,19 +41,6 @@ const BookShelfScreen: React.FC<Props> = ({navigation}) => {
     return newBookData;
   };
 
-  const scrollY = new Animated.Value(0);
-  const diffClamp = Animated.diffClamp(scrollY, 0, 80);
-  const scrollTranslateY = diffClamp.interpolate({
-    inputRange: [0, 80],
-    outputRange: [0, -80],
-    extrapolate: 'clamp',
-  });
-  const scrollTranslateListY = diffClamp.interpolate({
-    inputRange: [0, 80],
-    outputRange: [80, 0],
-    extrapolate: 'clamp',
-  });
-
   const {
     data,
     isSuccess,
@@ -86,7 +73,7 @@ const BookShelfScreen: React.FC<Props> = ({navigation}) => {
   const onItemPress = (data: Book) =>
     navigation.navigate(Route.DetailBook, {book: data});
 
-  const renderFooter = () => {
+  const renderFooterFlatList = () => {
     if (isFetching) {
       return (
         <LottieView
@@ -101,9 +88,14 @@ const BookShelfScreen: React.FC<Props> = ({navigation}) => {
     }
   };
 
+  const renderHeaderFlatList = () => (
+    <View style={style.header}>
+      <Text style={style.titleHeader}>BookShelf</Text>
+    </View>
+  );
   const renderItem = ({item}: any) => (
     <BookCard
-      style={{marginTop: 10}}
+      style={style.cardProduct}
       key={item.id}
       author={item.author}
       tittle={item.title}
@@ -118,43 +110,25 @@ const BookShelfScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={style.container}>
-      <Animated.View
-        style={[
-          style.header,
-          {
-            transform: [{translateY: scrollTranslateY}],
-            width: '100%',
-            position: 'absolute',
-            zIndex: 1,
-          },
-        ]}>
-        <Text style={style.titleHeader}>BookShelf</Text>
-      </Animated.View>
-      <View style={style.middle}>
-        {isSuccess ? (
-          <Animated.FlatList
-            style={{transform: [{translateY: scrollTranslateListY}]}}
-            onScroll={Animated.event(
-              [{nativeEvent: {contentOffset: {y: scrollY}}}],
-              {useNativeDriver: true},
-            )}
-            data={covertData()}
-            renderItem={renderItem}
-            onEndReachedThreshold={0.5}
-            onEndReached={onFetch}
-            keyExtractor={(item: any, index: any) => `${index}`}
-            showsVerticalScrollIndicator={false}
-            ListFooterComponent={renderFooter}
-          />
-        ) : (
-          <LottieView
-            style={style.loading}
-            source={require('../../../Asset/Animation/loading.json')}
-            autoPlay
-            loop
-          />
-        )}
-      </View>
+      {isSuccess ? (
+        <FlatList
+          data={covertData()}
+          renderItem={renderItem}
+          onEndReachedThreshold={0.5}
+          onEndReached={onFetch}
+          keyExtractor={(item: any, index: any) => `${index}`}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={renderFooterFlatList}
+          ListHeaderComponent={renderHeaderFlatList}
+        />
+      ) : (
+        <LottieView
+          style={style.loading}
+          source={require('../../../Asset/Animation/loading.json')}
+          autoPlay
+          loop
+        />
+      )}
     </View>
   );
 };
@@ -164,15 +138,13 @@ const style = StyleSheet.create({
     backgroundColor: '#F9F9F9',
   },
   header: {
-    height: 80,
+    height: 70,
     backgroundColor: Colors.Background,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 10,
     width: '100%',
-    position: 'absolute',
-    zIndex: 2,
   },
   middle: {
     flex: 1,
@@ -198,6 +170,10 @@ const style = StyleSheet.create({
     height: 100,
     width: 100,
     alignSelf: 'center',
+  },
+  cardProduct: {
+    marginHorizontal: 10,
+    marginTop: 10,
   },
 });
 export default BookShelfScreen;

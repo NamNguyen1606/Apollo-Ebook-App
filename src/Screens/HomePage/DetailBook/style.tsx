@@ -23,10 +23,15 @@ const style = StyleSheet.create({
     position: 'absolute',
   },
   middle: {
-    height: vs(200),
-    top: vs(110),
+    height: vs(185),
+    top: vs(125),
     left: hs(20),
     flexDirection: 'row',
+  },
+  img: {
+    height: vs(185),
+    width: hs(120),
+    borderRadius: vs(8),
   },
   bottom: {
     flex: 1,
@@ -52,18 +57,13 @@ const style = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
   },
-  img: {
-    height: vs(200),
-    width: hs(140),
-    borderRadius: vs(8),
-  },
   detail: {
     marginLeft: hs(14),
     justifyContent: 'space-between',
     width: Dimensions.get('window').width * 0.5,
   },
   title: {
-    fontSize: ms(19),
+    fontSize: ms(18),
     color: '#F6F6F6',
     fontWeight: 'bold',
   },
@@ -71,7 +71,7 @@ const style = StyleSheet.create({
     fontSize: ms(16),
   },
   author: {
-    fontSize: ms(15),
+    fontSize: ms(14),
     color: '#E1E1E1',
   },
   price: {
@@ -104,14 +104,14 @@ const style = StyleSheet.create({
   },
   loadingLottie: {height: vs(100), width: vs(100), alignSelf: 'center'},
   boxIcon: {
-    height: vs(50),
-    width: vs(50),
+    height: vs(40),
+    width: vs(40),
     backgroundColor: 'rgba(0,0,0,0.3)',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: vs(15),
+    borderRadius: vs(10),
   },
-  btnPurchase: {borderRadius: vs(15), height: vs(45), width: hs(120)},
+  btnPurchase: {borderRadius: vs(10), height: vs(40), width: hs(120)},
   lottieStatus: {
     height: vs(100),
     width: vs(100),

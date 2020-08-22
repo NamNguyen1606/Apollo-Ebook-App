@@ -66,7 +66,7 @@ const PacketCard: React.FC<Props> = (props) => {
           isExpand ? {opacity: 1} : {opacity: 0},
         ]}>
         <Button
-          style={{width: '100%', height: 50, alignSelf: 'center'}}
+          style={{height: 50, width: '95%', alignSelf: 'center'}}
           tittle="Purchase"
           onPress={() => props.onPurchasePress(props.packetId)}
         />
@@ -82,7 +82,7 @@ const PacketCard: React.FC<Props> = (props) => {
           </Text>
         </View>
         <BookScrollView
-          style={{height: vs(215)}}
+          style={{height: vs(200)}}
           books={result}
           onItemPress={(book) => props.onPressItem(book)}
           onMorePress={() => {}}
@@ -135,11 +135,9 @@ const PacketCard: React.FC<Props> = (props) => {
 const style = StyleSheet.create({
   container: {
     height: 180,
-    width: '100%',
     backgroundColor: 'white',
     borderColor: Colors.SubText,
     borderBottomWidth: 0.3,
-    paddingRight: 10,
   },
   view: {height: 180, flexDirection: 'row'},
   imgHolder: {

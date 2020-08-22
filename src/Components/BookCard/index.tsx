@@ -57,7 +57,6 @@ const style = StyleSheet.create({
   container: {
     flexDirection: 'row',
     height: 180,
-    width: '100%',
     backgroundColor: 'white',
     borderColor: Colors.SubText,
     borderBottomWidth: 0.3,

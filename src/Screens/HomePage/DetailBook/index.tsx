@@ -282,7 +282,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
             name="chevron-back"
             type="ionicon"
             color="white"
-            size={33}
+            size={vs(30)}
             onPress={() => {
               props.navigation.pop();
             }}
@@ -294,7 +294,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
             name="cloud-download"
             type="font-awesome"
             color="white"
-            size={26}
+            size={vs(24)}
             onPress={() => {
               props.navigation.pop();
             }}

@@ -4,7 +4,6 @@ import React, {useState} from 'react';
 import {View, StyleSheet, TouchableOpacity, Text, Image} from 'react-native';
 import Book from '../../Models/book';
 import Colors from '../../Utils/color';
-import {vs, hs, ms} from '../../Utils/Scaling';
 
 interface Props {
   img: string;
@@ -54,21 +53,21 @@ const BookProduct: React.FC<Props> = (props) => {
 
 const style = StyleSheet.create({
   container: {
-    height: vs(210),
-    width: hs(140),
+    height: 200,
+    width: 140,
     backgroundColor: 'white',
     alignItems: 'center',
-    marginLeft: hs(10),
+    marginLeft: 10,
   },
   imgHolder: {
-    height: vs(207),
-    width: hs(135),
+    height: 190,
+    width: 130,
     backgroundColor: 'white',
     borderRadius: 1.5,
   },
   titleStyle: {
     textAlign: 'center',
-    fontSize: ms(14),
+    fontSize: 13,
     marginHorizontal: 3,
     marginBottom: 5,
     color: Colors.DarkGrey,

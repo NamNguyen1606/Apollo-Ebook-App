@@ -6,6 +6,7 @@ import StoreData from '../../../Utils/storeData';
 import {GlobalContext} from '../../../Utils/StoreProvider';
 import {useNavigation} from '@react-navigation/native';
 import Route from '../../../Utils/router';
+import {vs} from '../../../Utils/Scaling';
 
 interface Props {}
 
@@ -20,10 +21,17 @@ const ProfileScreen = () => {
   return (
     <View style={style.container}>
       <View style={style.header}>
-        <Text style={style.headerTittle}>Setting</Text>
+        <View
+          style={{
+            height: vs(140),
+            borderBottomLeftRadius: vs(100),
+            borderBottomRightRadius: vs(100),
+            backgroundColor: Colors.Background,
+          }}
+        />
       </View>
       <View style={style.body}>
-        <View style={style.profile}>
+        {/* <View style={style.profile}>
           <View style={style.imgHolder}>
             <Image
               style={style.img}
@@ -45,7 +53,7 @@ const ProfileScreen = () => {
               onPress={() => navigation.navigate(Route.Welcome)}
             />
           )}
-        </View>
+        </View> */}
       </View>
       <Button tittle="Log Out" onPress={logout} />
     </View>
@@ -56,10 +64,8 @@ const style = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: '10%',
-    backgroundColor: Colors.Background,
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: vs(200),
+    backgroundColor: 'white',
   },
   headerTittle: {
     fontSize: 26,
@@ -67,7 +73,7 @@ const style = StyleSheet.create({
   },
   body: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'grey',
   },
   profile: {
     marginTop: 20,

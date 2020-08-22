@@ -36,7 +36,7 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
               name="chevron-back"
               type="ionicon"
               color="white"
-              size={33}
+              size={hs(33)}
               onPress={() => {
                 navigation.pop();
               }}
@@ -51,18 +51,19 @@ const RegisterScreen: React.FC<Props> = ({navigation}) => {
         </View>
         <View style={style.middle}>
           <TextField
-            style={{marginBottom: vs(10)}}
+            style={style.textField}
             title="Full Name"
             icon="user"
             onChangeText={(val) => setFullName(val)}
           />
           <TextField
-            style={{marginBottom: vs(10)}}
+            style={style.textField}
             title="Email"
             icon="envelope"
             onChangeText={(val) => setEmail(val)}
           />
           <TextField
+            style={{height: vs(45)}}
             title="Password"
             isPassword={true}
             onChangeText={(val) => setPassword(val)}
@@ -149,5 +150,9 @@ const style = StyleSheet.create({
     textAlign: 'center',
   },
   btn: {height: vs(55), marginTop: vs(14)},
+  textField: {
+    height: vs(45),
+    marginBottom: vs(10),
+  },
 });
 export default RegisterScreen;
