@@ -449,11 +449,21 @@ const DetailBookScreen: React.FC<Props> = (props) => {
         </TouchableWithoutFeedback>
       </Modal>
       {isReview && (
-        <TouchableOpacity onPress={showReviewModal}>
+        <View>
           <View style={style.reviewButton}>
-            <Text style={style.reviewTitle}>WRITE A REVIEW</Text>
+            <Icon
+              style={{
+                justifyContent: 'center',
+                alignSelf: 'center',
+              }}
+              name="edit"
+              type="font-awesome"
+              size={20}
+              color="black"
+              onPress={showReviewModal}
+            />
           </View>
-        </TouchableOpacity>
+        </View>
       )}
       {showStatusPurchasing()}
     </View>

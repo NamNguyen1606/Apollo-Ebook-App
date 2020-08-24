@@ -10,6 +10,7 @@ import BookApi from '../../../Api/bookApi';
 import {useInfiniteQuery} from 'react-query';
 import LottieView from 'lottie-react-native';
 import {APP_TOKEN} from '../../../Api/axiosClient';
+import {vs} from '../../../Utils/Scaling';
 
 interface Props {
   navigation: any;
@@ -47,7 +48,8 @@ const BookShelfScreen: React.FC<Props> = ({navigation}) => {
     fetchMore,
     isFetching,
     canFetchMore,
-  } = useInfiniteQuery(['collection'], loadMore, {
+    isLoading,
+  } = useInfiniteQuery(['bookShelf'], loadMore, {
     cacheTime: 0,
     getFetchMore: (lastGroup: any, allGroups: any) => {
       if (lastGroup.length === 10) {
@@ -73,6 +75,23 @@ const BookShelfScreen: React.FC<Props> = ({navigation}) => {
   const onItemPress = (data: Book) =>
     navigation.navigate(Route.DetailBook, {book: data});
 
+  const renderEmptyAnimation = () => {
+    if (!isLoading) {
+      if (data![0].length === 0) {
+        return (
+          <LottieView
+            style={style.emptyBox}
+            source={require('../../../Asset/Animation/empty_box.json')}
+            autoPlay
+            loop
+          />
+        );
+      }
+    } else {
+      return null;
+    }
+  };
+
   const renderFooterFlatList = () => {
     if (isFetching) {
       return (
@@ -93,6 +112,7 @@ const BookShelfScreen: React.FC<Props> = ({navigation}) => {
       <Text style={style.titleHeader}>BookShelf</Text>
     </View>
   );
+
   const renderItem = ({item}: any) => (
     <BookCard
       style={style.cardProduct}
@@ -129,6 +149,7 @@ const BookShelfScreen: React.FC<Props> = ({navigation}) => {
           loop
         />
       )}
+      {renderEmptyAnimation()}
     </View>
   );
 };
@@ -136,6 +157,7 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F9F9F9',
+    justifyContent: 'center',
   },
   header: {
     height: 70,
@@ -174,6 +196,12 @@ const style = StyleSheet.create({
   cardProduct: {
     marginHorizontal: 10,
     marginTop: 10,
+  },
+  emptyBox: {
+    top: -vs(85),
+    height: 250,
+    width: 250,
+    alignSelf: 'center',
   },
 });
 export default BookShelfScreen;

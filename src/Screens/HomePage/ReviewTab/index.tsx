@@ -22,12 +22,12 @@ const ReviewTab = () => {
         createdDate="28 jun 18"
         content="Waiting for next..."
       />
-       <ReviewCard
+      <ReviewCard
         username="Bill Legend"
         createdDate="28 jun 18"
         content="Waiting for next..."
       />
-       <ReviewCard
+      <ReviewCard
         username="Bill Legend"
         createdDate="28 jun 18"
         content="Waiting for next..."

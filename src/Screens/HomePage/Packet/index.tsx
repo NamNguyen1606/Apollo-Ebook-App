@@ -266,6 +266,7 @@ const PacketScreen: React.FC<Props> = (props) => {
     fetchMore,
     isFetching,
     canFetchMore,
+    isLoading,
   } = useInfiniteQuery(['packet'], loadingPacket, {
     getFetchMore: (lastGroup: any, allGroup: any) => {
       if (lastGroup.length === 10) {
@@ -300,6 +301,22 @@ const PacketScreen: React.FC<Props> = (props) => {
     }),
     [],
   );
+
+  const renderEmptyAnimation = () => {
+    if (!isLoading) {
+      if (data![0].length === 0) {
+        return (
+          <LottieView
+            source={require('../../../Asset/Animation/empty_box.json')}
+            autoPlay
+            loop
+          />
+        );
+      }
+    } else {
+      return null;
+    }
+  };
 
   const renderFooter = () => {
     if (isFetching) {
@@ -347,13 +364,14 @@ const PacketScreen: React.FC<Props> = (props) => {
         />
       ) : (
         <LottieView
-          style={{height: 100, width: 100}}
+          style={style.loading}
           source={require('../../../Asset/Animation/loading.json')}
           autoPlay
           loop
         />
       )}
       {showStatusPurchasing()}
+      {renderEmptyAnimation()}
     </View>
   );
 };
@@ -362,6 +380,7 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F9F9F9',
+    justifyContent: 'center',
   },
   header: {
     height: Dimensions.get('window').height / 10,

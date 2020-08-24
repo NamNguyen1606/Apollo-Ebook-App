@@ -11,6 +11,7 @@ import BookApi from '../../../Api/bookApi';
 import {useInfiniteQuery} from 'react-query';
 import LottieView from 'lottie-react-native';
 import {APP_TOKEN} from '../../../Api/axiosClient';
+import {vs} from '../../../Utils/Scaling';
 
 interface Props {
   navigation: any;
@@ -48,13 +49,13 @@ const SearchResultScreen: React.FC<Props> = ({navigation, route}) => {
   const scrollY = new Animated.Value(0);
   const diffClamp = Animated.diffClamp(scrollY, 0, 80);
   const scrollHeaderTranslateY = diffClamp.interpolate({
-    inputRange: [0, 80],
-    outputRange: [0, -80],
+    inputRange: [0, vs(70)],
+    outputRange: [0, -vs(70)],
     extrapolate: 'clamp',
   });
   const scrollListTranslateY = diffClamp.interpolate({
-    inputRange: [0, 80],
-    outputRange: [80, 0],
+    inputRange: [0, vs(70)],
+    outputRange: [vs(70), 0],
     extrapolate: 'clamp',
   });
 
@@ -65,7 +66,7 @@ const SearchResultScreen: React.FC<Props> = ({navigation, route}) => {
     fetchMore,
     isFetching,
     canFetchMore,
-  } = useInfiniteQuery(['collection'], loadMore, {
+  } = useInfiniteQuery(['searchResult'], loadMore, {
     cacheTime: 0,
     getFetchMore: (lastGroup: any, allGroups: any) => {
       if (lastGroup.length === 10) {
@@ -81,7 +82,7 @@ const SearchResultScreen: React.FC<Props> = ({navigation, route}) => {
       if (data![0].length === 0) {
         return (
           <LottieView
-            source={require('../../../Asset/Animation/empty-box.json')}
+            source={require('../../../Asset/Animation/empty_search.json')}
             autoPlay
             loop
           />
@@ -182,18 +183,19 @@ const SearchResultScreen: React.FC<Props> = ({navigation, route}) => {
             loop
           />
         )}
-        {renderEmptyAnimation()}
+        {!isLoading && renderEmptyAnimation()}
       </View>
     </View>
   );
 };
+
 const style = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F9F9F9',
   },
   header: {
-    height: 80,
+    height: vs(70),
     backgroundColor: Colors.Background,
     flexDirection: 'row',
     alignItems: 'center',

@@ -64,7 +64,7 @@ const CategoryResultScreen: React.FC<Props> = ({navigation, route}) => {
     fetchMore,
     isFetching,
     canFetchMore,
-  } = useInfiniteQuery(['collection'], loadMore, {
+  } = useInfiniteQuery(['categoryResult'], loadMore, {
     cacheTime: 0,
     getFetchMore: (lastGroup: any, allGroups: any) => {
       if (lastGroup.length === 10) {
