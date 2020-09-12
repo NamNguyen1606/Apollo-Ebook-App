@@ -24,9 +24,11 @@ const style = StyleSheet.create({
   },
   middle: {
     height: vs(185),
-    top: vs(125),
+    top: vs(115),
     left: hs(20),
     flexDirection: 'row',
+    position: 'absolute',
+    zIndex: 0,
   },
   img: {
     height: vs(185),
@@ -83,7 +85,7 @@ const style = StyleSheet.create({
     height: vs(50),
     width: vs(50),
     top: -vs(70),
-    left: vs(310),
+    left: hs(290),
     borderRadius: vs(25),
     backgroundColor: Colors.Background,
     justifyContent: 'center',

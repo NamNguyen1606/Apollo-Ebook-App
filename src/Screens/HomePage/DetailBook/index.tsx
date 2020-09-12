@@ -258,7 +258,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
     );
   }
 
-  function purchaseBook() {
+  const purchaseBook = () => {
     console.log(userInfo?.data);
     if (userInfo!.data) {
       setIsModalPurchasingVisible(true);
@@ -266,7 +266,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
     } else {
       Alert.alert('Warning', 'you should login for purchase');
     }
-  }
+  };
 
   return (
     <View style={{flex: 1, backgroundColor: 'transparent'}}>
@@ -348,7 +348,7 @@ const DetailBookScreen: React.FC<Props> = (props) => {
               <Button
                 style={style.btnPurchase}
                 tittle="PURCHASE"
-                onPress={() => purchaseBook()}
+                onPress={purchaseBook}
               />
             </View>
           </View>

@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Colors from '../../Utils/color';
+import {vs} from '../../Utils/Scaling';
 
 interface Props {
   tittle?: string;
@@ -50,7 +51,7 @@ const Button: React.FC<Props> = (props) => {
 const style = StyleSheet.create({
   container: {
     backgroundColor: Colors.Background,
-    height: 60,
+    height: vs(60),
     width: '100%',
     borderRadius: 5,
     justifyContent: 'center',

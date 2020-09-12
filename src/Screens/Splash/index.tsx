@@ -107,7 +107,11 @@ const SplashScreen: React.FC<Props> = (props) => {
         bestSellerBook!.setData(bestSellerBookList);
         categoryData!.setData(categoryList);
         userInfo!.setData(userData);
-        props.navigation.navigate(Route.Welcome);
+        // props.navigation.navigate(Route.Welcome);
+        props.navigation.reset({
+          index: 0,
+          routes: [{name: Route.Welcome}],
+        });
       }
     };
     fetchData();
